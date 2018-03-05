@@ -1,0 +1,3 @@
+Imagine this is a help file!
+
+Used in TabbedCustomDialog.rb as a test help file.  Look for call to dialog.setHelpFile in that file.
