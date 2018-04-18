@@ -11,6 +11,12 @@ import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
+/***
+ * Overlay clear pane which disables input to the underlying controls.  Used as a way to disable entire
+ * panel at once.
+ * @author Jason Wells
+ *
+ */
 @SuppressWarnings("serial")
 public class DisablingGlassPaneWrapper extends JLayeredPane{
 	private JPanel glassPanel = new JPanel();

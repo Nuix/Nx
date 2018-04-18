@@ -25,7 +25,7 @@ import javax.swing.SpinnerNumberModel;
 
 /***
  * A control for providing settings relevant to local Nuix workers
- * @author JWells01
+ * @author Jason Wells
  *
  */
 @SuppressWarnings("serial")

@@ -38,8 +38,8 @@ import java.awt.Toolkit;
 /***
  * Provides a configurable progress dialog.  Note that you do not create an instance of it
  * directly. Instead use the static method {@link #forBlock(ProgressDialogBlockInterface)} to
- * get an instance which will exist for the duration of the provided method.
- * @author JasonWells
+ * get an instance which will exist for the duration of the provided callback.
+ * @author Jason Wells
  *
  */
 @SuppressWarnings("serial")

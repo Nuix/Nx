@@ -12,6 +12,13 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 import javax.swing.SwingUtilities;
 
+/***
+ * Custom ArrayList wrapper around an ArrayList which offers methods for shifting a contiguous range
+ * of entries earlier or later in the list (for shifting rows).
+ * @author Jason Wells
+ *
+ * @param <E> Generic data type this list will contain.
+ */
 @SuppressWarnings("serial")
 public class ArrangeableListModel<E> extends AbstractListModel<E> {
 	private List<E> elements = new ArrayList<E>();

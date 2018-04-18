@@ -37,6 +37,11 @@ import com.nuix.nx.controls.models.CsvTableModel;
 import com.nuix.nx.dialogs.CommonDialogs;
 import java.awt.Font;
 
+/***
+ * A table control designed with the idea of accepting data imported from a CSV.
+ * @author Jason Wells
+ *
+ */
 @SuppressWarnings("serial")
 public class CsvTable extends JPanel {
 	private JTable recordsTable;

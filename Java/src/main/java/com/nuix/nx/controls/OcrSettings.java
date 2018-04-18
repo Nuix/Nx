@@ -24,7 +24,7 @@ import javax.swing.SpinnerNumberModel;
 
 /***
  * A control for providing some of the common OCR settings
- * @author JWells01
+ * @author Jason Wells
  *
  */
 @SuppressWarnings("serial")

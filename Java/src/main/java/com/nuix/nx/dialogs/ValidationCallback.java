@@ -8,9 +8,9 @@ package com.nuix.nx.dialogs;
 import java.util.Map;
 
 /***
- * Interface for a callback that allows the code being called to approve or disapprove of the current state.  Used by
- * {@link TabbedCustomDialog#validateBeforeClosing(ValidationCallback)}.
- * @author JasonWells
+ * Interface for a callback that allows the code being called to approve or disapprove of the current state of the settings in
+ * a {@link com.nuix.nx.dialogs.TabbedCustomDialog}.  Used by {@link TabbedCustomDialog#validateBeforeClosing(ValidationCallback)}.
+ * @author Jason Wells
  *
  */
 public interface ValidationCallback {

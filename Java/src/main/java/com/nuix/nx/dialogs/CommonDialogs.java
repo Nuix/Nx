@@ -16,7 +16,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /***
  * Provides convenience methods for displaying common dialogs.
- * @author JasonWells
+ * @author Jason Wells
  *
  */
 public class CommonDialogs {

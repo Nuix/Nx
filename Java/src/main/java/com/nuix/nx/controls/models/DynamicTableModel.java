@@ -20,7 +20,7 @@ import javax.swing.table.AbstractTableModel;
 
 /***
  * Table model used to store data for a {@link com.nuix.nx.controls.DynamicTableControl}
- * @author JWells01
+ * @author Jason Wells
  *
  */
 @SuppressWarnings("serial")

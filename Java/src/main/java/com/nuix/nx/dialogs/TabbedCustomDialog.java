@@ -74,8 +74,9 @@ import com.nuix.nx.controls.models.ControlDeserializationHandler;
 import com.nuix.nx.controls.models.ControlSerializationHandler;
 
 /***
- * Allows you to build a dialog from components such as: check boxes, text fields, file lists, etc.
- * @author JWells01
+ * Allows you to build a settings dialog with multiple tabs.  Each tab is a {@link com.nuix.nx.dialogs.CustomTabPanel} which
+ * suports easily adding various controls such as check boxes, text field, radio buttons and so on.
+ * @author Jason Wells
  *
  */
 @SuppressWarnings("serial")
@@ -104,9 +105,17 @@ public class TabbedCustomDialog extends JDialog {
 	private JMenuItem mntmViewHelp;
 	private Runnable jsonFileLoadedCallback;
 	
+	/***
+	 * Create a new instance.
+	 */
 	public TabbedCustomDialog() {
 		 this("Script"); 
 	}
+	
+	/***
+	 * Create a new instance with the specified title.
+	 * @param title The inital title of the dialog.
+	 */
 	public TabbedCustomDialog(String title) {
 		super((JDialog)null);
 		setTitle(title);
@@ -237,7 +246,7 @@ public class TabbedCustomDialog extends JDialog {
 	}
 	
 	/***
-	 * Displays this custom dialog.  Dialog is modal so this call will block until dialog is closed.  To determine
+	 * Displays this custom dialog.  Dialog is modal so this call will block caller until dialog is closed.  To determine
 	 * whether user clicked "Ok", "Cancel" or closed the dialog, call {@link #getDialogResult()} afterwards.
 	 */
 	public void display(){
@@ -317,7 +326,7 @@ public class TabbedCustomDialog extends JDialog {
 	}
 	
 	/***
-	 * Resizes the dialog to fill the screen, less the specified margin.
+	 * Resizes the dialog to fill the screen, less the specified margin on all sides.
 	 * @param margins The margin size on all sides
 	 */
 	public void fillScreen(int margins){

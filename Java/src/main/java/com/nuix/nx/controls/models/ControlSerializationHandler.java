@@ -9,7 +9,7 @@ import java.awt.Component;
 
 /***
  * Callback used to allow code to define a custom serialization for a particular control to JSON.
- * @author JWells01
+ * @author Jason Wells
  *
  */
 public interface ControlSerializationHandler {

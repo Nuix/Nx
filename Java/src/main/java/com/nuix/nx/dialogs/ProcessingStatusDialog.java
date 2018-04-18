@@ -29,7 +29,7 @@ import nuix.Processor;
 
 /***
  * A dialog which starts and monitors a processing job.  Also has buttons to pause, resume, stop and abort the job.
- * @author JWells01
+ * @author Jason Wells
  *
  */
 @SuppressWarnings("serial")

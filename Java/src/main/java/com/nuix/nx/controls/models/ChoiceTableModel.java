@@ -15,7 +15,7 @@ import javax.swing.table.AbstractTableModel;
 
 /***
  * Table model used by the {@link com.nuix.nx.controls.ChoiceTableControl}
- * @author JWells01
+ * @author Jason Wells
  *
  * @param <T> The data type of the of the {@link com.nuix.nx.controls.models.Choice} instances which will be held by this model.
  */

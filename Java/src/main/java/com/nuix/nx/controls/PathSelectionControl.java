@@ -24,7 +24,7 @@ import java.io.File;
 
 /***
  * A control which provides a user a way to select paths
- * @author JWells01
+ * @author Jason Wells
  *
  */
 @SuppressWarnings("serial")

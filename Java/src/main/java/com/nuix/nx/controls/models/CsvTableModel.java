@@ -11,6 +11,11 @@ import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
 
+/***
+ * Table model for {@link com.nuix.nx.controls.CsvTable}.
+ * @author Jason Wells
+ *
+ */
 @SuppressWarnings("serial")
 public class CsvTableModel extends AbstractTableModel {
 

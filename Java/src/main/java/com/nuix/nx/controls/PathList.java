@@ -33,7 +33,7 @@ import com.nuix.nx.dialogs.CommonDialogs;
 
 /***
  * A control which allows the user to supply a list of file and directory paths
- * @author JWells01
+ * @author Jason Wells
  *
  */
 @SuppressWarnings("serial")

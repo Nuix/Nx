@@ -35,7 +35,7 @@ import com.nuix.nx.dialogs.CommonDialogs;
 
 /***
  * A control which allows a user to provide a list of string values (custodian names, tag names, etc)
- * @author JWells01
+ * @author Jason Wells
  *
  */
 @SuppressWarnings("serial")

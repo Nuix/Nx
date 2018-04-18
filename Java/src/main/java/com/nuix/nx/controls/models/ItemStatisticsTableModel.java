@@ -19,6 +19,11 @@ import com.nuix.nx.helpers.FormatHelpers;
 import nuix.ItemType;
 import nuix.ProcessedItem;
 
+/***
+ * Table model used by {@link com.nuix.nx.controls.ProcessingStatusControl}.  Used in table to display processing numbers.
+ * @author Jason Wells
+ *
+ */
 @SuppressWarnings("serial")
 public class ItemStatisticsTableModel extends AbstractTableModel {
 

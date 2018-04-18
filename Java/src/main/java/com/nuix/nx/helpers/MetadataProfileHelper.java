@@ -7,6 +7,11 @@ package com.nuix.nx.helpers;
 
 import nuix.MetadataProfile;
 
+/***
+ * Class containing helper methods for working with Nuix metadata profiles.
+ * @author Jason Wells
+ *
+ */
 public class MetadataProfileHelper {
 	/***
 	 * Convenience method for determining if a given meta data profile contains a field with the given name.

@@ -16,7 +16,7 @@ import nuix.SourceItemFactory;
 
 /***
  * A helper class for visiting all items recursively in a tree of source items.
- * @author JasonWells
+ * @author Jason Wells
  *
  */
 public class SourceItemVisitor {

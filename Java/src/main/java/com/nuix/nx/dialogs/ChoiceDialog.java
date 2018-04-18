@@ -35,7 +35,7 @@ import java.awt.Toolkit;
 
 /***
  * Displays a dialog allowing a user to select one or more choices.
- * @author JasonWells
+ * @author Jason Wells
  *
  * @param <T> The data type of the choice values.  Allows any value to be supported as a choice value.
  */

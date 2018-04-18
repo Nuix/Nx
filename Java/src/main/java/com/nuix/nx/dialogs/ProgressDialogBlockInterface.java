@@ -7,7 +7,7 @@ package com.nuix.nx.dialogs;
 
 /**
  * Interface to be implemented to provide code to be ran by the {@link ProgressDialog}.
- * @author JasonWells
+ * @author Jason Wells
  *
  */
 public interface ProgressDialogBlockInterface {

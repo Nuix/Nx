@@ -37,7 +37,7 @@ import javax.swing.SwingConstants;
 /***
  * A table control for allowing the user to check one or more choices which are defined
  * using {@link com.nuix.nx.controls.models.Choice} objects.
- * @author JWells01
+ * @author Jason Wells
  *
  * @param <T> The data type of the of the {@link com.nuix.nx.controls.models.Choice} instances which will be displayed by this table.
  */

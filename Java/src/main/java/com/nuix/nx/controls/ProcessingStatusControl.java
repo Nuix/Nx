@@ -46,6 +46,11 @@ import nuix.LoadProcessingJob;
 import nuix.Processor;
 import nuix.ProcessorCleaningUpCallback;
 
+/***
+ * Control for displaying processing status.
+ * @author Jason Wells
+ *
+ */
 @SuppressWarnings("serial")
 public class ProcessingStatusControl extends JPanel {
 	private static Logger logger = Logger.getLogger(ProcessingStatusControl.class);

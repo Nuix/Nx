@@ -24,7 +24,7 @@ import com.nuix.nx.NuixConnection;
 
 /***
  * This class assists in generating combined PDFs outside of Nuix using iText.
- * @author JasonWells
+ * @author Jason Wells
  *
  */
 public class CombinedPdfExporter {

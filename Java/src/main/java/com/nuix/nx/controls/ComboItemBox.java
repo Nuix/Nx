@@ -11,7 +11,7 @@ import javax.swing.JComboBox;
 
 /***
  * Slightly customized combo box control for displaying {@link ComboItem} objects
- * @author JWells01
+ * @author Jason Wells
  */
 @SuppressWarnings("serial")
 public class ComboItemBox extends JComboBox<ComboItem> {
@@ -36,9 +36,9 @@ public class ComboItemBox extends JComboBox<ComboItem> {
 	}
 	
 	/***
-	 * Convenience method for adding 
-	 * @param label
-	 * @param value
+	 * Convenience method for adding an entry to the combo box.
+	 * @param label The label (value seen by user)
+	 * @param value The value that is returned when selected
 	 */
 	public void addValue(String label, String value){
 		addValue(new ComboItem(label,value));

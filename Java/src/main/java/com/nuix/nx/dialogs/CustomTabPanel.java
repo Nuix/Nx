@@ -85,6 +85,12 @@ import com.nuix.nx.controls.models.ControlDeserializationHandler;
 import com.nuix.nx.controls.models.ControlSerializationHandler;
 import com.nuix.nx.controls.models.DynamicTableValueCallback;
 
+/***
+ * This class represents a tab in the {@link TabbedCustomDialog} class.  This tab component hosts all the
+ * various methods for adding controls to a tab.
+ * @author Jason Wells
+ *
+ */
 @SuppressWarnings("serial")
 public class CustomTabPanel extends JPanel{
 	private String label = "New Tab";

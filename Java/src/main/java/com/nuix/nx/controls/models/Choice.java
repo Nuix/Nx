@@ -7,7 +7,7 @@ package com.nuix.nx.controls.models;
 
 /***
  * This class represents a choice in some controls and has an associated label, tool tip, value and whether the choice is checked.
- * @author JWells01
+ * @author Jason Wells
  *
  * @param <T> The data type of the value help by this instance
  */

@@ -9,7 +9,7 @@ import nuix.SourceItem;
 
 /***
  * Callback used by {@link SourceItemVisitor}.
- * @author JasonWells
+ * @author Jason Wells
  *
  */
 public interface SourceItemVisitCallback {

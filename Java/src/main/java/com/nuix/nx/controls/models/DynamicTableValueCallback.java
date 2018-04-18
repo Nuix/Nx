@@ -7,7 +7,7 @@ package com.nuix.nx.controls.models;
 /***
  * Callback used by {@link com.nuix.nx.controls.DynamicTableControl} to allow calling code (likely a Ruby script)
  * to save changes a user has made to a record in the table.
- * @author JWells01
+ * @author Jason Wells
  *
  */
 public interface DynamicTableValueCallback {

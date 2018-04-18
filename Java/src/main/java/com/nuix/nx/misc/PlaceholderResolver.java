@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 /***
  * This class provides a way to allow user input to make use of place holder values which will be
  * substituted at run time with appropriate values.
- * @author JWells01
+ * @author Jason Wells
  *
  */
 public class PlaceholderResolver {
