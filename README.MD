@@ -1,4 +1,5 @@
 ﻿
+
 Nx
 ==========
 
@@ -46,7 +47,7 @@ java_import "com.nuix.nx.controls.models.Choice"
 # if a script is being ran via nuix_console.exe
 LookAndFeelHelper.setWindowsIfMetal
 
-# Hand of copy of the Utilities object to the library
+# Hand off copy of the Utilities object to the library
 NuixConnection.setUtilities($utilities)
 
 # Inform the library of the current version of Nuix.  This allows the library (and your code) to
@@ -103,7 +104,7 @@ dialog.validateBeforeClosing do |values|
 end
 
 # Show the dialog to the user.  This is a blocking call until
-# the dialog closes either to clicking "OK" button or "Cancel"
+# the dialog closes either from clicking "OK" button or "Cancel"
 # button or dialog is closed
 dialog.display
 
