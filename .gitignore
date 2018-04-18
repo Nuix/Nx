@@ -1,5 +1,6 @@
 Ignored
 *.jar
+/Java/Doc
 
 .settings
 .classpath
