@@ -5,7 +5,7 @@ Nx
 
 ![Last tested in Nuix 7.4](https://img.shields.io/badge/Nuix-7.4-green.svg)
 
-View the GitHub project [here](https://github.com/NuixSDK/Nx) or download the latest release [here](https://github.com/NuixSDK/Nx/releases).
+View the GitHub project [here](https://github.com/Nuix/Nx) or download the latest release [here](https://github.com/Nuix/Nx/releases).
 
 # Overview
 
