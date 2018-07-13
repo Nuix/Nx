@@ -281,6 +281,14 @@ public class ChoiceTableControl<T> extends JPanel {
 			  }
 		});
 	}
+	
+	public void constrainFirstColumn(){
+		TableColumn checkColumn = choiceTable.getColumnModel().getColumn(0);
+		checkColumn.setMinWidth(25);
+		checkColumn.setWidth(25);
+		checkColumn.setPreferredWidth(25);
+		checkColumn.setMaxWidth(25);
+	}
 
 	public ChoiceTableModel<T> getTableModel() {
 		return tableModel;

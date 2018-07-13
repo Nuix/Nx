@@ -179,7 +179,7 @@ public class OcrSettings extends JPanel {
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{0, 0, 25, 0, 0, 25, 0, 0, 0};
 		gbl_panel.rowHeights = new int[]{0, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_panel.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 2.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_panel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
@@ -219,9 +219,24 @@ public class OcrSettings extends JPanel {
 		gbc_comboQuality.gridy = 0;
 		panel.add(comboQuality, gbc_comboQuality);
 		
-		comboQuality.addValue("High Quality","high_quality");
-		comboQuality.addValue("Medium Quality","mid_range");
-		comboQuality.addValue("Fast","fast");
+		if(NuixConnection.getCurrentNuixVersion().isLessThan("7.4")){
+			comboQuality.addValue("High Quality","high_quality");
+			comboQuality.addValue("Medium Quality","mid_range");
+			comboQuality.addValue("Fast","fast");	
+		} else {
+			// Nuix 7.4 OCR quality settings are quite a bit different
+			comboQuality.addValue("Default","default");
+			comboQuality.addValue("Document Archiving (accuracy)","document_archiving_accuracy");
+			comboQuality.addValue("Document Archiving (speed)","document_archiving_speed");
+			comboQuality.addValue("Book Archiving (accuracy)","book_archiving_accuracy");
+			comboQuality.addValue("Book Archiving (speed)","book_archiving_speed");
+			comboQuality.addValue("Document Conversion (accuracy)","document_conversion_accuracy");
+			comboQuality.addValue("Document Conversion (speed)","document_conversion_speed");
+			comboQuality.addValue("Text Extraction (accuracy)","text_extraction_accuracy");
+			comboQuality.addValue("Text Extraction (speed)","text_extraction_speed");
+			comboQuality.addValue("Field Level Recognition","field_level_recognition");
+		}
+		
 		comboQuality.setSelectedIndex(0);
 		
 		JLabel lblRotation = new JLabel("Rotation");
@@ -276,7 +291,6 @@ public class OcrSettings extends JPanel {
 		gbc_languageChoices.fill = GridBagConstraints.BOTH;
 		gbc_languageChoices.gridx = 0;
 		gbc_languageChoices.gridy = 5;
-		add(languageChoices, gbc_languageChoices);
 
 		languageChoices.getTableModel().setChoiceTypeName("Language");
 		List<Choice<String>> languages = new ArrayList<Choice<String>>();
@@ -467,6 +481,8 @@ public class OcrSettings extends JPanel {
 		languages.add(new Choice<String>("Zapotec"));
 		languages.add(new Choice<String>("Zulu"));
 		languageChoices.setChoices(languages);
+		
+		add(languageChoices, gbc_languageChoices);
 				
 		// Update duplicates was added in Nuix 7.2.0
 		if(NuixConnection.getCurrentNuixVersion().isLessThan("7.2.0")){
@@ -474,6 +490,8 @@ public class OcrSettings extends JPanel {
 			lblTimeoutminutes.setVisible(false);
 			timeoutMinutes.setVisible(false);
 		}
+		
+		languageChoices.constrainFirstColumn();
 	}
 
 	public JCheckBox getChckbxRegeneratePdfs() {
