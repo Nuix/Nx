@@ -9,7 +9,7 @@ View the GitHub project [here](https://github.com/Nuix/Nx) or download the lates
 
 **Written By:** Jason Wells
 
-Nx is a library which allows a Nuxi script to show a settings dialog and progress dialog.  Additionally Nx contains some convenience methods for things like showing a message dialog.
+Nx is a library which allows a Nuix script to show a settings dialog and progress dialog.  Additionally Nx contains some convenience methods for things like showing a message dialog.
 
 # Getting Started
 
