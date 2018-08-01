@@ -24,7 +24,7 @@ Additionally [TabbedCustomDialog](https://github.com/Nuix/Nx/blob/master/Java/sr
 
 ## Setup
 
-To build the JAR from source, load the source code into your IDE of choice.  Make sure the build path includes `\lib\*.jar` from the Nuix install directory.  For example, if you have Nuix 7.4 installed, include all JAR files located in `C:\Program Files\Nuix\Nuix 7.4\lib`.
+To build the JAR from source, load the source code into your IDE of choice.  Make sure the build path includes `\lib\*.jar` from the Nuix install directory.  For example, if you have Nuix 7.4 installed, include all JAR files located in `C:\Program Files\Nuix\Nuix 7.4\lib` in you build path.
 
 Once you have downloaded or built `Nx.jar`, copy `Nx.jar` to the same directory as your script.  From your script you then bootstrap the library like so:
 
@@ -44,7 +44,6 @@ require File.join(script_directory,"Nx.jar")
 java_import "com.nuix.nx.NuixConnection"
 java_import "com.nuix.nx.LookAndFeelHelper"
 java_import "com.nuix.nx.dialogs.ChoiceDialog"
-java_import "com.nuix.nx.dialogs.CustomDialog"
 java_import "com.nuix.nx.dialogs.TabbedCustomDialog"
 java_import "com.nuix.nx.dialogs.CommonDialogs"
 java_import "com.nuix.nx.dialogs.ProgressDialog"
@@ -66,21 +65,31 @@ NuixConnection.setCurrentNuixVersion(NUIX_VERSION)
 
 ## Example Settings Dialog
 
+![image](https://user-images.githubusercontent.com/11775738/43551318-78e11ae8-959b-11e8-8872-7b87e44ae2b2.png)
+
 ```ruby
+# Make sure bootstrap code from above has already been executed at some point before this!!
+
 # Create an instance of the tabbed dialog
 dialog = TabbedCustomDialog.new
+
+# Optionally set dialog width and height
+dialog.setSize(400,300)
 
 # Create our first tab with identifier 'main_tab' and label 'Main'
 main_tab = dialog.addTab("main_tab","Main")
 
 # Add a checkbox
-main_tab.appendCheckBox("apply_tags","Apply Tags",false)
+main_tab.appendCheckBox("apply_tags","Apply Tags",true)
 
 # Add a text field
 main_tab.appendTextField("tag_name","Tag Name","MyTag")
 
+# Lets make it so tag name is only enabled when `apply_tags` is checked
+main_tab.enabledOnlyWhenChecked("tag_name","apply_tags")
+
 # Add another checkbox
-main_tab.appendCheckBox("save_report","Save CSV Report",true)
+main_tab.appendCheckBox("save_report","Save CSV Report",false)
 
 # Add save file path control for CSV file
 main_tab.appendSaveFileChooser("csv_report_file","Report CSV File","Comma Separated Values","csv")
