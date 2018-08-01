@@ -1,5 +1,6 @@
 Ignored
 *.jar
+*.jardesc
 /Java/Doc
 
 .settings
