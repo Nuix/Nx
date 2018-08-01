@@ -11,7 +11,7 @@ require_relative "NxBootstrap.rb"
 # dialog will enter a state which will allow the user to
 # close the dialog.
 ProgressDialog.forBlock do |progress_dialog|
-	# Set the title, and whether the abort button and log area are shown
+	# Set the title, and whether an abort button and log area are shown
 	progress_dialog.setTitle("ProgressDialog Demo")
 	progress_dialog.setAbortButtonVisible(false)
 	progress_dialog.setLogVisible(false)
@@ -21,6 +21,8 @@ ProgressDialog.forBlock do |progress_dialog|
 	progress_dialog.setMainStatus("Demo 1")
 	progress_dialog.setSubStatus("Basic")
 	progress_dialog.setSubProgress(0,100)
+
+	# Simulate a process that take time and report progress updates while doing it
 	100.times do |i|
 		progress_dialog.setSubProgress(i+1)
 		sleep(0.1)
@@ -32,6 +34,8 @@ ProgressDialog.forBlock do |progress_dialog|
 	progress_dialog.setMainStatus("Demo 2")
 	progress_dialog.setSubStatus("With logging")
 	progress_dialog.setSubProgress(0,5)
+
+	# Simulate a process that take time and report progress updates while doing it
 	5.times do |i|
 		progress_dialog.setSubProgress(i+1)
 		progress_dialog.logMessage("Stuff is happening: #{Time.now}")
@@ -49,6 +53,8 @@ ProgressDialog.forBlock do |progress_dialog|
 	progress_dialog.setMainStatus("Demo 2")
 	progress_dialog.setSubStatus("With Abort")
 	progress_dialog.setSubProgress(0,100)
+
+	# Simulate a process that take time and report progress updates while doing it
 	100.times do |i|
 		progress_dialog.setSubProgress(i+1)
 		progress_dialog.logMessage("Stuff is happening: #{Time.now}")
