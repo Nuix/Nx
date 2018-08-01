@@ -9,7 +9,16 @@ View the GitHub project [here](https://github.com/Nuix/Nx) or download the lates
 
 **Written By:** Jason Wells
 
-Nx is a library which allows a Nuix script to show a settings dialog and progress dialog.  Additionally Nx contains some convenience methods for things like showing a message dialog.
+Nx is a library of classes designed to make it easier to create a settings dialog from a script and display a progress dialog while a script performs some work.  The classes in the library, most notably [TabbedCustomDialog](https://github.com/Nuix/Nx/blob/master/Java/src/main/java/com/nuix/nx/dialogs/TabbedCustomDialog.java), attempt to simplify the GUI construction process for a script by abstracting away the numerous Java calls that might normally be required to build a GUI, down to simpler calls like:
+
+```ruby
+# Add a checkbox
+main_tab.appendCheckBox("apply_tags","Apply Tags",false)
+```
+
+Additionally [TabbedCustomDialog](https://github.com/Nuix/Nx/blob/master/Java/src/main/java/com/nuix/nx/dialogs/TabbedCustomDialog.java) provides the ability to save and/or load control settings to/from JSON files.
+
+![image](https://user-images.githubusercontent.com/11775738/43547829-491de700-9591-11e8-8c01-0c9e60d3cfb8.png)
 
 # Getting Started
 
