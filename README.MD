@@ -1,6 +1,4 @@
-﻿
-
-Nx
+﻿Nx
 ==========
 
 ![Last tested in Nuix 7.4](https://img.shields.io/badge/Nuix-7.4-green.svg)
@@ -17,7 +15,9 @@ Nx is a library which allows a Nuxi script to show a settings dialog and progres
 
 ## Setup
 
-Build or download latest `Nx.jar`.  Copy `Nx.jar` to the same directory as your script.  From your script bootstrap the library:
+To build the JAR from source, load the source code into your IDE of choice.  Make sure the build path includes `\lib\*.jar` from the Nuix install directory.  For example, if you have Nuix 7.4 installed, include all JAR files located in `C:\Program Files\Nuix\Nuix 7.4\lib`.
+
+Once you have downloaded or built `Nx.jar`, copy `Nx.jar` to the same directory as your script.  From your script you then bootstrap the library like so:
 
 ```ruby
 # This essentially "bootstraps" the library from a Ruby script
