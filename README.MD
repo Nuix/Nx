@@ -5,6 +5,8 @@
 
 View the GitHub project [here](https://github.com/Nuix/Nx) or download the latest release [here](https://github.com/Nuix/Nx/releases).
 
+View the Java Docs [here](https://nuix.github.io/Nx/).
+
 # Overview
 
 **Written By:** Jason Wells
