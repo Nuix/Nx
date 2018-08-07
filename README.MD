@@ -161,7 +161,7 @@ A tab may have controls such as:
 - Tables
 - More complex controls for things like worker settings and OCR settings
 
-Refer to the documentation for the CustomTabPanel class for a list of methods which add controls to a tab.  Further examples can be found in the Examples directory.
+Refer to the [documentation for the CustomTabPanel](https://nuix.github.io/Nx/com/nuix/nx/dialogs/CustomTabPanel.html) class for a list of methods which add controls to a tab.  Further examples can be found in the Examples directory.
 
 # License
 
