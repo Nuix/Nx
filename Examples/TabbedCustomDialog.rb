@@ -59,6 +59,12 @@ file_tab = dialog.addTab("file_tab","File Controls")
 file_tab.appendDirectoryChooser("path001","Directory Chooser")
 file_tab.appendOpenFileChooser("path002","Open File Chooser","Text File","txt")
 file_tab.appendSaveFileChooser("path003","Save File Chooser","Text File","txt")
+
+# With initial dialog directory set
+file_tab.appendDirectoryChooser("path004","Directory Chooser","C:\\Temp")
+file_tab.appendOpenFileChooser("path005","Open File Chooser","Text File","txt","C:\\Temp")
+file_tab.appendSaveFileChooser("path006","Save File Chooser","Text File","txt","C:\\Temp")
+
 file_tab.appendHeader("File Path List")
 file_tab.appendPathList("file_paths")
 

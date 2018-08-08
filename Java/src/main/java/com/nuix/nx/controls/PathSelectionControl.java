@@ -38,6 +38,7 @@ public class PathSelectionControl extends JPanel {
 	private String dialogTitle = "Choose";
 	private JButton btnChoose;
 	private PathSelectedCallback pathSelectedCallback;
+	private String initialDirectory = null;
 	
 	public PathSelectionControl(ChooserType type, String fileTypeName, String fileExtension, String openFileDialogTitle) {
 		if(openFileDialogTitle != null)
@@ -62,15 +63,28 @@ public class PathSelectionControl extends JPanel {
 		btnChoose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				File selectedFile = null;
+				String existingValue = txtFilePath.getText();
 				switch(type){
 				case DIRECTORY:
-					selectedFile = CommonDialogs.getDirectory(txtFilePath.getText(), dialogTitle);
+					if(initialDirectory != null){
+						selectedFile = CommonDialogs.getDirectory(initialDirectory, dialogTitle);
+					} else {
+						selectedFile = CommonDialogs.getDirectory(existingValue, dialogTitle);	
+					}
 					break;
 				case OPEN_FILE:
-					selectedFile = CommonDialogs.openFileDialog(txtFilePath.getText(), fileTypeName, fileExtension, dialogTitle);
+					if(initialDirectory != null){
+						selectedFile = CommonDialogs.openFileDialog(initialDirectory, fileTypeName, fileExtension, dialogTitle);
+					} else {
+						selectedFile = CommonDialogs.openFileDialog(existingValue, fileTypeName, fileExtension, dialogTitle);	
+					}
 					break;
 				case SAVE_FILE:
-					selectedFile = CommonDialogs.saveFileDialog(txtFilePath.getText(), fileTypeName, fileExtension, dialogTitle);
+					if(initialDirectory != null){
+						selectedFile = CommonDialogs.saveFileDialog(initialDirectory, fileTypeName, fileExtension, dialogTitle);
+					} else {
+						selectedFile = CommonDialogs.saveFileDialog(existingValue, fileTypeName, fileExtension, dialogTitle);	
+					}
 					break;
 				default:
 					break;
@@ -117,5 +131,13 @@ public class PathSelectionControl extends JPanel {
 	
 	public void setPathFieldEditable(boolean value){
 		txtFilePath.setEditable(value);
+	}
+
+	public String getInitialDirectory() {
+		return initialDirectory;
+	}
+
+	public void setInitialDirectory(String initialDirectory) {
+		this.initialDirectory = initialDirectory;
 	}
 }

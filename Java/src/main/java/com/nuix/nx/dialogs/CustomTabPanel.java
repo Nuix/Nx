@@ -1020,12 +1020,47 @@ public class CustomTabPanel extends JPanel{
 	 * Appends a control which allows a user to select a directory.
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
+	 * @param initialDirectory A string containing a directory path which will be the initially selected directory when selection dialog is shown.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
+	 */
+	public CustomTabPanel appendDirectoryChooser(String identifier, String controlLabel, String initialDirectory) throws Exception{
+		PathSelectionControl component = new PathSelectionControl(ChooserType.DIRECTORY,null,null,"Choose Directory");
+		component.setInitialDirectory(initialDirectory);
+		addBasicLabelledComponent(controlLabel, component);
+		trackComponent(identifier, component);
+		return this;
+	}
+	
+	/***
+	 * Appends a control which allows a user to select a directory.
+	 * @param identifier The unique identifier for this control.
+	 * @param controlLabel The label for this control.
 	 * @param callback Callback which will be invoked when user selects a file using the choose button
 	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendDirectoryChooser(String identifier, String controlLabel, PathSelectedCallback callback) throws Exception{
 		PathSelectionControl component = new PathSelectionControl(ChooserType.DIRECTORY,null,null,"Choose Directory");
+		component.whenPathSelected(callback);
+		addBasicLabelledComponent(controlLabel, component);
+		trackComponent(identifier, component);
+		return this;
+	}
+	
+	/***
+	 * Appends a control which allows a user to select a directory.
+	 * @param identifier The unique identifier for this control.
+	 * @param controlLabel The label for this control.
+	 * @param initialDirectory A string containing a directory path which will be the initially selected directory when selection dialog is shown.
+	 * @param callback Callback which will be invoked when user selects a file using the choose button
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
+	 */
+	public CustomTabPanel appendDirectoryChooser(String identifier, String controlLabel, String initialDirectory,
+			PathSelectedCallback callback) throws Exception{
+		PathSelectionControl component = new PathSelectionControl(ChooserType.DIRECTORY,null,null,"Choose Directory");
+		component.setInitialDirectory(initialDirectory);
 		component.whenPathSelected(callback);
 		addBasicLabelledComponent(controlLabel, component);
 		trackComponent(identifier, component);
@@ -1054,12 +1089,52 @@ public class CustomTabPanel extends JPanel{
 	 * @param controlLabel The label for this control.
 	 * @param fileTypeName The name portion of the file type filter.
 	 * @param fileExtension The extension (without period) to filter the visible files on.
+	 * @param initialDirectory A string containing a directory path which will be the initially selected directory when selection dialog is shown.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
+	 */
+	public CustomTabPanel appendOpenFileChooser(String identifier, String controlLabel, String fileTypeName, String fileExtension,
+			String initialDirectory) throws Exception{
+		PathSelectionControl component = new PathSelectionControl(ChooserType.OPEN_FILE,fileTypeName,fileExtension,"Choose Existing File");
+		component.setInitialDirectory(initialDirectory);
+		addBasicLabelledComponent(controlLabel, component);
+		trackComponent(identifier, component);
+		return this;
+	}
+	
+	/***
+	 * Appends a control which allows a user to select a file to open.
+	 * @param identifier The unique identifier for this control.
+	 * @param controlLabel The label for this control.
+	 * @param fileTypeName The name portion of the file type filter.
+	 * @param fileExtension The extension (without period) to filter the visible files on.
 	 * @param callback Callback which will be invoked when user selects a file using the choose button
 	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendOpenFileChooser(String identifier, String controlLabel, String fileTypeName, String fileExtension, PathSelectedCallback callback) throws Exception{
 		PathSelectionControl component = new PathSelectionControl(ChooserType.OPEN_FILE,fileTypeName,fileExtension,"Choose Existing File");
+		component.whenPathSelected(callback);
+		addBasicLabelledComponent(controlLabel, component);
+		trackComponent(identifier, component);
+		return this;
+	}
+	
+	/***
+	 * Appends a control which allows a user to select a file to open.
+	 * @param identifier The unique identifier for this control.
+	 * @param controlLabel The label for this control.
+	 * @param fileTypeName The name portion of the file type filter.
+	 * @param fileExtension The extension (without period) to filter the visible files on.
+	 * @param initialDirectory A string containing a directory path which will be the initially selected directory when selection dialog is shown.
+	 * @param callback Callback which will be invoked when user selects a file using the choose button
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
+	 */
+	public CustomTabPanel appendOpenFileChooser(String identifier, String controlLabel, String fileTypeName, String fileExtension, String initialDirectory,
+			PathSelectedCallback callback) throws Exception{
+		PathSelectionControl component = new PathSelectionControl(ChooserType.OPEN_FILE,fileTypeName,fileExtension,"Choose Existing File");
+		component.setInitialDirectory(initialDirectory);
 		component.whenPathSelected(callback);
 		addBasicLabelledComponent(controlLabel, component);
 		trackComponent(identifier, component);
@@ -1077,6 +1152,25 @@ public class CustomTabPanel extends JPanel{
 	 */
 	public CustomTabPanel appendSaveFileChooser(String identifier, String controlLabel, String fileTypeName, String fileExtension) throws Exception{
 		PathSelectionControl component = new PathSelectionControl(ChooserType.SAVE_FILE,fileTypeName,fileExtension,"Choose File");
+		addBasicLabelledComponent(controlLabel, component);
+		trackComponent(identifier, component);
+		return this;
+	}
+	
+	/***
+	 * Appends a control which allows a user to select a file to save.
+	 * @param identifier The unique identifier for this control.
+	 * @param controlLabel The label for this control.
+	 * @param fileTypeName The name portion of the file type filter.
+	 * @param fileExtension The extension (without period) to filter the visible files on.
+	 * @param initialDirectory A string containing a directory path which will be the initially selected directory when selection dialog is shown.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
+	 */
+	public CustomTabPanel appendSaveFileChooser(String identifier, String controlLabel, String fileTypeName, String fileExtension,
+			String initialDirectory) throws Exception{
+		PathSelectionControl component = new PathSelectionControl(ChooserType.SAVE_FILE,fileTypeName,fileExtension,"Choose File");
+		component.setInitialDirectory(initialDirectory);
 		addBasicLabelledComponent(controlLabel, component);
 		trackComponent(identifier, component);
 		return this;
