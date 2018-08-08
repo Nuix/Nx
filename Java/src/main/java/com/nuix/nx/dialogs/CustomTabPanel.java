@@ -174,6 +174,11 @@ public class CustomTabPanel extends JPanel{
 		addComponent(component,c);
 	}
 	
+	/***
+	 * Adds a panel to fill remaining vertical space if none of the controls which have
+	 * been already added are vertical space filling.  Helps ensure that controls are packed
+	 * nicely in the GridBagLayout.
+	 */
 	void addVerticalFillerAsNeeded(){
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -232,6 +237,13 @@ public class CustomTabPanel extends JPanel{
 		add(component);
 	}
 	
+	/***
+	 * Registers control to be tracked which is important to ensuring that control values are able to be
+	 * passed back to script and eligible for being saved to or loaded from JSON. 
+	 * @param identifier Unique identifier associated with this control
+	 * @param component The actual control
+	 * @throws Exception Thrown is something goes wrong
+	 */
 	protected void trackComponent(String identifier, Component component) throws Exception{
 		if(controls.containsKey(identifier) || owner.controls.containsKey(identifier))
 			throw new Exception("Cannot append component, component with the identifier already exists: "+identifier);
@@ -242,12 +254,12 @@ public class CustomTabPanel extends JPanel{
 	}
 	
 	/***
-	 * Appends a check box control to the dialog.
+	 * Appends a check box control to the tab.
 	 * Calls to {@link #getControl(String)} should cast result to JCheckBox.
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param isChecked Whether this is checked initially.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendCheckBox(String identifier, String controlLabel, boolean isChecked) throws Exception{
@@ -258,6 +270,17 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends 2 check boxes, in a single row, to the tab.
+	 * @param identifierA The unique identifier for the first check box.
+	 * @param controlLabelA The label for the first checkbox.
+	 * @param isCheckedA Whether the first check box is checked by default.
+	 * @param identifierB The unique identifier of the second check box.
+	 * @param controlLabelB The label for the second checkbox.
+	 * @param isCheckedB Whether the second check box is checked by default.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if a provided identifier has already been used.
+	 */
 	public CustomTabPanel appendCheckBoxes(String identifierA, String controlLabelA, boolean isCheckedA,
 			String identifierB, String controlLabelB, boolean isCheckedB) throws Exception{
 		
@@ -289,7 +312,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param radioButtonGroupName The name of the radio button group to assign this to.  The group determines what other radio buttons are
 	 * unchecked when a given radio button is checked.
 	 * @param isChecked Whether this is checked initially.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendRadioButton(String identifier, String controlLabel, String radioButtonGroupName, boolean isChecked) throws Exception{
@@ -315,8 +338,6 @@ public class CustomTabPanel extends JPanel{
 	public CustomTabPanel appendRadioButtonGroup(String groupLabel, String radioButtonGroupName, Map<String,String> radioButtonChoices) throws Exception{
 		JPanel radioButtonContainerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		radioButtonContainerPanel.getInsets().set(1, 1, 1, 1);
-		//debugging
-		//radioButtonContainerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		
 		addBasicLabelledComponent(groupLabel, radioButtonContainerPanel);
 		buttonGroups.putIfAbsent(radioButtonGroupName, new ButtonGroup());
@@ -337,7 +358,7 @@ public class CustomTabPanel extends JPanel{
 	/***
 	 * Appends a header label that spans 2 columns.
 	 * @param text The text of the label.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 */
 	public CustomTabPanel appendHeader(String text){
 		JLabel component = new JLabel(text);
@@ -352,7 +373,7 @@ public class CustomTabPanel extends JPanel{
 	 * Appends a label that spans 2 columns.
 	 * @param identifier The unique identifier for this control.
 	 * @param text The text of the label.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if this identifier has already been used
 	 */
 	public CustomTabPanel appendLabel(String identifier, String text) throws Exception{
@@ -363,6 +384,11 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 
+	/***
+	 * Appends an image to the tab
+	 * @param imageFile File object representing the image file on disk
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 */
 	public CustomTabPanel appendImage(File imageFile){
 		BufferedImage picture = null;
 		try {
@@ -379,6 +405,11 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends an image to the tab
+	 * @param imageFile String representing path to the image file on disk
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 */
 	public CustomTabPanel appendImage(String imageFile){
 		return appendImage(new File(imageFile));
 	}
@@ -386,7 +417,7 @@ public class CustomTabPanel extends JPanel{
 	/***
 	 * Appends a separator that spans 2 columns.
 	 * @param label Label text that will appear in the center of the separator.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 */
 	public CustomTabPanel appendSeparator(String label){
 		MatteBorder mb = new MatteBorder(1, 0, 0, 0, Color.BLACK);
@@ -404,7 +435,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param text The initial text this text field should contain.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendTextField(String identifier, String controlLabel, String text) throws Exception{
@@ -415,6 +446,17 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a text field with an associated check box.  Text field is enabled/disabled based on whether
+	 * check box is checked.
+	 * @param checkBoxId The unique identifier of the check box.
+	 * @param isChecked Whether the check box is checked by default.
+	 * @param textFieldId The unique identifier of the text field.
+	 * @param textFieldDefault The default text of the text field.
+	 * @param controlLabel The label of the control.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if a provided identifier has already been used.
+	 */
 	public CustomTabPanel appendCheckableTextField(String checkBoxId, boolean isChecked,
 			String textFieldId, String textFieldDefault, String controlLabel) throws Exception{
 		
@@ -440,7 +482,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label text of the button
 	 * @param actionListener The action listener to attach to the button.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendButton(String identifier, String controlLabel, ActionListener actionListener) throws Exception{
@@ -461,7 +503,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param min The minimum value for the control.
 	 * @param max The maximum value for the control.
 	 * @param step Determines the "step" value, which determines how much up/down buttons increment.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendSpinner(String identifier, String controlLabel, int initialValue, int min, int max, int step) throws Exception {
@@ -482,7 +524,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param initialValue Initial value for the control.
 	 * @param min The minimum value for the control.
 	 * @param max The maximum value for the control.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendSpinner(String identifier, String controlLabel, int initialValue, int min, int max) throws Exception {
@@ -495,7 +537,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param initialValue Initial value for the control.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendSpinner(String identifier, String controlLabel, int initialValue) throws Exception {
@@ -507,7 +549,7 @@ public class CustomTabPanel extends JPanel{
 	 * , a maximum of Integer.MAX_VALUE and an initial value of 0.
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendSpinner(String identifier, String controlLabel) throws Exception {
@@ -519,7 +561,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param defaultDate The default date to display.  Can be null for no default, a java.util.Date object or a String in the format "yyyymmdd".
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendDatePicker(String identifier, String controlLabel, Object defaultDate) throws Exception{
@@ -551,7 +593,7 @@ public class CustomTabPanel extends JPanel{
 	 * Appends a date picker field control to the dialog with the default date being today's date.
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendDatePicker(String identifier, String controlLabel) throws Exception{
@@ -564,7 +606,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param text The initial text this text area should contain.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendTextArea(String identifier, String controlLabel, String text) throws Exception{
@@ -592,7 +634,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param text The initial text this text area should contain.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendInformation(String identifier, String controlLabel, String text) throws Exception{
@@ -619,7 +661,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param text The initial text this text area should contain.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendFormattedInformation(String identifier, String controlLabel, String text) throws Exception{
@@ -640,6 +682,12 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a control with controls used to provide worker settings, as passed to {@link nuix.ParallelProcessingConfigurable#setParallelProcessingSettings(Map)}.
+	 * @param identifier The unique identifier of this control.  Note values of nested controls will be returns as a Map under this identifier.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendLocalWorkerSettings(String identifier) throws Exception{
 		LocalWorkerSettings component = new LocalWorkerSettings();
 		addComponent(component,controls.size()+headersCount,0,2,1,true);
@@ -648,6 +696,12 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a control with controls used to provide traversal settings, as passed to {@link nuix.BatchExporter#setTraversalOptions(Map)}.
+	 * @param identifier The unique identifier of this control.  Note values of nested controls will be returns as a Map under this identifier.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendBatchExporterTraversalSettings(String identifier) throws Exception {
 		BatchExporterTraversalSettings component = new BatchExporterTraversalSettings();
 		addComponent(component,controls.size()+headersCount,0,2,1,true);
@@ -656,6 +710,12 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a control with controls used to provide native export settings, as passed to {@link nuix.BatchExporter#addProduct(String, Map)} for the "native" product.
+	 * @param identifier The unique identifier of this control.  Note values of nested controls will be returns as a Map under this identifier.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendBatchExporterNativeSettings(String identifier) throws Exception {
 		BatchExporterNativeSettings component = new BatchExporterNativeSettings();
 		addComponent(component,controls.size()+headersCount,0,2,1,true);
@@ -664,6 +724,12 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a control with controls used to provide text export settings, as passed to {@link nuix.BatchExporter#addProduct(String, Map)} for the "text" product.
+	 * @param identifier The unique identifier of this control.  Note values of nested controls will be returns as a Map under this identifier.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendBatchExporterTextSettings(String identifier) throws Exception {
 		BatchExporterTextSettings component = new BatchExporterTextSettings();
 		addComponent(component,controls.size()+headersCount,0,2,1,true);
@@ -672,6 +738,12 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a control with controls used to provide PDF export settings, as passed to {@link nuix.BatchExporter#addProduct(String, Map)} for the "pdf" product.
+	 * @param identifier The unique identifier of this control.  Note values of nested controls will be returns as a Map under this identifier.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendBatchExporterPdfSettings(String identifier) throws Exception {
 		BatchExporterPdfSettings component = new BatchExporterPdfSettings();
 		addComponent(component,controls.size()+headersCount,0,2,1,true);
@@ -680,6 +752,12 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a control with controls used to provide loadfile export settings, as passed to {@link nuix.BatchExporter#addLoadFile(String, Map)}.
+	 * @param identifier The unique identifier of this control.  Note values of nested controls will be returns as a Map under this identifier.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendBatchExporterLoadFileSettings(String identifier) throws Exception {
 		BatchExporterLoadFileSettings component = new BatchExporterLoadFileSettings();
 		addComponent(component,controls.size()+headersCount,0,2,1,true);
@@ -688,6 +766,12 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a control with controls used to provide OCR settings, as passed to {@link nuix.OcrProcessor}.
+	 * @param identifier The unique identifier of this control.  Note values of nested controls will be returns as a Map under this identifier.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendOcrSettings(String identifier) throws Exception {
 		OcrSettings component = new OcrSettings();
 		addComponent(component,controls.size()+headersCount,0,2,1,true);
@@ -702,7 +786,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param text The initial text this field should contain.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendPasswordField(String identifier, String controlLabel, String text) throws Exception{
@@ -719,7 +803,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param choices The list of {@link Choice} objects to display.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 * @param <T> The data type of the choice values.  Allows any value to be supported as a choice value.
 	 */
@@ -733,6 +817,13 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a table control with the specified headers, which is capable of importing a CSV with the same headers.
+	 * @param identifier The unique identifier for this control.
+	 * @param headers List of headers for the table.  Also determines import CSV columns.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendCsvTable(String identifier, List<String> headers) throws Exception{
 		CsvTable component = new CsvTable(headers);
 		addComponent(component,controls.size()+headersCount,0,2,1,true);
@@ -741,6 +832,90 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a fairly flexible table control to the tab.  Table control relies on provided callback to get column values and optionally write
+	 * column value changes back to underlying row objects.
+	 * <pre>
+ 	 * {@code
+	 * # Define what the headers will be
+	 * headers = [
+	 * 	"First",
+	 * 	"Last",
+	 * 	"Location",
+	 * 	"Occupation",
+	 * ]
+	 * 
+	 * # Define the records which will be displayed, this can essentially look
+	 * # like whatever you want as later the callback we define will be responsible
+	 * # for getting/setting values for individual records
+	 * records = [
+	 * 	{first: "Luke", last: "Skywalker", location: "Tatooine", occupation: "Moisture Farmer"},
+	 * 	{first: "Beru", last: "Lars", location: "Tatooine", occupation: "Moisture Farmer"},
+	 * 	{first: "Owen", last: "Lars", location: "Tatooine", occupation: "Moisture Farmer"},
+	 * 	{first: "Obi-wan", last: "Kenobi", location: "Tatooine", occupation: "Hermit"},
+	 * ]
+	 * 
+	 * # Now we add the dynamic table, configuring headers, records and callback which will get/set cell values
+	 * # Method signature
+	 * # public CustomTabPanel appendDynamicTable(String identifier, String controlLabel, List<String> headers,
+	 * # 	List<Object> records, DynamicTableValueCallback callback)
+	 * #
+	 * # Callback signature
+	 * # interact(Object record, int i, boolean setValue, Object aValue)
+	 * #
+	 * main_tab.appendDynamicTable("characters_table","Characters",headers,records) do |record, column_index, setting_value, value|
+	 * 	# record: The current record the table wants to interact with from the records array
+	 * 	# column_index: The column index the table wants to interact with
+	 * 	# setting_value: True if the table wishes to set a new value for this record/column index, false if reading the current value
+	 * 	# value: If setting_value is true, the value the table wishes to store back on the item
+	 * 
+	 * 	# Debugging messages
+	 * 	show_debug = false
+	 * 	if show_debug
+	 * 		if setting_value
+	 * 			puts "Setting column #{column_index} with value '#{value}' in object:\n#{record.inspect}"
+	 * 		else
+	 * 			puts "Getting column #{column_index} in object:\n#{record.inspect}"
+	 * 		end
+	 * 	end
+	 * 
+	 * 	if setting_value
+	 * 		# Logic for setting values
+	 * 		case column_index
+	 * 		when 0
+	 * 			# Example of modifying value before storing it
+	 * 			record[:first] = value.capitalize
+	 * 		when 1
+	 * 			record[:last] = value.capitalize
+	 * 		when 2
+	 * 			record[:location] = value
+	 * 		when 3
+	 * 			record[:occupation] = value
+	 * 		end
+	 * 	else
+	 * 		# Logic for getting values
+	 * 		case column_index
+	 * 		when 0
+	 * 			next record[:first]
+	 * 		when 1
+	 * 			next record[:last]
+	 * 		when 2
+	 * 			next record[:location]
+	 * 		when 3
+	 * 			next record[:occupation]
+	 * 		end
+	 * 	end
+	 * end
+	 * }
+	 * </pre>
+	 * @param identifier The unique identifier for this control.
+	 * @param controlLabel The label for this control.
+	 * @param headers List of headers for this control.
+	 * @param records A List of objects representing each row in the table.  Can be any object provided callback is able to get values from.
+	 * @param callback A callback which is responsible for reading and potentially writing values associated to each column in the table.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendDynamicTable(String identifier, String controlLabel,
 			List<String> headers, List<Object> records, DynamicTableValueCallback callback) throws Exception{
 		DynamicTableControl component = new DynamicTableControl(headers,records,callback);
@@ -757,7 +932,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param choices The collection of String choices to display.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendStringChoiceTable(String identifier, String controlLabel, Collection<String> choices) throws Exception{
@@ -774,7 +949,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param controlLabel The label for this control.
 	 * @param choices A collection of strings which will be the available choices
 	 * @param callback Optional (may be null) callback which will be invoked when the combo box value changes
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendComboBox(String identifier, String controlLabel, Collection<String> choices, Runnable callback) throws Exception{
@@ -802,7 +977,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param choices A collection of strings which will be the available choices
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendComboBox(String identifier, String controlLabel, Collection<String> choices) throws Exception {
@@ -831,7 +1006,7 @@ public class CustomTabPanel extends JPanel{
 	 * Appends a control which allows a user to select a directory.
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendDirectoryChooser(String identifier, String controlLabel) throws Exception{
@@ -846,7 +1021,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param callback Callback which will be invoked when user selects a file using the choose button
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendDirectoryChooser(String identifier, String controlLabel, PathSelectedCallback callback) throws Exception{
@@ -863,7 +1038,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param controlLabel The label for this control.
 	 * @param fileTypeName The name portion of the file type filter.
 	 * @param fileExtension The extension (without period) to filter the visible files on.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendOpenFileChooser(String identifier, String controlLabel, String fileTypeName, String fileExtension) throws Exception{
@@ -880,7 +1055,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param fileTypeName The name portion of the file type filter.
 	 * @param fileExtension The extension (without period) to filter the visible files on.
 	 * @param callback Callback which will be invoked when user selects a file using the choose button
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendOpenFileChooser(String identifier, String controlLabel, String fileTypeName, String fileExtension, PathSelectedCallback callback) throws Exception{
@@ -897,7 +1072,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param controlLabel The label for this control.
 	 * @param fileTypeName The name portion of the file type filter.
 	 * @param fileExtension The extension (without period) to filter the visible files on.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendSaveFileChooser(String identifier, String controlLabel, String fileTypeName, String fileExtension) throws Exception{
@@ -911,7 +1086,7 @@ public class CustomTabPanel extends JPanel{
 	 * Appends a list box allowing the user to specify multiple file and directory paths.
 	 * @param identifier The unique identifier for this control.
 	 * @param initialPaths Initial values to populate the list with, can be null.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendPathList(String identifier, List<String> initialPaths) throws Exception{
@@ -927,7 +1102,7 @@ public class CustomTabPanel extends JPanel{
 	/***
 	 * Appends a list box allowing the user to specify multiple file and directory paths.
 	 * @param identifier The unique identifier for this control.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendPathList(String identifier) throws Exception{
@@ -938,7 +1113,7 @@ public class CustomTabPanel extends JPanel{
 	 * Appends a list box allowing the user to specify string values.
 	 * @param identifier The unique identifier for this control.
 	 * @param initialValues Initial values to populate the list with, can be null.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendStringList(String identifier, List<String> initialValues) throws Exception{
@@ -954,7 +1129,7 @@ public class CustomTabPanel extends JPanel{
 	/***
 	 * Appends a list box allowing the user to specify string values.
 	 * @param identifier The unique identifier for this control.
-	 * @return Returns this TabbedCustomDialog instance to allow for method chaining.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendStringList(String identifier) throws Exception{
@@ -1102,6 +1277,14 @@ public class CustomTabPanel extends JPanel{
 			throw new Exception("Control for identifier '"+identifier+"' is not a supported control type: JPasswordField, JTextField, PathSelectionControl, JTextArea");
 	}
 	
+	/***
+	 * Sets the date contained in a date picker control previously added through a call to {@link #appendDatePicker(String, String)} or 
+	 * {@link #appendDatePicker(String, String, Object)}.
+	 * @param identifier The unique identifier of the previously added date picker control.
+	 * @param value The value to set the date picker to.  Accepts values of {@link java.util.Date}, {@link org.joda.time.DateTime} or a date
+	 * String formatted "yyyyMMdd".
+	 * @throws Exception May be thrown if identifier does not point to a valid/existing control or date format string is invalid.
+	 */
 	public void setDate(String identifier, Object value) throws Exception{
 		Component component = controls.get(identifier);
 		if(component instanceof JXDatePicker){
@@ -1309,7 +1492,7 @@ public class CustomTabPanel extends JPanel{
 	}
 	
 	/***
-	 * Gets a JSON String equivalent of the dialog values.  This is a convenience method for calling
+	 * Gets a JSON String equivalent of the dialog's values.  This is a convenience method for calling
 	 * {@link #toMap} and then converting that Map to a JSON string.
 	 * @return A JSON string representation of the dialogs values (based on the Map returned by {@link toMap}).
 	 */
@@ -1321,31 +1504,49 @@ public class CustomTabPanel extends JPanel{
 	}
 	
 	/**
-	 * @return the choiceTableHeight
+	 * @return The height of choice table controls
 	 */
 	public int getChoiceTableHeight() {
 		return choiceTableHeight;
 	}
 
 	/**
-	 * @param choiceTableHeight the choiceTableHeight to set
+	 * @param choiceTableHeight The choiceTableHeight to set
 	 */
 	public void setChoiceTableHeight(int choiceTableHeight) {
 		this.choiceTableHeight = choiceTableHeight;
 	}
 
+	/***
+	 * Gets the label of this tab.
+	 * @return The label of this tab.
+	 */
 	public String getLabel() {
 		return label;
 	}
 
+	/***
+	 * Sets the label of this tab.
+	 * @param label The label to set.
+	 */
 	public void setLabel(String label) {
 		this.label = label;
 	}
 	
+	/***
+	 * Allows you to specify code which customizes how a particular control's value is serialized.
+	 * @param identifier The unique identifier of the control to which you are providing custom serialization logic for.
+	 * @param handler Provides logic regarding how to serialize the control's value.
+	 */
 	public void whenSerializing(String identifier, ControlSerializationHandler handler){
 		owner.whenSerializing(identifier,handler);
 	}
 	
+	/***
+	 * Allows you to specify code which customizes how a particular control's value is deserialized.
+	 * @param identifier The unique identifier of the control to which you are providing custom deserialization logic for.
+	 * @param handler Provides logic regarding how to deserialize the control's value.
+	 */
 	public void whenDeserializing(String identifier, ControlDeserializationHandler handler){
 		owner.whenDeserializing(identifier,handler);
 	}
@@ -1370,10 +1571,20 @@ public class CustomTabPanel extends JPanel{
 		}
 	}
 
+	/***
+	 * Allows you to specify that a particular control's value should not be serialized in calls to {@link #toMap(boolean)}.
+	 * @param identifier The unique identified of the control to be skipped.
+	 */
 	public void doNotSerialize(String identifier){
 		skipSerializing.add(identifier);
 	}
 	
+	/***
+	 * Registers a callback which is notified when a particular text control's value is modified.
+	 * @param identifier The unique of identifier of the text control to monitor.
+	 * @param callback Callback invoked when the text control's value is modified.
+	 * @throws Exception May be thrown if identifier does not refer to a supported/existing control.
+	 */
 	public void whenTextChanged(String identifier, Consumer<String> callback) throws Exception{
 		Component component = controls.get(identifier);
 		if(component instanceof JTextComponent){
