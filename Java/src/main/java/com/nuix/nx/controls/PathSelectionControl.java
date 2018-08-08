@@ -64,23 +64,24 @@ public class PathSelectionControl extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				File selectedFile = null;
 				String existingValue = txtFilePath.getText();
+				boolean existingValueIsEmpty = existingValue.trim().isEmpty();
 				switch(type){
 				case DIRECTORY:
-					if(initialDirectory != null){
+					if(existingValueIsEmpty && initialDirectory != null){
 						selectedFile = CommonDialogs.getDirectory(initialDirectory, dialogTitle);
 					} else {
 						selectedFile = CommonDialogs.getDirectory(existingValue, dialogTitle);	
 					}
 					break;
 				case OPEN_FILE:
-					if(initialDirectory != null){
+					if(existingValueIsEmpty && initialDirectory != null){
 						selectedFile = CommonDialogs.openFileDialog(initialDirectory, fileTypeName, fileExtension, dialogTitle);
 					} else {
 						selectedFile = CommonDialogs.openFileDialog(existingValue, fileTypeName, fileExtension, dialogTitle);	
 					}
 					break;
 				case SAVE_FILE:
-					if(initialDirectory != null){
+					if(existingValueIsEmpty && initialDirectory != null){
 						selectedFile = CommonDialogs.saveFileDialog(initialDirectory, fileTypeName, fileExtension, dialogTitle);
 					} else {
 						selectedFile = CommonDialogs.saveFileDialog(existingValue, fileTypeName, fileExtension, dialogTitle);	
