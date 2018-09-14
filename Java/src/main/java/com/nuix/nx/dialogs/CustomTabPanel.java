@@ -1428,7 +1428,9 @@ public class CustomTabPanel extends JPanel{
 	public Map<String,Object> toMap(boolean forJsonCreation){
 		Map<String,Object> result = new HashMap<String,Object>();
 		for(String identifier : controls.keySet()){
-			if(skipSerializing.contains(identifier)){
+			// Only skip serializing fields marked to be skipped and
+			// if we are serializing control values to build JSON
+			if(forJsonCreation && skipSerializing.contains(identifier)){
 				continue;
 			}
 			Component component = controls.get(identifier);
