@@ -272,6 +272,13 @@ public class ProgressDialog extends JDialog {
 	}
 	
 	/***
+	 * Increases the current value of the main progress bar by 1.
+	 */
+	public void incrementMainProgress() {
+		mainProgress.setValue(mainProgress.getValue()+1);
+	}
+	
+	/***
 	 * Sets whether the main progress bar is visible.
 	 * @param value True for visible, false for hidden.
 	 */
@@ -295,6 +302,13 @@ public class ProgressDialog extends JDialog {
 	 */
 	public void setSubProgress(int value){
 		subProgress.setValue(value);
+	}
+	
+	/***
+	 * Increases the current value of the sub progress bar by 1.
+	 */
+	public void incrememntSubProgress() {
+		subProgress.setValue(subProgress.getValue()+1);
 	}
 	
 	/***
@@ -355,9 +369,11 @@ public class ProgressDialog extends JDialog {
 		}
 		
 		txtrLog.setCaretPosition(txtrLog.getDocument().getLength());
-		System.out.println(message);
+		
 		if(loggingCallback != null){
 			loggingCallback.messageLogged(message);
+		} else {
+			System.out.println(message);	
 		}
 	}
 	
