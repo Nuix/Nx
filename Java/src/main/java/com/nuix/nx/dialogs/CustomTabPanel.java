@@ -1668,7 +1668,7 @@ public class CustomTabPanel extends JPanel{
 	}
 
 	/***
-	 * Allows you to specify that a particular control's value should not be serialized in calls to {@link #toMap(boolean)}.
+	 * Allows you to specify that a particular control's value should not be serialized in calls to {@link #toMap(boolean)} with a value of true (meaning it is generating map of setting for generating JSON).
 	 * @param identifier The unique identified of the control to be skipped.
 	 */
 	public void doNotSerialize(String identifier){
