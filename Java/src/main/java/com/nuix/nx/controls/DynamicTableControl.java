@@ -74,8 +74,10 @@ public class DynamicTableControl extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					tableModel.setFilter(txtFilter.getText());
-					
+					// Possible for this to fire before were properly ready so we check for nulls
+					if(tableModel != null && txtFilter != null) {
+						tableModel.setFilter(txtFilter.getText());
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
