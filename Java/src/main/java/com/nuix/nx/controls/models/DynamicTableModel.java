@@ -289,9 +289,10 @@ public class DynamicTableModel extends AbstractTableModel {
 	 * @param value The checked state to set
 	 */
 	public void setCheckedAtIndex(int index, boolean value){
-		if(index > 0 && index < recordSelection.size()){
+		if(index >= 0 && index < recordSelection.size()){
 			recordSelection.set(index, value);
 		}
+		notifyChanged();
 	}
 	
 	/***
