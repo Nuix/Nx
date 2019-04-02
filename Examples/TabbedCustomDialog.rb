@@ -154,7 +154,7 @@ values = [
 ]
 
 # Need to supply a callback which can fetch field values from a given record in the data
-# and potential save values back assuming you wish the table to editable
+# and potential save values back assuming you wish the table to be editable
 dynamic_table_tab.appendDynamicTable("dynamic_table","Dynamic Table",headers,values) do |record,column|
 	case column
 	when 0
