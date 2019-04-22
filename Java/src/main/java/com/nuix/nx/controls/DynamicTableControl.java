@@ -400,6 +400,11 @@ public class DynamicTableControl extends JPanel {
 		btnAddRecord.setEnabled(value);
 		btnRemoveSelected.setEnabled(value);
 	}
+	
+	public void setDefaultCheckState(boolean defaultCheckState) {
+		tableModel.setDefaultCheckState(defaultCheckState);
+	}
+
 	public JButton getBtnAddRecord() {
 		return btnAddRecord;
 	}

@@ -7,7 +7,7 @@ require_relative "NxBootstrap.rb"
 # ==========================================================================
 
 # Open a test case, change this to a case on your system
-$current_case = $utilities.getCaseFactory.open('C:\@NUIX\Cases\Ziggy')
+$current_case = $utilities.getCaseFactory.open('D:\Cases\Ziggy')
 
 # Tell the library what the current case is
 NuixConnection.setCurrentCase($current_case)
