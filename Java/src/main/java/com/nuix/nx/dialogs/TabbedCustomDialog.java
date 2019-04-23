@@ -907,4 +907,28 @@ public class TabbedCustomDialog extends JDialog {
 	public ControlSerializationHandler getSerializer(String identifier){
 		return serializationHandlers.get(identifier);
 	}
+	
+	private Map<String,JMenu> parentMenus = new HashMap<String,JMenu>();
+	
+	public void addMenu(String parentMenuLabel, String menuItemLabel, Runnable action) {
+		JMenu parentMenu = null;
+		if(!parentMenus.containsKey(parentMenuLabel)) {
+			parentMenu = new JMenu(parentMenuLabel);
+			menuBar.add(parentMenu);
+			parentMenus.put(parentMenuLabel, parentMenu);
+		} else {
+			parentMenu = parentMenus.get(parentMenuLabel);
+		}
+		
+		JMenuItem menuItem = new JMenuItem(menuItemLabel);
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { action.run(); }
+		});
+		parentMenu.add(menuItem);
+	}
+	
+	public void setSelectedTabIndex(int index) {
+		tabbedPane.setSelectedIndex(index);
+	}
 }

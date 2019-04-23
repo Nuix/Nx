@@ -143,6 +143,7 @@ public class CustomTabPanel extends JPanel{
 		c.anchor = GridBagConstraints.EAST;
 		JLabel labelComponent = new JLabel(label);
 		labelComponent.setHorizontalAlignment(SwingConstants.RIGHT);
+		labelComponent.setHorizontalTextPosition(SwingConstants.RIGHT);
 		labelComponent.setVerticalAlignment(SwingConstants.CENTER);
 		Font font = labelComponent.getFont();
 		Font boldFont = new Font(font.getFontName(), Font.BOLD, font.getSize());
