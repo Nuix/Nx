@@ -910,6 +910,25 @@ public class TabbedCustomDialog extends JDialog {
 	
 	private Map<String,JMenu> parentMenus = new HashMap<String,JMenu>();
 	
+	/***
+	 * Adds a menu entry to the menu bar and then a menu item to that menu.
+	 * @param parentMenuLabel The label of the menu to be added to the menu bar.  If one already exists with this name (exact matching) then the created
+	 * menu item will be added to that existing menu.  If a menu with this label does not already exist, it is created.
+	 * @param menuItemLabel The label of the menu item to be added to the specified parent menu.
+	 * @param action The action to perform when the given menu item is clicked.  Example:
+	 * <pre>{@code
+	 * dialog.addMenu("Add Queries","Add Custodian Queries") do
+	 *	$current_case.getAllCustodians.each do |custodian_name|
+	 *			record = {
+	 *				:name => "Custodian: #{custodian_name}",
+	 *				:query => "custodian:\"#{custodian_name}\"",
+	 *			}
+	 *			dynamic_table.getModel.addRecord(record)
+	 *		end
+	 *		dialog.setSelectedTabIndex(2)
+	 * 	end
+	 * }</pre>
+	 */
 	public void addMenu(String parentMenuLabel, String menuItemLabel, Runnable action) {
 		JMenu parentMenu = null;
 		if(!parentMenus.containsKey(parentMenuLabel)) {
@@ -928,6 +947,10 @@ public class TabbedCustomDialog extends JDialog {
 		parentMenu.add(menuItem);
 	}
 	
+	/***
+	 * Sets which tab is currently selected.
+	 * @param index The index of the tab to make selected (index starts at 0).
+	 */
 	public void setSelectedTabIndex(int index) {
 		tabbedPane.setSelectedIndex(index);
 	}
