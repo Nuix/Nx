@@ -19,6 +19,17 @@ dialog = TabbedCustomDialog.new
 # will call on the OS to open the specified file when clicked
 dialog.setHelpFile(File.join(File.dirname(__FILE__),"TestHelpFile.txt"))
 
+# Demonstrate adding menu items
+dialog.addMenu("Common Dialogs","Show Information Dialog") do
+	CommonDialogs.showInformation("This is an example informative dialog!")
+end
+dialog.addMenu("Common Dialogs","Show Warning Dialog") do
+	CommonDialogs.showWarning("This is an example warning dialog!")
+end
+dialog.addMenu("Common Dialogs","Show Error Dialog") do
+	CommonDialogs.showError("This is an example error dialog!")
+end
+
 # ================================
 # Add a tab and test date controls
 # ================================
