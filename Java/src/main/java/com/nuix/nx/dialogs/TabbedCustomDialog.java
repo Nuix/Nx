@@ -88,6 +88,7 @@ public class TabbedCustomDialog extends JDialog {
 	private boolean stickySettingsEnabled = false;
 	private String stickySettingsFilePath = "";
 	private File helpFile = null;
+	private String helpUrl = null;
 	private String dateSerializationFormat = "yyyy-MM-dd HH:mm:ss";
 	private SimpleDateFormat sdf = new SimpleDateFormat(dateSerializationFormat);
 	
@@ -226,6 +227,7 @@ public class TabbedCustomDialog extends JDialog {
 		menuBar.add(mnHelp);
 		
 		mntmViewHelp = new JMenuItem("View Help");
+		mntmViewHelp.setVisible(false);
 		mntmViewHelp.setIcon(new ImageIcon(TabbedCustomDialog.class.getResource("/com/nuix/nx/dialogs/help.png")));
 		mntmViewHelp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -243,6 +245,20 @@ public class TabbedCustomDialog extends JDialog {
 			}
 		});
 		mnHelp.add(mntmViewHelp);
+		
+		mntmViewOnlineHelp = new JMenuItem("View Online Help");
+		mntmViewOnlineHelp.setVisible(false);
+		mntmViewOnlineHelp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					java.awt.Desktop.getDesktop().browse(java.net.URI.create(helpUrl));
+				} catch (IOException e1) {
+					CommonDialogs.showError("Unable to open help page at "+helpUrl+"\n\n"+e1.getMessage());
+				}
+			}
+		});
+		mntmViewOnlineHelp.setIcon(new ImageIcon(TabbedCustomDialog.class.getResource("/com/nuix/nx/dialogs/help.png")));
+		mnHelp.add(mntmViewOnlineHelp);
 	}
 	
 	/***
@@ -257,8 +273,15 @@ public class TabbedCustomDialog extends JDialog {
 			}catch(Exception exc){}
 		}
 		
-		if(helpFile == null || !helpFile.exists())
-			mnHelp.setVisible(false);
+		if(helpFile != null && helpFile.exists()) {
+			mnHelp.setVisible(true);
+			mntmViewHelp.setVisible(true);
+		}
+			
+		if(helpUrl != null && !helpUrl.trim().isEmpty()) {
+			mnHelp.setVisible(true);
+			mntmViewOnlineHelp.setVisible(true);
+		}
 		
 		for(CustomTabPanel tab : tabs.values()){
 			tab.addVerticalFillerAsNeeded();
@@ -283,8 +306,15 @@ public class TabbedCustomDialog extends JDialog {
 			}catch(Exception exc){}
 		}
 		
-		if(helpFile == null || !helpFile.exists())
-			mnHelp.setVisible(false);
+		if(helpFile != null && helpFile.exists()) {
+			mnHelp.setVisible(true);
+			mntmViewHelp.setVisible(true);
+		}
+			
+		if(helpUrl != null && !helpUrl.trim().isEmpty()) {
+			mnHelp.setVisible(true);
+			mntmViewOnlineHelp.setVisible(true);
+		}
 		
 		for(CustomTabPanel tab : tabs.values()){
 			tab.addVerticalFillerAsNeeded();
@@ -847,13 +877,21 @@ public class TabbedCustomDialog extends JDialog {
 	}
 	
 	/***
-	 * Sets the path to a help file which will be associated to the "Help" menu "View Documentation" entry
+	 * Sets the path to a help file which will be associated to the "Help" menu "View Help" entry
 	 * @param helpFile Path to a help file (set null to hide help menu, default is null)
 	 */
 	public void setHelpFile(String helpFile) {
 		setHelpFile(new File(helpFile));
 	}
-	
+
+	/***
+	 * Sets the URL which will be associated to the "Help" menu "View Online Help" entry.
+	 * @param helpUrl URL to a web site
+	 */
+	public void setHelpUrl(String helpUrl) {
+		this.helpUrl = helpUrl;
+	}
+
 	/***
 	 * Hides the file menu from the user (effectively disabling save and load).  Mostly included for situations
 	 * where settings cannot be reasonably saved to JSON so you wish to hide those choices from the user.
@@ -909,6 +947,7 @@ public class TabbedCustomDialog extends JDialog {
 	}
 	
 	private Map<String,JMenu> parentMenus = new HashMap<String,JMenu>();
+	private JMenuItem mntmViewOnlineHelp;
 	
 	/***
 	 * Adds a menu entry to the menu bar and then a menu item to that menu.
