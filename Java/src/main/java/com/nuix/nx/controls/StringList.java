@@ -20,17 +20,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import org.apache.commons.lang.ArrayUtils;
 
+import com.nuix.nx.controls.models.StringListTableModel;
 import com.nuix.nx.dialogs.CommonDialogs;
 
 /***
@@ -42,11 +42,11 @@ import com.nuix.nx.dialogs.CommonDialogs;
 public class StringList extends JPanel {
 	private JButton btnAdd;
 	private JButton btnRemoveSelected;
-	private JList<String> valueList;
-	private DefaultListModel<String> listModel = new DefaultListModel<String>();
 	private JTextField txtUservalue;
 	private JButton btnImportFile;
 	private JPanel buttonLayoutPanel;
+	private JTable table;
+	private StringListTableModel model = new StringListTableModel();
 
 	public StringList() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -121,11 +121,11 @@ public class StringList extends JPanel {
 		btnRemoveSelected = new JButton("Remove Selected");
 		btnRemoveSelected.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int[] selectedIndices = valueList.getSelectedIndices();
+				int[] selectedIndices = table.getSelectedRows();
 				Arrays.sort(selectedIndices);
 				ArrayUtils.reverse(selectedIndices);
 				for(int index : selectedIndices){
-					listModel.remove(index);
+					model.removeValueAt(index);
 				}
 			}
 		});
@@ -166,29 +166,39 @@ public class StringList extends JPanel {
 		gbc_scrollPane.gridy = 1;
 		add(scrollPane, gbc_scrollPane);
 		
-		valueList = new JList<String>();
-		valueList.setModel(listModel);
-		scrollPane.setViewportView(valueList);
+		table = new JTable(model);
+		table.setFillsViewportHeight(true);
+		scrollPane.setViewportView(table);
 	}
 	
+	/***
+	 * Gets the current values of the list.
+	 * @return The current values of the list.
+	 */
 	public List<String> getValues(){
 		List<String> result = new ArrayList<String>();
-		for (int i = 0; i < listModel.size(); i++) {
-			result.add(listModel.getElementAt(i));
+		for (int i = 0; i < model.getValueCount(); i++) {
+			result.add(model.getValueAt(i));
 		}
 		return result;
 	}
 	
+	/***
+	 * Sets the values of the list.
+	 * @param values The new values of the list.
+	 */
 	public void setValues(List<String> values){
-		listModel.clear();
-		for(String value : values){
-			addValue(value);
-		}
+		model.setValues(values);
 	}
 	
-	public void addValue(String path){
-		listModel.addElement(path);
+	/***
+	 * Adds a value to the list.
+	 * @param value The value to add.
+	 */
+	public void addValue(String value){
+		model.addValue(value);
 	}
+	
 	public JButton getBtnImportFile() {
 		return btnImportFile;
 	}
@@ -199,5 +209,13 @@ public class StringList extends JPanel {
 			c.setEnabled(enabled);
 		}
 		super.setEnabled(enabled);
+	}
+
+	/***
+	 * Sets whether the user is allowed to edit entries.
+	 * @param editable True if the user should be allowed to edit entries, False if not.
+	 */
+	public void setEditable(boolean editable) {
+		model.setEditable(editable);
 	}
 }

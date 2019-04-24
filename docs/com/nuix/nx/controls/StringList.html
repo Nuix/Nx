@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -229,7 +229,9 @@ extends javax.swing.JPanel</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/controls/StringList.html#addValue-java.lang.String-">addValue</a></span>(java.lang.String&nbsp;path)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/controls/StringList.html#addValue-java.lang.String-">addValue</a></span>(java.lang.String&nbsp;value)</code>
+<div class="block">Adds a value to the list.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>javax.swing.JButton</code></td>
@@ -237,15 +239,25 @@ extends javax.swing.JPanel</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;java.lang.String&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/controls/StringList.html#getValues--">getValues</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/controls/StringList.html#getValues--">getValues</a></span>()</code>
+<div class="block">Gets the current values of the list.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/controls/StringList.html#setEnabled-boolean-">setEnabled</a></span>(boolean&nbsp;enabled)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/controls/StringList.html#setEditable-boolean-">setEditable</a></span>(boolean&nbsp;editable)</code>
+<div class="block">Sets whether the user is allowed to edit entries.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/controls/StringList.html#setValues-java.util.List-">setValues</a></span>(java.util.List&lt;java.lang.String&gt;&nbsp;values)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/controls/StringList.html#setEnabled-boolean-">setEnabled</a></span>(boolean&nbsp;enabled)</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/controls/StringList.html#setValues-java.util.List-">setValues</a></span>(java.util.List&lt;java.lang.String&gt;&nbsp;values)</code>
+<div class="block">Sets the values of the list.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -321,6 +333,11 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>getValues</h4>
 <pre>public&nbsp;java.util.List&lt;java.lang.String&gt;&nbsp;getValues()</pre>
+<div class="block">Gets the current values of the list.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The current values of the list.</dd>
+</dl>
 </li>
 </ul>
 <a name="setValues-java.util.List-">
@@ -330,6 +347,11 @@ extends javax.swing.JPanel</pre>
 <li class="blockList">
 <h4>setValues</h4>
 <pre>public&nbsp;void&nbsp;setValues(java.util.List&lt;java.lang.String&gt;&nbsp;values)</pre>
+<div class="block">Sets the values of the list.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>values</code> - The new values of the list.</dd>
+</dl>
 </li>
 </ul>
 <a name="addValue-java.lang.String-">
@@ -338,7 +360,12 @@ extends javax.swing.JPanel</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>addValue</h4>
-<pre>public&nbsp;void&nbsp;addValue(java.lang.String&nbsp;path)</pre>
+<pre>public&nbsp;void&nbsp;addValue(java.lang.String&nbsp;value)</pre>
+<div class="block">Adds a value to the list.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - The value to add.</dd>
+</dl>
 </li>
 </ul>
 <a name="getBtnImportFile--">
@@ -353,13 +380,27 @@ extends javax.swing.JPanel</pre>
 <a name="setEnabled-boolean-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setEnabled</h4>
 <pre>public&nbsp;void&nbsp;setEnabled(boolean&nbsp;enabled)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>setEnabled</code>&nbsp;in class&nbsp;<code>javax.swing.JComponent</code></dd>
+</dl>
+</li>
+</ul>
+<a name="setEditable-boolean-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setEditable</h4>
+<pre>public&nbsp;void&nbsp;setEditable(boolean&nbsp;editable)</pre>
+<div class="block">Sets whether the user is allowed to edit entries.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>editable</code> - True if the user should be allowed to edit entries, False if not.</dd>
 </dl>
 </li>
 </ul>

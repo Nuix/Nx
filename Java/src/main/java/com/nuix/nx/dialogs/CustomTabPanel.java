@@ -1212,12 +1212,25 @@ public class CustomTabPanel extends JPanel{
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendStringList(String identifier, List<String> initialValues) throws Exception{
+		return appendStringList(identifier,initialValues,false);
+	}
+	
+	/***
+	 * Appends a list box allowing the user to specify string values.
+	 * @param identifier The unique identifier for this control.
+	 * @param initialValues Initial values to populate the list with, can be null.
+	 * @param editable Whether the user is able to edit entries in the list.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
+	 */
+	public CustomTabPanel appendStringList(String identifier, List<String> initialValues, boolean editable) throws Exception{
 		StringList component = new StringList();
 		if(initialValues != null)
 			component.setValues(initialValues);
 		addComponent(component,controls.size()+headersCount,0,2,1,true);
 		headersCount++;
 		trackComponent(identifier, component);
+		component.setEditable(editable);
 		return this;
 	}
 	
@@ -1228,7 +1241,18 @@ public class CustomTabPanel extends JPanel{
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendStringList(String identifier) throws Exception{
-		return appendStringList(identifier,null);
+		return appendStringList(identifier,null,false);
+	}
+	
+	/***
+	 * Appends a list box allowing the user to specify string values.
+	 * @param identifier The unique identifier for this control.
+	 * @param editable Whether the user is able to edit entries in the list.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
+	 */
+	public CustomTabPanel appendStringList(String identifier,boolean editable) throws Exception{
+		return appendStringList(identifier,null,editable);
 	}
 	
 	/***
