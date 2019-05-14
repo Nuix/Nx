@@ -427,6 +427,7 @@ public class ProgressDialog extends JDialog {
 			PrintWriter pw = new PrintWriter(sw);
 			exc.printStackTrace(pw);
 			dialog.logMessage(sw.toString());
+			exc.printStackTrace();
 		}
 		dialog.setAbortButtonVisible(false);
 		dialog.btnClose.setEnabled(true);
