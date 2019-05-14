@@ -224,6 +224,7 @@ public class TabbedCustomDialog extends JDialog {
 		
 		mnHelp = new JMenu("Help");
 		mnHelp.setIcon(new ImageIcon(TabbedCustomDialog.class.getResource("/com/nuix/nx/dialogs/help.png")));
+		mnHelp.setVisible(false);
 		menuBar.add(mnHelp);
 		
 		mntmViewHelp = new JMenuItem("View Help");
