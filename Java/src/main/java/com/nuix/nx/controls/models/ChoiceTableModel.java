@@ -182,6 +182,10 @@ public class ChoiceTableModel<T> extends AbstractTableModel {
 		this.fireTableDataChanged();
 	}
 	
+	public void refreshTable() {
+		this.fireTableDataChanged();
+	}
+	
 	public void setFilter(String filter){
 		this.filter = filter;
 		applyFiltering();
