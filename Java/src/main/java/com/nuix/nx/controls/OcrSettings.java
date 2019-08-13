@@ -486,6 +486,7 @@ public class OcrSettings extends JPanel {
 				
 		// Update duplicates was added in Nuix 7.2.0
 		if(NuixConnection.getCurrentNuixVersion().isLessThan("7.2.0")){
+			lblUpdateDuplicates.setVisible(false);
 			chckbxUpdateDuplicates.setVisible(false);
 			lblTimeoutminutes.setVisible(false);
 			timeoutMinutes.setVisible(false);
