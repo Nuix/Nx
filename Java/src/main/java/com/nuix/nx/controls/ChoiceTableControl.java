@@ -23,6 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
 import com.nuix.nx.controls.models.Choice;
@@ -244,11 +246,13 @@ public class ChoiceTableControl<T> extends JPanel {
 				gbc_lblLblcounts.gridx = 0;
 				gbc_lblLblcounts.gridy = 2;
 				add(lblLblcounts, gbc_lblLblcounts);
-				TableColumn checkColumn = choiceTable.getColumnModel().getColumn(0);
-				checkColumn.setMinWidth(25);
-				checkColumn.setWidth(25);
-				checkColumn.setPreferredWidth(25);
-				checkColumn.setMaxWidth(25);
+				constrainFirstColumn();
+				choiceTable.getModel().addTableModelListener(new TableModelListener() {
+					@Override
+					public void tableChanged(TableModelEvent e) {
+						constrainFirstColumn();
+					}
+				});
 			}
 		}
 		
