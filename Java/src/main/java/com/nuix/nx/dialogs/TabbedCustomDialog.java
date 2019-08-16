@@ -739,8 +739,8 @@ public class TabbedCustomDialog extends JDialog {
 					bets.getComboNaming().setSelectedValue((String)settings.get("naming"));
 					bets.getTxtPath().setText((String)settings.get("path"));
 					bets.getTxtSuffix().setText((String)settings.get("suffix"));
-					bets.getChckbxWrapLines().setSelected((Boolean)settings.get("wrapLinesCheck"));
-					bets.getSpinnerWrapLength().setValue((Integer)settings.get("wrapLines"));
+					bets.getChckbxWrapLines().setSelected((Boolean)settings.get("wrapLinesChecked"));
+					bets.getSpinnerWrapLength().setValue(((Double)settings.get("wrapLines")).intValue());
 					bets.getComboLineSeparator().setSelectedValue((String)settings.get("lineSeparator"));
 					bets.getComboEncoding().setSelectedValue((String)settings.get("encoding"));
 				}
@@ -777,10 +777,12 @@ public class TabbedCustomDialog extends JDialog {
 					}
 					
 					if(NuixConnection.getCurrentNuixVersion().isAtLeast("7.2.0") && settings.containsKey("timeout")){
-						os.setTimeoutMinutes((int)settings.get("timeout"));
+						os.setTimeoutMinutes(((Double)settings.get("timeout")).intValue());
 					}
 					
 					ChoiceTableControl choiceTable = os.getLanguageChoices();
+					// Should clear check state before loading in new check state
+					choiceTable.getTableModel().uncheckAllChoices();
 					List<Choice> loadedChoices = new ArrayList<Choice>();
 					for(String value : (Iterable<String>)settings.get("languages")){
 						Choice choice = choiceTable.getTableModel().getFirstChoiceByLabel(value);
