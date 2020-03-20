@@ -48,6 +48,30 @@ checkable_tab.appendRadioButton("radio002","Radio 2 - Group 1", "group1", false)
 checkable_tab.appendRadioButton("radio003","Radio 3 - Group 2", "group2", true)
 checkable_tab.appendRadioButton("radio004","Radio 4 - Group 2", "group2", false)
 
+food_choices = [
+	"Pizza",
+	"Pho",
+	"Broccoli Beef",
+	"Tea Leaf Salad",
+	"Spicy Beef",
+	"Potstickers",
+	"Gyro",
+	"Calzone",
+	"Pancackes"
+]
+
+checked_food_choices = [
+	"Pizza",
+	"Gyro",
+	"Calzone",
+]
+
+# With defaults checked
+checkable_tab.appendMultipleChoiceComboBox("multi_choice_combo001","Multiple Choice (defaults)",food_choices,checked_food_choices)
+
+# Without defaults checked
+checkable_tab.appendMultipleChoiceComboBox("multi_choice_combo002","Multiple Choice (no defaults)",food_choices)
+
 # ================================
 # Add a tab and test text controls
 # ================================
@@ -193,6 +217,10 @@ dialog.toMap.each do |key,value|
 		value.each do |path|
 			puts "\t\t#{path}"
 		end
+	elsif value.is_a?(java.util.Date)
+		puts "\t#{key} = #{value.toString}"
+	elsif value.is_a?(java.util.ArrayList)
+		puts "\t#{key} = #{value.to_a.inspect}"
 	else
 		puts "\t#{key} = #{value.inspect}"
 	end

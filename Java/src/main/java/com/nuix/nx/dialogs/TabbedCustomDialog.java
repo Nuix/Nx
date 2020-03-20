@@ -65,6 +65,7 @@ import com.nuix.nx.controls.ComboItemBox;
 import com.nuix.nx.controls.CsvTable;
 import com.nuix.nx.controls.DynamicTableControl;
 import com.nuix.nx.controls.LocalWorkerSettings;
+import com.nuix.nx.controls.MultipleChoiceComboBox;
 import com.nuix.nx.controls.OcrSettings;
 import com.nuix.nx.controls.PathList;
 import com.nuix.nx.controls.PathSelectionControl;
@@ -707,6 +708,11 @@ public class TabbedCustomDialog extends JDialog {
 						values.add(value);
 					}
 					stringList.setValues(values);
+				}
+				else if(control instanceof MultipleChoiceComboBox) {
+					MultipleChoiceComboBox mccb = (MultipleChoiceComboBox) control;
+					List<String> values = (ArrayList<String>) entry.getValue();
+					mccb.setChoices(values);
 				}
 				else if(control instanceof LocalWorkerSettings){
 					LocalWorkerSettings lws = (LocalWorkerSettings) control;
