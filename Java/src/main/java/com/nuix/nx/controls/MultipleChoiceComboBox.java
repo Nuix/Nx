@@ -15,6 +15,12 @@ import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/***
+ * A combo box (based on CheckBoxListExComboBox) which offers a drop down which allows the user to pick
+ * multiple choices by checking them, rather than just the single choice of a traditional combo box.
+ * @author Jason Wells
+ *
+ */
 @SuppressWarnings("serial")
 public class MultipleChoiceComboBox extends JPanel {
 

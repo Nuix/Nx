@@ -1004,6 +1004,15 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a combo box which allows you to select multiple choices from its drop down list by checking them.
+	 * @param identifier The unique identifier for this control.
+	 * @param controlLabel The label for this control.
+	 * @param choices A List of String choices
+	 * @param defaultCheckedChoices A List of String choices to be checked initially
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendMultipleChoiceComboBox(String identifier, String controlLabel, List<String> choices, List<String> defaultCheckedChoices) throws Exception {
 		MultipleChoiceComboBox component = new MultipleChoiceComboBox();
 		component.setChoices(choices);
@@ -1014,6 +1023,15 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	/***
+	 * Appends a combo box which allows you to select multiple choices from its drop down list by checking them.  Starts
+	 * off with no choices initially checked.
+	 * @param identifier The unique identifier for this control.
+	 * @param controlLabel The label for this control.
+	 * @param choices A List of String choices
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendMultipleChoiceComboBox(String identifier, String controlLabel, List<String> choices) throws Exception {
 		MultipleChoiceComboBox component = new MultipleChoiceComboBox();
 		component.setChoices(choices);
