@@ -74,6 +74,7 @@ import com.nuix.nx.controls.ComboItemBox;
 import com.nuix.nx.controls.CsvTable;
 import com.nuix.nx.controls.DynamicTableControl;
 import com.nuix.nx.controls.LocalWorkerSettings;
+import com.nuix.nx.controls.MultipleChoiceComboBox;
 import com.nuix.nx.controls.OcrSettings;
 import com.nuix.nx.controls.PathList;
 import com.nuix.nx.controls.PathSelectedCallback;
@@ -1003,6 +1004,26 @@ public class CustomTabPanel extends JPanel{
 		return this;
 	}
 	
+	public CustomTabPanel appendMultipleChoiceComboBox(String identifier, String controlLabel, List<String> choices, List<String> defaultCheckedChoices) throws Exception {
+		MultipleChoiceComboBox component = new MultipleChoiceComboBox();
+		component.setChoices(choices);
+		component.setCheckedChoices(defaultCheckedChoices);
+		addBasicLabelledComponent(controlLabel, component);
+		trackComponent(identifier, component);
+				
+		return this;
+	}
+	
+	public CustomTabPanel appendMultipleChoiceComboBox(String identifier, String controlLabel, List<String> choices) throws Exception {
+		MultipleChoiceComboBox component = new MultipleChoiceComboBox();
+		component.setChoices(choices);
+		component.uncheckAll();
+		addBasicLabelledComponent(controlLabel, component);
+		trackComponent(identifier, component);
+				
+		return this;
+	}
+	
 	/***
 	 * Appends a control which allows a user to select a directory.
 	 * @param identifier The unique identifier for this control.
@@ -1512,6 +1533,10 @@ public class CustomTabPanel extends JPanel{
 				}else{
 					value = ((DynamicTableControl)component).getTableModel().getCheckedRecords();	
 				}
+			}
+			else if(component instanceof MultipleChoiceComboBox) {
+				MultipleChoiceComboBox mccb = (MultipleChoiceComboBox)component;
+				value = mccb.getCheckedChoices();
 			}
 			else if(component instanceof LocalWorkerSettings){
 				Map<String,Object> workerSettings = new HashMap<String,Object>();
