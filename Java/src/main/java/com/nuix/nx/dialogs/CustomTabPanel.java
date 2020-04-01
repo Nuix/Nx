@@ -94,19 +94,23 @@ import com.nuix.nx.controls.models.DynamicTableValueCallback;
  */
 @SuppressWarnings("serial")
 public class CustomTabPanel extends JPanel{
-	private String label = "New Tab";
-	private TabbedCustomDialog owner;
+	protected String label = "New Tab";
+	protected TabbedCustomDialog owner;
 	Map<String,Component> controls;
-	private Map<String,ButtonGroup> buttonGroups;
+	protected Map<String,ButtonGroup> buttonGroups;
 	private static final Insets genericInsets = new Insets(2,2,2,2);
 	GridBagLayout rootLayout;
-	private int LABEL_COLUMN_WIDTH = 50;
-	private int CONTROL_COLUMN_WIDTH = 500;
+	protected int LABEL_COLUMN_WIDTH = 50;
+	protected int CONTROL_COLUMN_WIDTH = 500;
 	private int headersCount = 0;
 	private int choiceTableHeight = 200;
 	private boolean hasVerticalFiller = false;
 	Map<String,Boolean> enabledStates = null;
 	private Set<String> skipSerializing = new HashSet<String>();
+	
+	protected CustomTabPanel() {
+		// Only here so derived class can have custom contructor which does not need to call super()
+	}
 	
 	public CustomTabPanel(String label,TabbedCustomDialog owner) {
 		this.label = label;
@@ -158,7 +162,9 @@ public class CustomTabPanel extends JPanel{
 		c.gridheight = 1;
 		c.weightx = 0;
 		
-		if(fillVertical){c.weighty = 1.0;}
+		if(fillVertical){
+			c.weighty = 1.0;
+		}
 		else{c.weighty = 0;}
 		
 		if(fillVertical && fillHorizontal){
