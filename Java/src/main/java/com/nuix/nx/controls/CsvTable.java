@@ -49,6 +49,7 @@ public class CsvTable extends JPanel {
 	private JButton btnRemovedSelectedRows;
 	private JButton btnAddRow;
 	private JButton btnImportCsv;
+	private String defaultImportDirectory = "C:\\";
 
 	public CsvTable(List<String> headers) {
 		recordsTableModel = new CsvTableModel(headers);
@@ -62,7 +63,7 @@ public class CsvTable extends JPanel {
 		btnImportCsv = new JButton("Import CSV");
 		btnImportCsv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				File csvFile = CommonDialogs.openFileDialog("C:\\", "Comma Separated Values", "csv", "Import CSV");
+				File csvFile = CommonDialogs.openFileDialog(defaultImportDirectory, "Comma Separated Values", "csv", "Import CSV");
 				if(csvFile != null){
 					importCsv(csvFile);
 				}
@@ -225,6 +226,12 @@ public class CsvTable extends JPanel {
 		btnRemovedSelectedRows.setEnabled(value);
 		super.setEnabled(value);
 	}
-	
-	
+
+	public String getDefaultImportDirectory() {
+		return defaultImportDirectory;
+	}
+
+	public void setDefaultImportDirectory(String defaultImportDirectory) {
+		this.defaultImportDirectory = defaultImportDirectory;
+	}
 }

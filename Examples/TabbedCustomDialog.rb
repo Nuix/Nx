@@ -109,6 +109,18 @@ file_tab.appendPathList("file_paths")
 choice_table_tab = dialog.addTab("choice_table_tab","Choice Table")
 choice_table_tab.appendStringChoiceTable("choices001","Tags",$current_case.getAllTags)
 
+# =========
+# CSV Table
+# =========
+
+csv_table_tab = dialog.addTab("csv_table_tab","CSV Table")
+headers = [
+	"Search Term",
+	"Tag"
+]
+default_import_directory = "D:\\Temp"
+csv_table_tab.appendCsvTable("csv_table",headers,default_import_directory)
+
 # ===========================================
 # Add a tab and test some other misc controls
 # ===========================================

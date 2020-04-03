@@ -835,6 +835,23 @@ public class CustomTabPanel extends JPanel{
 	}
 	
 	/***
+	 * Appends a table control with the specified headers, which is capable of importing a CSV with the same headers.
+	 * @param identifier The unique identifier for this control.
+	 * @param headers List of headers for the table.  Also determines import CSV columns.
+	 * @param defaultImportDirectory Directory path that should be default directory opened when user clicks import.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception May throw an exception if the provided identifier has already been used.
+	 */
+	public CustomTabPanel appendCsvTable(String identifier, List<String> headers, String defaultImportDirectory) throws Exception{
+		CsvTable component = new CsvTable(headers);
+		component.setDefaultImportDirectory(defaultImportDirectory);
+		addComponent(component,controls.size()+headersCount,0,2,1,true);
+		headersCount++;
+		trackComponent(identifier, component);
+		return this;
+	}
+	
+	/***
 	 * Appends a fairly flexible table control to the tab.  Table control relies on provided callback to get column values and optionally write
 	 * column value changes back to underlying row objects.
 	 * <pre>
