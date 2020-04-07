@@ -30,7 +30,7 @@ dialog.addMenu("Common Dialogs","Show Error Dialog") do
 	CommonDialogs.showError("This is an example error dialog!")
 end
 
-# ================================
+# ================================`
 # Add a tab and test date controls
 # ================================
 date_tab = dialog.addScrollableTab("date_tab","Date Controls")
@@ -96,6 +96,20 @@ text_tab.appendPasswordField("pass002","Password Field 2","cat")
 100.times do |i|
 	text_tab.appendCheckBox("text_tab_check#{i.to_s.rjust(3,"0")}","Text Tab Checkbox #{i+1}",true)
 end
+
+# =========
+# CSV Table
+# =========
+
+csv_table_tab = dialog.addScrollableTab("csv_table_tab","CSV Table")
+headers = [
+	"Search Term",
+	"Tag"
+]
+default_import_directory = "D:\\Temp"
+csv_table_tab.appendCsvTable("csv_table",headers,default_import_directory)
+csv_table_tab.appendCsvTable("csv_table2",headers,default_import_directory)
+csv_table_tab.getControl("csv_table2").setPreferredSize()
 
 # ================================
 # Add a tab and test file controls
