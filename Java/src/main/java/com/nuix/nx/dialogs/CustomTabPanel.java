@@ -834,6 +834,7 @@ public class CustomTabPanel extends JPanel{
 	 */
 	public CustomTabPanel appendCsvTable(String identifier, List<String> headers) throws Exception{
 		CsvTable component = new CsvTable(headers);
+		component.setPreferredSize(new Dimension(CONTROL_COLUMN_WIDTH,choiceTableHeight));
 		addComponent(component,controls.size()+headersCount,0,2,1,true);
 		headersCount++;
 		trackComponent(identifier, component);
@@ -851,6 +852,7 @@ public class CustomTabPanel extends JPanel{
 	public CustomTabPanel appendCsvTable(String identifier, List<String> headers, String defaultImportDirectory) throws Exception{
 		CsvTable component = new CsvTable(headers);
 		component.setDefaultImportDirectory(defaultImportDirectory);
+		component.setPreferredSize(new Dimension(CONTROL_COLUMN_WIDTH,choiceTableHeight));
 		addComponent(component,controls.size()+headersCount,0,2,1,true);
 		headersCount++;
 		trackComponent(identifier, component);
