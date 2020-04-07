@@ -393,6 +393,16 @@ public class TabbedCustomDialog extends JDialog {
 		return newTab;
 	}
 	
+	public ScrollableCustomTabPanel addScrollableTab(String id, String label) {
+		if(tabs.containsKey(id))
+			throw new RuntimeException("Dialog already contains a tab with the ID: "+id);
+		
+		ScrollableCustomTabPanel newTab = new ScrollableCustomTabPanel(label,this);
+		tabs.put(id,newTab);
+		controls.put(id, newTab);
+		return newTab;
+	}
+	
 	/***
 	 * Updates the label for given tab to a new value
 	 * @param tabId Id assigned to the tab when it was added
