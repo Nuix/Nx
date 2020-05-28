@@ -25,6 +25,7 @@ public class ChoiceTableModel<T> extends AbstractTableModel {
 	private List<Choice<T>> displayedChoices;
 	private String filter = "";
 	private ChoiceTableModelChangeListener changeListener;
+	private Pattern whitespaceSplitter = Pattern.compile("\\s+");
 	
 	/***
 	 * Create a new instance
@@ -172,8 +173,13 @@ public class ChoiceTableModel<T> extends AbstractTableModel {
 			displayedChoices = choices.stream().filter(c -> !c.isSelected()).collect(Collectors.toList());
 		} else {
 			try {
-				Pattern p = Pattern.compile(filter,Pattern.CASE_INSENSITIVE);
-				displayedChoices = choices.stream().filter(c -> p.matcher(c.getLabel().toLowerCase()).find()).collect(Collectors.toList());	
+				// we will treat spaces as a delimiter allowing for multiple things AND'ed
+				String[] criteria = whitespaceSplitter.split(filter);
+				displayedChoices = choices;
+				for(String criterion : criteria) {
+					Pattern p = Pattern.compile(criterion,Pattern.CASE_INSENSITIVE);
+					displayedChoices = displayedChoices.stream().filter(c -> p.matcher(c.getLabel().toLowerCase()).find()).collect(Collectors.toList());	
+				}
 			}
 			catch(Exception exc) {
 				displayedChoices = new ArrayList<Choice<T>>();
