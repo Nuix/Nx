@@ -969,7 +969,7 @@ public class CustomTabPanel extends JPanel{
 		}
 		return appendChoiceTable(identifier, controlLabel, actualChoices);
 	}
-	
+
 	/***
 	 * Appends a combo box control allowing a user to select one of many choices.
 	 * @param identifier The unique identifier for this control.
@@ -984,6 +984,7 @@ public class CustomTabPanel extends JPanel{
 		for(String choice : choices){
 			component.addItem(choice);
 		}
+		
 		addBasicLabelledComponent(controlLabel, component);
 		trackComponent(identifier, component);
 		

@@ -722,7 +722,7 @@ public class TabbedCustomDialog extends JDialog {
 				else if(control instanceof MultipleChoiceComboBox) {
 					MultipleChoiceComboBox mccb = (MultipleChoiceComboBox) control;
 					List<String> values = (ArrayList<String>) entry.getValue();
-					mccb.setChoices(values);
+					mccb.setCheckedChoices(values);
 				}
 				else if(control instanceof LocalWorkerSettings){
 					LocalWorkerSettings lws = (LocalWorkerSettings) control;

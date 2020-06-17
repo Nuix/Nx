@@ -7,7 +7,7 @@ require_relative "NxBootstrap.rb"
 # ==========================================================================
 
 # Open a test case, change this to a case on your system
-$current_case = $utilities.getCaseFactory.open('D:\Cases\FakeData_8.0')
+$current_case = $utilities.getCaseFactory.open('D:\cases\Fake Data 20200601_172517',{:migrate=>true})
 
 # Tell the library what the current case is
 NuixConnection.setCurrentCase($current_case)
@@ -131,6 +131,20 @@ other_tab.appendSpinner("spinner001","Spinner Control 1")
 other_tab.appendSpinner("spinner002","Spinner Control 2",1337)
 other_tab.appendSpinner("spinner003","Spinner Control 3",1337,100,2000)
 other_tab.appendSpinner("spinner004","Spinner Control 4",1000,100,2000,100)
+
+combo_choices = [
+	"Cat",
+	"Dog",
+	"Cat & Dog",
+	"Mouse",
+	"Bird",
+	"Monkey",
+	"Alligator",
+]
+other_tab.appendComboBox("combo01","Combob Box",combo_choices)
+other_tab.appendComboBox("combo02","Combob Box w/ Callback",combo_choices) do
+	CommonDialogs.showInformation("You changed your choice!")
+end
 
 # ========================
 # Radio button group tests
