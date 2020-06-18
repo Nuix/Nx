@@ -141,10 +141,11 @@ combo_choices = [
 	"Monkey",
 	"Alligator",
 ]
-other_tab.appendComboBox("combo01","Combob Box",combo_choices)
-other_tab.appendComboBox("combo02","Combob Box w/ Callback",combo_choices) do
+other_tab.appendComboBox("combo01","Combo Box",combo_choices)
+other_tab.appendComboBox("combo02","Combo Box w/ Callback",combo_choices) do
 	CommonDialogs.showInformation("You changed your choice!")
 end
+other_tab.appendSearchableComboBox("combo03","Searchable Combo Box",combo_choices)
 
 # ========================
 # Radio button group tests

@@ -62,6 +62,7 @@ import org.joda.time.DateTime;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jidesoft.swing.SearchableUtils;
 import com.nuix.nx.NuixConnection;
 import com.nuix.nx.controls.BatchExporterLoadFileSettings;
 import com.nuix.nx.controls.BatchExporterNativeSettings;
@@ -996,6 +997,30 @@ public class CustomTabPanel extends JPanel{
 				}
 			});
 		}
+		
+		return this;
+	}
+	
+	/***
+	 * Appends a combo box control allowing a user to select one of many choices and allows for filtering choices by typing in a value.
+	 * @param identifier The unique identifier for this control.
+	 * @param controlLabel The label for this control.
+	 * @param choices A collection of strings which will be the available choices
+	 * @param callback Optional (may be null) callback which will be invoked when the combo box value changes
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
+	 */
+	public CustomTabPanel appendSearchableComboBox(String identifier, String controlLabel, Collection<String> choices) throws Exception{
+		JComboBox<String> component = new JComboBox<String>();
+		for(String choice : choices){
+			component.addItem(choice);
+		}
+		
+		component.setEditable(false);
+		SearchableUtils.installSearchable(component);
+		
+		addBasicLabelledComponent(controlLabel, component);
+		trackComponent(identifier, component);
 		
 		return this;
 	}
