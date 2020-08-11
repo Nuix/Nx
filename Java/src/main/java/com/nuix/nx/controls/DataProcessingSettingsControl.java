@@ -873,9 +873,11 @@ public class DataProcessingSettingsControl extends JPanel {
 						break;
 					}
 				}
-			}else if (entry.getKey().equals("carvingBlockSize")){
+			} else if (entry.getKey().equals("carvingBlockSize")){
 				Double blockSize = (Double)entry.getValue();
-				txtCarvingBlockSize.setText(blockSize.intValue()+"");
+				if(blockSize != null) {
+					txtCarvingBlockSize.setText(blockSize.intValue()+"");	
+				}
 			}
 		}
 	}
