@@ -48,6 +48,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.log4j.Logger;
 import org.jdesktop.swingx.JXDatePicker;
 
 import com.google.common.base.Joiner;
@@ -82,6 +83,8 @@ import com.nuix.nx.controls.models.ControlSerializationHandler;
  */
 @SuppressWarnings("serial")
 public class TabbedCustomDialog extends JDialog {
+	private static Logger logger = Logger.getLogger(TabbedCustomDialog.class);
+	
 	private Map<String,CustomTabPanel> tabs = new LinkedHashMap<String,CustomTabPanel>();
 	Map<String,Component> controls;
 	private boolean dialogResult = false;
@@ -272,7 +275,10 @@ public class TabbedCustomDialog extends JDialog {
 		if(stickySettingsEnabled){
 			try{
 				loadJsonFile(stickySettingsFilePath);
-			}catch(Exception exc){}
+			}catch(Exception exc){
+				String message = String.format("Error while loading sticky settings JSON file '%s'", stickySettingsFilePath); 
+				logger.error(message,exc);
+			}
 		}
 		
 		if(helpFile != null && helpFile.exists()) {
@@ -305,7 +311,10 @@ public class TabbedCustomDialog extends JDialog {
 		if(stickySettingsEnabled){
 			try{
 				loadJsonFile(stickySettingsFilePath);
-			}catch(Exception exc){}
+			}catch(Exception exc){
+				String message = String.format("Error while loading sticky settings JSON file '%s'", stickySettingsFilePath); 
+				logger.error(message,exc);
+			}
 		}
 		
 		if(helpFile != null && helpFile.exists()) {
