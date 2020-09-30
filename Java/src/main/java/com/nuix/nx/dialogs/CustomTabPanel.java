@@ -1037,6 +1037,16 @@ public class CustomTabPanel extends JPanel{
 		return appendComboBox(identifier,controlLabel,choices,null);
 	}
 	
+	/***
+	 * Appends a combo box control which takes a list of {@link ComboItem} instances, allowing you to have each entry represent a specific value
+	 * while having a separate value as the labeled choice displayed in the combo box.
+	 * @param identifier The unique identifier for this control.
+	 * @param controlLabel The label for this control.
+	 * @param choices A collection of {@link ComboItem} objects to be used as the choices.
+	 * @param callback Optional (may be null) callback which will be invoked when the combo box value changes.
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
+	 */
 	public CustomTabPanel appendComboItemBox(String identifier, String controlLabel, List<ComboItem> choices, Runnable callback) throws Exception{
 		ComboItemBox component = new ComboItemBox();
 		component.setValues(choices);
