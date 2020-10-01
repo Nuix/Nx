@@ -26,6 +26,7 @@ public class ChoiceTableModel<T> extends AbstractTableModel {
 	private String filter = "";
 	private ChoiceTableModelChangeListener changeListener;
 	private Pattern whitespaceSplitter = Pattern.compile("\\s+");
+	private boolean singleSelectMode = false;
 	
 	/***
 	 * Create a new instance
@@ -159,7 +160,17 @@ public class ChoiceTableModel<T> extends AbstractTableModel {
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		if(columnIndex == 0){
-			displayedChoices.get(rowIndex).setSelected((boolean)aValue);
+			boolean value = (boolean)aValue;
+			if(singleSelectMode) {
+				if(value == true) {
+					uncheckAllChoices();
+				} else {
+					// In single select mode we don't allow user to deselect
+					// the only selected choice
+					return;
+				}
+			}
+			displayedChoices.get(rowIndex).setSelected(value);
 			notifyChanged();
 		}
 	}
@@ -356,5 +367,13 @@ public class ChoiceTableModel<T> extends AbstractTableModel {
 			choices.remove(choice);
 			choices.add(0, choice);
 		}
+	}
+
+	public boolean isSingleSelectMode() {
+		return singleSelectMode;
+	}
+
+	public void setSingleSelectMode(boolean singleSelectMode) {
+		this.singleSelectMode = singleSelectMode;
 	}
 }

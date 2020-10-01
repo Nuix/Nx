@@ -55,7 +55,8 @@ public class ChoiceDialog<T> extends JDialog {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ChoiceDialog.class.getResource("/com/nuix/nx/dialogs/nuix_icon.png")));
 		setModal(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setSize(400,300);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -155,18 +156,36 @@ public class ChoiceDialog<T> extends JDialog {
 	 * @param choices A collection of choices to show the user.
 	 * @param typeName Determines the label placed on the second column.
 	 * @param title Determines the title of the dialog.
+	 * @param singleSelectMode Whether we wish to restrict user to a single selection
 	 * @return A list of selected values, or null if the user cancels or closes the dialog.
 	 * @param <T> The data type of the choice values.  Allows any value to be supported as a choice value.
 	 */
-	public static <T> List<T> forChoices(List<Choice<T>> choices, String typeName, String title){
+	public static <T> List<T> forChoices(List<Choice<T>> choices, String typeName, String title, boolean singleSelectMode){
 		ChoiceDialog<T> dialog = new ChoiceDialog<T>(typeName);
 		dialog.setTitle(title);
 		dialog.getTableModel().setChoices(choices);
+		dialog.getTableModel().setSingleSelectMode(singleSelectMode);
+		// With single select mode lets check first choice by default
+		if(singleSelectMode && choices.size() >= 1) {
+			dialog.getTableModel().setValueAt(true, 0, 0);	
+		}
 		dialog.setVisible(true);
 		if(dialog.getDialogResult() == true)
 			return dialog.tableModel.getCheckedValues();
 		else
 			return null;
+	}
+	
+	/***
+	 * Shows a choice dialog for a provided list of choices.
+	 * @param choices A collection of choices to show the user.
+	 * @param typeName Determines the label placed on the second column.
+	 * @param title Determines the title of the dialog.
+	 * @return A list of selected values, or null if the user cancels or closes the dialog.
+	 * @param <T> The data type of the choice values.  Allows any value to be supported as a choice value.
+	 */
+	public static <T> List<T> forChoices(List<Choice<T>> choices, String typeName, String title){
+		return forChoices(choices,typeName,title,false);
 	}
 	
 	/***
