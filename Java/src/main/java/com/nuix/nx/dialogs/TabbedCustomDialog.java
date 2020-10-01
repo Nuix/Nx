@@ -647,7 +647,18 @@ public class TabbedCustomDialog extends JDialog {
 		builder.setPrettyPrinting();
 		builder.setDateFormat(dateSerializationFormat);
 		Gson gson = builder.create();
-		return gson.toJson(toMap(true));
+		String jsonString = gson.toJson(toMap(true));
+		// https://github.com/google/gson/issues/388#issuecomment-83704872
+		StringBuilder result = new StringBuilder();
+		for(char c : jsonString.toCharArray()) {
+			if (c <= 0x7F) {
+				result.append(c);
+			} else {
+				// Escape
+				result.append(String.format("\\u%04x", (int) c));
+			}
+		}
+		return result.toString();
 	}
 	
 	/***
@@ -869,9 +880,11 @@ public class TabbedCustomDialog extends JDialog {
 		}
 		finally{
 			try {
-				fw.close();
-			} catch (IOException e) {}
-			pw.close();
+				if(fw != null) { fw.close(); }
+				if(pw != null) { pw.close(); }
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
