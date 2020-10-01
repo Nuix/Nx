@@ -142,7 +142,7 @@ public class BatchExporterTextSettings extends JPanel {
 		gbc_spinnerWrapLength.gridy = 0;
 		panel.add(spinnerWrapLength, gbc_spinnerWrapLength);
 		spinnerWrapLength.setMinimumSize(new Dimension(100, 22));
-		spinnerWrapLength.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		spinnerWrapLength.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
 		
 		lblPerPage = new JLabel("Per Page");
 		GridBagConstraints gbc_lblPerPage = new GridBagConstraints();

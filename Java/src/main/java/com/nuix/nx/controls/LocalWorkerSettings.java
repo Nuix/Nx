@@ -76,7 +76,7 @@ public class LocalWorkerSettings extends JPanel {
 		add(lblMemoryPerworkermb, gbc_lblMemoryPerworkermb);
 		
 		memoryPerWorker = new JSpinner();
-		memoryPerWorker.setModel(new SpinnerNumberModel(new Integer(2048), new Integer(768), null, new Integer(1)));
+		memoryPerWorker.setModel(new SpinnerNumberModel(Integer.valueOf(2048), Integer.valueOf(768), null, Integer.valueOf(1)));
 		GridBagConstraints gbc_memoryPerWorker = new GridBagConstraints();
 		gbc_memoryPerWorker.fill = GridBagConstraints.HORIZONTAL;
 		gbc_memoryPerWorker.insets = new Insets(0, 0, 5, 5);

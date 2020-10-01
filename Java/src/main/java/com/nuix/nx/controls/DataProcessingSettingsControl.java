@@ -678,7 +678,7 @@ public class DataProcessingSettingsControl extends JPanel {
 		digestSettings.add(lblMaximumDigestSize, gbc_lblMaximumDigestSize);
 		
 		spinnerMaxDigestSize = new JSpinner();
-		spinnerMaxDigestSize.setModel(new SpinnerNumberModel(new Integer(250), new Integer(0), null, new Integer(1)));
+		spinnerMaxDigestSize.setModel(new SpinnerNumberModel(Integer.valueOf(250), Integer.valueOf(0), null, Integer.valueOf(1)));
 		GridBagConstraints gbc_spinnerMaxDigestSize = new GridBagConstraints();
 		gbc_spinnerMaxDigestSize.insets = new Insets(0, 0, 5, 0);
 		gbc_spinnerMaxDigestSize.fill = GridBagConstraints.HORIZONTAL;
@@ -845,9 +845,11 @@ public class DataProcessingSettingsControl extends JPanel {
 				if(mapValue instanceof Double){
 					value = (Double)entry.getValue();
 				} else if (mapValue instanceof Integer){
-					value = new Double((Integer)entry.getValue());
+					Integer intValue = (Integer)entry.getValue();
+					value = Double.valueOf(intValue);
 				} else if (mapValue instanceof Long){
-					value = new Double((Long)entry.getValue());
+					Long longValue = (Long)entry.getValue();
+					value = Double.valueOf(longValue);
 				}
 				intSettingsMap.get(entry.getKey()).setValue(value.intValue() / (1000 * 1000));
 			} else if (entry.getKey().equals("digests")){
