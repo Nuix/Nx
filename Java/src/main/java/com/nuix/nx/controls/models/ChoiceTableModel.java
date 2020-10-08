@@ -6,12 +6,17 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.nuix.nx.controls.models;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.swing.table.AbstractTableModel;
+
+import org.apache.log4j.Logger;
 
 /***
  * Table model used by the {@link com.nuix.nx.controls.ChoiceTableControl}
@@ -21,6 +26,8 @@ import javax.swing.table.AbstractTableModel;
  */
 @SuppressWarnings("serial")
 public class ChoiceTableModel<T> extends AbstractTableModel {
+	private static Logger logger = Logger.getLogger(ChoiceTableModel.class);
+	
 	private List<Choice<T>> choices;
 	private List<Choice<T>> displayedChoices;
 	private String filter = "";
@@ -55,6 +62,25 @@ public class ChoiceTableModel<T> extends AbstractTableModel {
 		if(filter.equalsIgnoreCase(":checked:") || filter.equalsIgnoreCase(":unchecked:")){
 			applyFiltering();
 		}
+	}
+	
+	public List<Choice<T>> setCheckedByLabels(Collection<String> labels, boolean setChecked) {
+		Set<String> labelLookup = new HashSet<String>();
+		labelLookup.addAll(labels);
+		List<Choice<T>> updatedChoices = new ArrayList<Choice<T>>();
+		for (int i = 0; i < choices.size(); i++) {
+			if((i+1) % 1000 == 0 || (i+1) == choices.size()) {
+				logger.info(String.format("Restored check state to %s choices...", i+1));
+			}
+			Choice<T> c = choices.get(i);
+			if(labelLookup.contains(c.getLabel())) {
+				c.setSelected(setChecked);
+				updatedChoices.add(c);
+			}
+		}
+		fireTableDataChanged();
+		notifyChanged();
+		return updatedChoices;
 	}
 	
 	/***
@@ -249,9 +275,11 @@ public class ChoiceTableModel<T> extends AbstractTableModel {
 	
 	public void uncheckAllChoices(){
 		for(Choice<T> choice : choices){
-			choice.setSelected(false);
-			this.fireTableCellUpdated(displayedChoices.indexOf(choice), 0);
+			if(choice.isSelected()) {
+				choice.setSelected(false);
+			}
 		}
+		fireTableDataChanged();
 		notifyChanged();
 	}
 	
@@ -350,8 +378,13 @@ public class ChoiceTableModel<T> extends AbstractTableModel {
 	}
 	
 	public void sortCheckedToTop(){
-		List<Choice<T>> checked = getCheckedChoices();
-		List<Choice<T>> unchecked = getUncheckedChoices();
+		List<Choice<T>> checked = new ArrayList<Choice<T>>(choices.size()/2);
+		List<Choice<T>> unchecked = new ArrayList<Choice<T>>(choices.size()/2);
+		for (int i = 0; i < choices.size(); i++) {
+			Choice<T> c = choices.get(i);
+			if(c.isSelected()) { checked.add(c); }
+			else { unchecked.add(c); }
+		}
 		choices.clear();
 		choices.addAll(checked);
 		choices.addAll(unchecked);

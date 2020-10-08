@@ -687,7 +687,9 @@ public class TabbedCustomDialog extends JDialog {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void loadJson(String json, Map<String,Component> controlMap){
 		Gson gson = new Gson();
+		System.out.println("Parsing JSON...");
 		Map<String,Object> fieldValues = gson.fromJson(json,new TypeToken<Map<String,Object>>(){}.getType());
+		System.out.println("Assigning values to controls...");
 		for(Map.Entry<String,Object> entry : fieldValues.entrySet()){
 			String controlIdentifier = entry.getKey();
 			Component control = controlMap.get(controlIdentifier);
@@ -711,18 +713,12 @@ public class TabbedCustomDialog extends JDialog {
 				else if(control instanceof ChoiceTableControl){
 					ChoiceTableControl choiceTable = (ChoiceTableControl) control;
 					choiceTable.getTableModel().uncheckAllChoices();
-					List<Choice> loadedChoices = new ArrayList<Choice>();
+					List<String> selectedLabels = new ArrayList<String>();
 					for(String value : (Iterable<String>)entry.getValue()){
-						Choice choice = choiceTable.getTableModel().getFirstChoiceByLabel(value);
-						if(choice != null){
-							choiceTable.getTableModel().setChoiceSelection(choice, true);
-							loadedChoices.add(choice);
-						}
-						else {
-							System.out.println("Unable to resolve choice for "+entry.getKey()+" => "+value);
-						}
+						selectedLabels.add(value);
 					}
-					choiceTable.getTableModel().sortChoicesToTop(loadedChoices);
+					choiceTable.getTableModel().setCheckedByLabels(selectedLabels, true);
+					choiceTable.getTableModel().sortCheckedToTop();
 				} else if(control instanceof PathList){
 					PathList pathList = (PathList) control;
 					List<String> values = new ArrayList<String>();
@@ -894,7 +890,9 @@ public class TabbedCustomDialog extends JDialog {
 	 * @throws IOException Thrown if there are exceptions while loading the file
 	 */
 	public void loadJsonFile(String filePath) throws IOException{
+		System.out.println("Loading JSON file "+filePath);
 		List<String> lines = Files.readAllLines(Paths.get(filePath));
+		System.out.println("File lines read...");
 		loadJson(Joiner.on("\n").join(lines));
 		if (jsonFileLoadedCallback != null){
 			jsonFileLoadedCallback.run();
