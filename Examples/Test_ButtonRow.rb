@@ -42,3 +42,6 @@ button_red = main_tab.getControl("button_red")
 button_red.setFont(button_red.getFont.deriveFont(java.awt.Font::BOLD))
 
 dialog.display
+dialog.toMap.each do |key,value|
+	puts "#{key}: #{value}"
+end
