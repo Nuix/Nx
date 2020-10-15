@@ -69,6 +69,7 @@ import com.nuix.nx.controls.BatchExporterNativeSettings;
 import com.nuix.nx.controls.BatchExporterPdfSettings;
 import com.nuix.nx.controls.BatchExporterTextSettings;
 import com.nuix.nx.controls.BatchExporterTraversalSettings;
+import com.nuix.nx.controls.ButtonRow;
 import com.nuix.nx.controls.ChoiceTableControl;
 import com.nuix.nx.controls.ComboItem;
 import com.nuix.nx.controls.ComboItemBox;
@@ -253,7 +254,7 @@ public class CustomTabPanel extends JPanel{
 	 * @param component The actual control
 	 * @throws Exception Thrown is something goes wrong
 	 */
-	protected void trackComponent(String identifier, Component component) throws Exception{
+	public void trackComponent(String identifier, Component component) throws Exception{
 		if(controls.containsKey(identifier) || owner.controls.containsKey(identifier))
 			throw new Exception("Cannot append component, component with the identifier already exists: "+identifier);
 		else {
@@ -502,6 +503,12 @@ public class CustomTabPanel extends JPanel{
 		addBasicLabelledComponent("", component, false, false);
 		trackComponent(identifier, component);
 		return this;
+	}
+	
+	public ButtonRow appendButtonRow(String identifier) {
+		ButtonRow buttonRow = new ButtonRow(this);
+		addComponent(buttonRow,controls.size()+headersCount,0,2,1);
+		return buttonRow;
 	}
 	
 	/***
