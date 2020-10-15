@@ -276,6 +276,22 @@
 </li>
 </ul>
 </li>
+<li class="blockList"><a name="com.nuix.nx.controls.ButtonRow">
+<!--   -->
+</a>
+<h3>Class <a href="com/nuix/nx/controls/ButtonRow.html" title="class in com.nuix.nx.controls">com.nuix.nx.controls.ButtonRow</a> extends javax.swing.JPanel implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>owningTab</h4>
+<pre><a href="com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a> owningTab</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="com.nuix.nx.controls.ChoiceTableControl">
 <!--   -->
 </a>
@@ -385,9 +401,13 @@
 <h4>btnAddRow</h4>
 <pre>javax.swing.JButton btnAddRow</pre>
 </li>
-<li class="blockListLast">
+<li class="blockList">
 <h4>btnImportCsv</h4>
 <pre>javax.swing.JButton btnImportCsv</pre>
+</li>
+<li class="blockListLast">
+<h4>defaultImportDirectory</h4>
+<pre>java.lang.String defaultImportDirectory</pre>
 </li>
 </ul>
 </li>
@@ -1082,6 +1102,14 @@
 <h4>changeListener</h4>
 <pre><a href="com/nuix/nx/controls/models/ChoiceTableModelChangeListener.html" title="interface in com.nuix.nx.controls.models">ChoiceTableModelChangeListener</a> changeListener</pre>
 </li>
+<li class="blockList">
+<h4>whitespaceSplitter</h4>
+<pre>java.util.regex.Pattern whitespaceSplitter</pre>
+</li>
+<li class="blockList">
+<h4>singleSelectMode</h4>
+<pre>boolean singleSelectMode</pre>
+</li>
 <li class="blockListLast">
 <h4>columns</h4>
 <pre>java.lang.String[] columns</pre>
@@ -1406,6 +1434,22 @@
 <li class="blockListLast">
 <h4>timestampLoggedMessages</h4>
 <pre>boolean timestampLoggedMessages</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="com.nuix.nx.dialogs.ScrollableCustomTabPanel">
+<!--   -->
+</a>
+<h3>Class <a href="com/nuix/nx/dialogs/ScrollableCustomTabPanel.html" title="class in com.nuix.nx.dialogs">com.nuix.nx.dialogs.ScrollableCustomTabPanel</a> extends <a href="com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>wrappedPanel</h4>
+<pre>javax.swing.JPanel wrappedPanel</pre>
 </li>
 </ul>
 </li>

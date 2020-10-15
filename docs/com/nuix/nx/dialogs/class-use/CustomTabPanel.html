@@ -82,6 +82,10 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#com.nuix.nx.controls">com.nuix.nx.controls</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#com.nuix.nx.dialogs">com.nuix.nx.dialogs</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -90,10 +94,39 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="com.nuix.nx.controls">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a> in <a href="../../../../../com/nuix/nx/controls/package-summary.html">com.nuix.nx.controls</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../com/nuix/nx/controls/package-summary.html">com.nuix.nx.controls</a> with parameters of type <a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/controls/ButtonRow.html#ButtonRow-com.nuix.nx.dialogs.CustomTabPanel-">ButtonRow</a></span>(<a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a>&nbsp;owningTab)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="com.nuix.nx.dialogs">
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a> in <a href="../../../../../com/nuix/nx/dialogs/package-summary.html">com.nuix.nx.dialogs</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a> in <a href="../../../../../com/nuix/nx/dialogs/package-summary.html">com.nuix.nx.dialogs</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/ScrollableCustomTabPanel.html" title="class in com.nuix.nx.dialogs">ScrollableCustomTabPanel</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../com/nuix/nx/dialogs/package-summary.html">com.nuix.nx.dialogs</a> that return <a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -206,7 +239,10 @@
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendComboItemBox-java.lang.String-java.lang.String-java.util.List-java.lang.Runnable-">appendComboItemBox</a></span>(java.lang.String&nbsp;identifier,
                   java.lang.String&nbsp;controlLabel,
                   java.util.List&lt;<a href="../../../../../com/nuix/nx/controls/ComboItem.html" title="class in com.nuix.nx.controls">ComboItem</a>&gt;&nbsp;choices,
-                  java.lang.Runnable&nbsp;callback)</code>&nbsp;</td>
+                  java.lang.Runnable&nbsp;callback)</code>
+<div class="block">Appends a combo box control which takes a list of <a href="../../../../../com/nuix/nx/controls/ComboItem.html" title="class in com.nuix.nx.controls"><code>ComboItem</code></a> instances, allowing you to have each entry represent a specific value
+ while having a separate value as the labeled choice displayed in the combo box.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
@@ -217,12 +253,20 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendCsvTable-java.lang.String-java.util.List-java.lang.String-">appendCsvTable</a></span>(java.lang.String&nbsp;identifier,
+              java.util.List&lt;java.lang.String&gt;&nbsp;headers,
+              java.lang.String&nbsp;defaultImportDirectory)</code>
+<div class="block">Appends a table control with the specified headers, which is capable of importing a CSV with the same headers.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendDatePicker-java.lang.String-java.lang.String-">appendDatePicker</a></span>(java.lang.String&nbsp;identifier,
                 java.lang.String&nbsp;controlLabel)</code>
 <div class="block">Appends a date picker field control to the dialog with the default date being today's date.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendDatePicker-java.lang.String-java.lang.String-java.lang.Object-">appendDatePicker</a></span>(java.lang.String&nbsp;identifier,
                 java.lang.String&nbsp;controlLabel,
@@ -230,14 +274,14 @@
 <div class="block">Appends a date picker field control to the dialog</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendDirectoryChooser-java.lang.String-java.lang.String-">appendDirectoryChooser</a></span>(java.lang.String&nbsp;identifier,
                       java.lang.String&nbsp;controlLabel)</code>
 <div class="block">Appends a control which allows a user to select a directory.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendDirectoryChooser-java.lang.String-java.lang.String-com.nuix.nx.controls.PathSelectedCallback-">appendDirectoryChooser</a></span>(java.lang.String&nbsp;identifier,
                       java.lang.String&nbsp;controlLabel,
@@ -245,7 +289,7 @@
 <div class="block">Appends a control which allows a user to select a directory.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendDirectoryChooser-java.lang.String-java.lang.String-java.lang.String-">appendDirectoryChooser</a></span>(java.lang.String&nbsp;identifier,
                       java.lang.String&nbsp;controlLabel,
@@ -253,7 +297,7 @@
 <div class="block">Appends a control which allows a user to select a directory.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendDirectoryChooser-java.lang.String-java.lang.String-java.lang.String-com.nuix.nx.controls.PathSelectedCallback-">appendDirectoryChooser</a></span>(java.lang.String&nbsp;identifier,
                       java.lang.String&nbsp;controlLabel,
@@ -262,7 +306,7 @@
 <div class="block">Appends a control which allows a user to select a directory.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendDynamicTable-java.lang.String-java.lang.String-java.util.List-java.util.List-com.nuix.nx.controls.models.DynamicTableValueCallback-">appendDynamicTable</a></span>(java.lang.String&nbsp;identifier,
                   java.lang.String&nbsp;controlLabel,
@@ -272,7 +316,7 @@
 <div class="block">Appends a fairly flexible table control to the tab.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendFormattedInformation-java.lang.String-java.lang.String-java.lang.String-">appendFormattedInformation</a></span>(java.lang.String&nbsp;identifier,
                           java.lang.String&nbsp;controlLabel,
@@ -280,25 +324,25 @@
 <div class="block">Appends a read only text area control for you to place some user information similar to <a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendInformation-java.lang.String-java.lang.String-java.lang.String-"><code>appendInformation(String, String, String)</code></a>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendHeader-java.lang.String-">appendHeader</a></span>(java.lang.String&nbsp;text)</code>
 <div class="block">Appends a header label that spans 2 columns.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendImage-java.io.File-">appendImage</a></span>(java.io.File&nbsp;imageFile)</code>
 <div class="block">Appends an image to the tab</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendImage-java.lang.String-">appendImage</a></span>(java.lang.String&nbsp;imageFile)</code>
 <div class="block">Appends an image to the tab</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendInformation-java.lang.String-java.lang.String-java.lang.String-">appendInformation</a></span>(java.lang.String&nbsp;identifier,
                  java.lang.String&nbsp;controlLabel,
@@ -306,20 +350,20 @@
 <div class="block">Appends a read only text area control for you to place some user information.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendLabel-java.lang.String-java.lang.String-">appendLabel</a></span>(java.lang.String&nbsp;identifier,
            java.lang.String&nbsp;text)</code>
 <div class="block">Appends a label that spans 2 columns.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendLocalWorkerSettings-java.lang.String-">appendLocalWorkerSettings</a></span>(java.lang.String&nbsp;identifier)</code>
 <div class="block">Appends a control with controls used to provide worker settings, as passed to <code>ParallelProcessingConfigurable.setParallelProcessingSettings(Map)</code>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendMultipleChoiceComboBox-java.lang.String-java.lang.String-java.util.List-">appendMultipleChoiceComboBox</a></span>(java.lang.String&nbsp;identifier,
                             java.lang.String&nbsp;controlLabel,
@@ -327,7 +371,7 @@
 <div class="block">Appends a combo box which allows you to select multiple choices from its drop down list by checking them.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendMultipleChoiceComboBox-java.lang.String-java.lang.String-java.util.List-java.util.List-">appendMultipleChoiceComboBox</a></span>(java.lang.String&nbsp;identifier,
                             java.lang.String&nbsp;controlLabel,
@@ -336,13 +380,13 @@
 <div class="block">Appends a combo box which allows you to select multiple choices from its drop down list by checking them.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendOcrSettings-java.lang.String-">appendOcrSettings</a></span>(java.lang.String&nbsp;identifier)</code>
 <div class="block">Appends a control with controls used to provide OCR settings, as passed to <code>OcrProcessor</code>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendOpenFileChooser-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">appendOpenFileChooser</a></span>(java.lang.String&nbsp;identifier,
                      java.lang.String&nbsp;controlLabel,
@@ -351,7 +395,7 @@
 <div class="block">Appends a control which allows a user to select a file to open.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendOpenFileChooser-java.lang.String-java.lang.String-java.lang.String-java.lang.String-com.nuix.nx.controls.PathSelectedCallback-">appendOpenFileChooser</a></span>(java.lang.String&nbsp;identifier,
                      java.lang.String&nbsp;controlLabel,
@@ -361,7 +405,7 @@
 <div class="block">Appends a control which allows a user to select a file to open.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendOpenFileChooser-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">appendOpenFileChooser</a></span>(java.lang.String&nbsp;identifier,
                      java.lang.String&nbsp;controlLabel,
@@ -371,7 +415,7 @@
 <div class="block">Appends a control which allows a user to select a file to open.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendOpenFileChooser-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-com.nuix.nx.controls.PathSelectedCallback-">appendOpenFileChooser</a></span>(java.lang.String&nbsp;identifier,
                      java.lang.String&nbsp;controlLabel,
@@ -382,7 +426,7 @@
 <div class="block">Appends a control which allows a user to select a file to open.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendPasswordField-java.lang.String-java.lang.String-java.lang.String-">appendPasswordField</a></span>(java.lang.String&nbsp;identifier,
                    java.lang.String&nbsp;controlLabel,
@@ -390,20 +434,20 @@
 <div class="block">Appends a password text field control to the dialog.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendPathList-java.lang.String-">appendPathList</a></span>(java.lang.String&nbsp;identifier)</code>
 <div class="block">Appends a list box allowing the user to specify multiple file and directory paths.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendPathList-java.lang.String-java.util.List-">appendPathList</a></span>(java.lang.String&nbsp;identifier,
               java.util.List&lt;java.lang.String&gt;&nbsp;initialPaths)</code>
 <div class="block">Appends a list box allowing the user to specify multiple file and directory paths.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendRadioButton-java.lang.String-java.lang.String-java.lang.String-boolean-">appendRadioButton</a></span>(java.lang.String&nbsp;identifier,
                  java.lang.String&nbsp;controlLabel,
@@ -412,20 +456,20 @@
 <div class="block">Appends a radio button control to the dialog.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendRadioButtonGroup-java.lang.String-java.lang.String-java.util.Map-">appendRadioButtonGroup</a></span>(java.lang.String&nbsp;groupLabel,
                       java.lang.String&nbsp;radioButtonGroupName,
                       java.util.Map&lt;java.lang.String,java.lang.String&gt;&nbsp;radioButtonChoices)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendRadioButtonLeft-java.lang.String-java.lang.String-java.lang.String-boolean-">appendRadioButtonLeft</a></span>(java.lang.String&nbsp;identifier,
                      java.lang.String&nbsp;controlLabel,
                      java.lang.String&nbsp;radioButtonGroupName,
                      boolean&nbsp;isChecked)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendSaveFileChooser-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">appendSaveFileChooser</a></span>(java.lang.String&nbsp;identifier,
                      java.lang.String&nbsp;controlLabel,
@@ -434,7 +478,7 @@
 <div class="block">Appends a control which allows a user to select a file to save.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendSaveFileChooser-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">appendSaveFileChooser</a></span>(java.lang.String&nbsp;identifier,
                      java.lang.String&nbsp;controlLabel,
@@ -442,6 +486,14 @@
                      java.lang.String&nbsp;fileExtension,
                      java.lang.String&nbsp;initialDirectory)</code>
 <div class="block">Appends a control which allows a user to select a file to save.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomTabPanel.</span><code><span class="memberNameLink"><a href="../../../../../com/nuix/nx/dialogs/CustomTabPanel.html#appendSearchableComboBox-java.lang.String-java.lang.String-java.util.Collection-">appendSearchableComboBox</a></span>(java.lang.String&nbsp;identifier,
+                        java.lang.String&nbsp;controlLabel,
+                        java.util.Collection&lt;java.lang.String&gt;&nbsp;choices)</code>
+<div class="block">Appends a combo box control allowing a user to select one of many choices and allows for filtering choices by typing in a value.</div>
 </td>
 </tr>
 <tr class="altColor">

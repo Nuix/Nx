@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -261,42 +261,51 @@ extends javax.swing.JDialog</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;java.util.List&lt;T&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html#forChoices-java.util.List-java.lang.String-java.lang.String-boolean-">forChoices</a></span>(java.util.List&lt;<a href="../../../../com/nuix/nx/controls/models/Choice.html" title="class in com.nuix.nx.controls.models">Choice</a>&lt;T&gt;&gt;&nbsp;choices,
+          java.lang.String&nbsp;typeName,
+          java.lang.String&nbsp;title,
+          boolean&nbsp;singleSelectMode)</code>
+<div class="block">Shows a choice dialog for a provided list of choices.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static java.util.List&lt;java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html#forCustodians-nuix.Case-">forCustodians</a></span>(nuix.Case&nbsp;nuixCase)</code>
 <div class="block">Presents the user with a dialog where they can select custodian names.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static java.util.List&lt;nuix.Item&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html#forEvidenceItems-nuix.Case-">forEvidenceItems</a></span>(nuix.Case&nbsp;nuixCase)</code>
 <div class="block">Presents the user with a dialog where they can select evidence items.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static java.util.List&lt;nuix.ItemSet&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html#forItemSets-nuix.Case-">forItemSets</a></span>(nuix.Case&nbsp;nuixCase)</code>
 <div class="block">Presents the user with a dialog where they can select item sets.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static java.util.List&lt;nuix.ItemKind&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html#forKinds--">forKinds</a></span>()</code>
 <div class="block">Presents the user with a dialog where they can select item kinds.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static java.util.List&lt;nuix.ProductionSet&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html#forProductionSets-nuix.Case-">forProductionSets</a></span>(nuix.Case&nbsp;nuixCase)</code>
 <div class="block">Presents the user with a dialog where they can select productions sets.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static java.util.List&lt;java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html#forTags-nuix.Case-">forTags</a></span>(nuix.Case&nbsp;nuixCase)</code>
 <div class="block">Presents the user with a dialog where they can select tag names.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;java.util.List&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html#forValues-java.util.Collection-java.lang.String-java.lang.String-">forValues</a></span>(java.util.Collection&lt;T&gt;&nbsp;choiceValues,
          java.lang.String&nbsp;typeName,
@@ -304,17 +313,17 @@ extends javax.swing.JDialog</pre>
 <div class="block">Shows a choice dialog for a provided collection of values.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html#getDialogResult--">getDialogResult</a></span>()</code>
 <div class="block">Provides a value signifying whether the dialog was cancelled/closed or user hit ok.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../../com/nuix/nx/controls/models/ChoiceTableModel.html" title="class in com.nuix.nx.controls.models">ChoiceTableModel</a>&lt;<a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html" title="type parameter in ChoiceDialog">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html#getTableModel--">getTableModel</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html#setTableModel-com.nuix.nx.controls.models.ChoiceTableModel-">setTableModel</a></span>(<a href="../../../../com/nuix/nx/controls/models/ChoiceTableModel.html" title="class in com.nuix.nx.controls.models">ChoiceTableModel</a>&lt;<a href="../../../../com/nuix/nx/dialogs/ChoiceDialog.html" title="type parameter in ChoiceDialog">T</a>&gt;&nbsp;tableModel)</code>&nbsp;</td>
 </tr>
@@ -446,6 +455,30 @@ extends javax.swing.JDialog</pre>
 <dd><code>choiceValues</code> - A collection of values to show the user.</dd>
 <dd><code>typeName</code> - Determines the label placed on the second column.</dd>
 <dd><code>title</code> - Determines the title of the dialog.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A list of selected values, or null if the user cancels or closes the dialog.</dd>
+</dl>
+</li>
+</ul>
+<a name="forChoices-java.util.List-java.lang.String-java.lang.String-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>forChoices</h4>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;java.util.List&lt;T&gt;&nbsp;forChoices(java.util.List&lt;<a href="../../../../com/nuix/nx/controls/models/Choice.html" title="class in com.nuix.nx.controls.models">Choice</a>&lt;T&gt;&gt;&nbsp;choices,
+                                               java.lang.String&nbsp;typeName,
+                                               java.lang.String&nbsp;title,
+                                               boolean&nbsp;singleSelectMode)</pre>
+<div class="block">Shows a choice dialog for a provided list of choices.</div>
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - The data type of the choice values.  Allows any value to be supported as a choice value.</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>choices</code> - A collection of choices to show the user.</dd>
+<dd><code>typeName</code> - Determines the label placed on the second column.</dd>
+<dd><code>title</code> - Determines the title of the dialog.</dd>
+<dd><code>singleSelectMode</code> - Whether we wish to restrict user to a single selection</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A list of selected values, or null if the user cancels or closes the dialog.</dd>
 </dl>

@@ -1013,7 +1013,6 @@ public class CustomTabPanel extends JPanel{
 	 * @param identifier The unique identifier for this control.
 	 * @param controlLabel The label for this control.
 	 * @param choices A collection of strings which will be the available choices
-	 * @param callback Optional (may be null) callback which will be invoked when the combo box value changes
 	 * @return Returns this CustomTabPanel instance to allow for method chaining.
 	 * @throws Exception Exception May throw an exception if the provided identifier has already been used.
 	 */

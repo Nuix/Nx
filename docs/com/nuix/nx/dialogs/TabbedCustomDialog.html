@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -48,7 +48,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../com/nuix/nx/dialogs/ProgressDialogLoggingCallback.html" title="interface in com.nuix.nx.dialogs"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../com/nuix/nx/dialogs/ScrollableCustomTabPanel.html" title="class in com.nuix.nx.dialogs"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../com/nuix/nx/dialogs/ValidationCallback.html" title="interface in com.nuix.nx.dialogs"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -263,221 +263,226 @@ extends javax.swing.JDialog</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../../../com/nuix/nx/dialogs/ScrollableCustomTabPanel.html" title="class in com.nuix.nx.dialogs">ScrollableCustomTabPanel</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#addScrollableTab-java.lang.String-java.lang.String-">addScrollableTab</a></span>(java.lang.String&nbsp;id,
+                java.lang.String&nbsp;label)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#addTab-java.lang.String-java.lang.String-">addTab</a></span>(java.lang.String&nbsp;id,
       java.lang.String&nbsp;label)</code>
 <div class="block">Adds a new tab to the dialog.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#display--">display</a></span>()</code>
 <div class="block">Displays this custom dialog.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#displayNonModal-java.util.function.Consumer-">displayNonModal</a></span>(java.util.function.Consumer&lt;java.lang.Boolean&gt;&nbsp;callback)</code>
 <div class="block">Similar to <a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#display--"><code>display()</code></a> except that the dialog will be displayed non-modal and will invoke the provided callback
  when the dialog is closed and the result of <a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#getDialogResult--"><code>getDialogResult()</code></a> returns true.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#enabledOnlyWhenChecked-java.lang.String-java.lang.String-">enabledOnlyWhenChecked</a></span>(java.lang.String&nbsp;dependentControlIdentifier,
                       java.lang.String&nbsp;targetCheckableIdentifier)</code>
 <div class="block">Registers an event handle such that a given control is only enabled when another checkable control is checked.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#enabledOnlyWhenNotChecked-java.lang.String-java.lang.String-">enabledOnlyWhenNotChecked</a></span>(java.lang.String&nbsp;dependentControlIdentifier,
                          java.lang.String&nbsp;targetCheckableIdentifier)</code>
 <div class="block">Registers an event handle such that a given control is only enabled when another checkable control is not checked.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#enableStickySettings-java.lang.String-">enableStickySettings</a></span>(java.lang.String&nbsp;filePath)</code>
 <div class="block">This enables "sticky settings" where the dialog will save a JSON file of settings when 'Okay' is clicked and will attempt to
  load previously saved settings when the dialog is displayed.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#fillScreen-int-">fillScreen</a></span>(int&nbsp;margins)</code>
 <div class="block">Resizes the dialog to fill the screen, less the specified margin on all sides.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.awt.Component</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#getControl-java.lang.String-">getControl</a></span>(java.lang.String&nbsp;identifier)</code>
 <div class="block">Allows you to get the actual Java Swing control.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../../com/nuix/nx/controls/models/ControlDeserializationHandler.html" title="interface in com.nuix.nx.controls.models">ControlDeserializationHandler</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#getDeserializer-java.lang.String-">getDeserializer</a></span>(java.lang.String&nbsp;identifier)</code>
 <div class="block">Gets the previously provided deserialization handler for a particular control</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#getDialogResult--">getDialogResult</a></span>()</code>
 <div class="block">Gets the result of showing the dialog.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#getHelpFile--">getHelpFile</a></span>()</code>
 <div class="block">The File currently associated to the "Help" menu "View Documentation" entry</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../com/nuix/nx/controls/models/ControlSerializationHandler.html" title="interface in com.nuix.nx.controls.models">ControlSerializationHandler</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#getSerializer-java.lang.String-">getSerializer</a></span>(java.lang.String&nbsp;identifier)</code>
 <div class="block">Gets the previously provided serialization handler for a particular control</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../../../com/nuix/nx/dialogs/CustomTabPanel.html" title="class in com.nuix.nx.dialogs">CustomTabPanel</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#getTab-java.lang.String-">getTab</a></span>(java.lang.String&nbsp;id)</code>
 <div class="block">Gets the tab with the specified ID</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#getText-java.lang.String-">getText</a></span>(java.lang.String&nbsp;identifier)</code>
 <div class="block">Gets the text present in a TextField or PasswordField.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#hideFileMenu--">hideFileMenu</a></span>()</code>
 <div class="block">Hides the file menu from the user (effectively disabling save and load).</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#isChecked-java.lang.String-">isChecked</a></span>(java.lang.String&nbsp;identifier)</code>
 <div class="block">Gets whether a particular Checkbox or RadioButton is checked.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#loadJson-java.lang.String-">loadJson</a></span>(java.lang.String&nbsp;json)</code>
 <div class="block">Attempts to set control values based on entries in JSON file.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#loadJson-java.lang.String-java.util.Map-">loadJson</a></span>(java.lang.String&nbsp;json,
         java.util.Map&lt;java.lang.String,java.awt.Component&gt;&nbsp;controlMap)</code>
 <div class="block">Attempts to set control values based on entries in JSON file.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#loadJson-java.lang.String-java.lang.String-">loadJson</a></span>(java.lang.String&nbsp;json,
         java.lang.String&nbsp;tabIdentifier)</code>
 <div class="block">Loads JSON but only to the controls contained within the specified tab.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#loadJsonFile-java.lang.String-">loadJsonFile</a></span>(java.lang.String&nbsp;filePath)</code>
 <div class="block">Loads the settings of this dialog from a JSON file</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#saveJsonFile-java.lang.String-">saveJsonFile</a></span>(java.lang.String&nbsp;filePath)</code>
 <div class="block">Saves the settings of this dialog to a JSON file</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#setChecked-java.lang.String-boolean-">setChecked</a></span>(java.lang.String&nbsp;identifier,
           boolean&nbsp;isChecked)</code>
 <div class="block">Sets whether a particular Checkbox or RadioButton is checked.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#setHelpFile-java.io.File-">setHelpFile</a></span>(java.io.File&nbsp;helpFile)</code>
 <div class="block">Sets the path to a help file which will be associated to the "Help" menu "View Documentation" entry</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#setHelpFile-java.lang.String-">setHelpFile</a></span>(java.lang.String&nbsp;helpFile)</code>
 <div class="block">Sets the path to a help file which will be associated to the "Help" menu "View Help" entry</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#setHelpUrl-java.lang.String-">setHelpUrl</a></span>(java.lang.String&nbsp;helpUrl)</code>
 <div class="block">Sets the URL which will be associated to the "Help" menu "View Online Help" entry.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#setSelectedTabIndex-int-">setSelectedTabIndex</a></span>(int&nbsp;index)</code>
 <div class="block">Sets which tab is currently selected.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#setTabLabel-java.lang.String-java.lang.String-">setTabLabel</a></span>(java.lang.String&nbsp;tabId,
            java.lang.String&nbsp;label)</code>
 <div class="block">Updates the label for given tab to a new value</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#setTabPlacement-int-">setTabPlacement</a></span>(int&nbsp;tabPlacement)</code>
 <div class="block">Allows you to change the orientation of the tabs in the dialog by providing one of the
  JTabbedPane alignment constants</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#setTabPlacementLeft--">setTabPlacementLeft</a></span>()</code>
 <div class="block">Changes the orientation of the dialogs tabs to be along the left side of the dialog</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#setText-java.lang.String-java.lang.String-">setText</a></span>(java.lang.String&nbsp;identifier,
        java.lang.String&nbsp;text)</code>
 <div class="block">Sets the text present in a TextField or PasswordField.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#toJson--">toJson</a></span>()</code>
 <div class="block">Gets a JSON String equivalent of the dialog values.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#toMap--">toMap</a></span>()</code>
 <div class="block">Returns a Map of the control values.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#toMap-boolean-">toMap</a></span>(boolean&nbsp;forJsonCreation)</code>
 <div class="block">Returns a Map of the control values.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#validateBeforeClosing-com.nuix.nx.dialogs.ValidationCallback-">validateBeforeClosing</a></span>(<a href="../../../../com/nuix/nx/dialogs/ValidationCallback.html" title="interface in com.nuix.nx.dialogs">ValidationCallback</a>&nbsp;callback)</code>
 <div class="block">Allows code to implement and provide a callback which can validate whether things are okay.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#whenDeserializing-java.lang.String-com.nuix.nx.controls.models.ControlDeserializationHandler-">whenDeserializing</a></span>(java.lang.String&nbsp;identifier,
                  <a href="../../../../com/nuix/nx/controls/models/ControlDeserializationHandler.html" title="interface in com.nuix.nx.controls.models">ControlDeserializationHandler</a>&nbsp;handler)</code>
@@ -485,13 +490,13 @@ extends javax.swing.JDialog</pre>
  from JSON.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#whenJsonFileLoaded-java.lang.Runnable-">whenJsonFileLoaded</a></span>(java.lang.Runnable&nbsp;callback)</code>
 <div class="block">Allows you to provide a callback to run when a JSON file is loaded.</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/nx/dialogs/TabbedCustomDialog.html#whenSerializing-java.lang.String-com.nuix.nx.controls.models.ControlSerializationHandler-">whenSerializing</a></span>(java.lang.String&nbsp;identifier,
                <a href="../../../../com/nuix/nx/controls/models/ControlSerializationHandler.html" title="interface in com.nuix.nx.controls.models">ControlSerializationHandler</a>&nbsp;handler)</code>
@@ -661,6 +666,16 @@ extends javax.swing.JDialog</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A newly created tab associated to this dialog</dd>
 </dl>
+</li>
+</ul>
+<a name="addScrollableTab-java.lang.String-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addScrollableTab</h4>
+<pre>public&nbsp;<a href="../../../../com/nuix/nx/dialogs/ScrollableCustomTabPanel.html" title="class in com.nuix.nx.dialogs">ScrollableCustomTabPanel</a>&nbsp;addScrollableTab(java.lang.String&nbsp;id,
+                                                 java.lang.String&nbsp;label)</pre>
 </li>
 </ul>
 <a name="setTabLabel-java.lang.String-java.lang.String-">
@@ -1228,7 +1243,7 @@ extends javax.swing.JDialog</pre>
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../com/nuix/nx/dialogs/ProgressDialogLoggingCallback.html" title="interface in com.nuix.nx.dialogs"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../com/nuix/nx/dialogs/ScrollableCustomTabPanel.html" title="class in com.nuix.nx.dialogs"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../com/nuix/nx/dialogs/ValidationCallback.html" title="interface in com.nuix.nx.dialogs"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
