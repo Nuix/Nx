@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -26,6 +27,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
+
+import org.apache.log4j.Logger;
 
 import com.nuix.nx.controls.models.Choice;
 import com.nuix.nx.controls.models.ChoiceTableModel;
@@ -45,6 +48,8 @@ import javax.swing.SwingConstants;
  */
 @SuppressWarnings("serial")
 public class ChoiceTableControl<T> extends JPanel {
+	private static Logger logger = Logger.getLogger(ChoiceTableControl.class);
+	private ChoiceTableModelChangeListener tableDataChangedCallback;
 
 	private JTable choiceTable;
 	private ChoiceTableModel<T> tableModel;
@@ -85,6 +90,13 @@ public class ChoiceTableControl<T> extends JPanel {
 						lblLblcounts.setText("Checked: " + tableModel.getCheckedValueCount() + 
 								" Visible: " + tableModel.getVisibleValueCount() +
 								" Total: " + tableModel.getTotalValueCount());
+						if(tableDataChangedCallback != null) {
+							try {
+								tableDataChangedCallback.dataChanged();
+							} catch (Exception e) {
+								logger.error(e);
+							}
+						}
 					}
 				});
 				
@@ -339,5 +351,25 @@ public class ChoiceTableControl<T> extends JPanel {
 	
 	public void fitColumns(){
 		this.choiceTable.sizeColumnsToFit(1);
+	}
+
+	public List<Choice<T>> getCheckedChoices() {
+		return tableModel.getCheckedChoices();
+	}
+
+	public List<T> getCheckedValues() {
+		return tableModel.getCheckedValues();
+	}
+
+	public List<Choice<T>> setCheckedByLabels(Collection<String> labels, boolean setChecked) {
+		return tableModel.setCheckedByLabels(labels, setChecked);
+	}
+
+	public void uncheckAllChoices() {
+		tableModel.uncheckAllChoices();
+	}
+	
+	public void onTableDataChanged(ChoiceTableModelChangeListener callback) {
+		tableDataChangedCallback = callback;
 	}
 }
