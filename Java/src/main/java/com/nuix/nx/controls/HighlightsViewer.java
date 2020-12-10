@@ -475,8 +475,10 @@ public class HighlightsViewer extends JPanel {
 		// Either of these can be blank, but we need to AND them together appropriately
 		// when they have values, so the following is to handle AND'ing them together
 		// for searching, while still being able to cope with empty values.
-		List<String> queryFragments = List.of(contentQuery,filteringQuery)
-			.stream()
+		List<String> queryFragments = new ArrayList<String>();
+		queryFragments.add(contentQuery);
+		queryFragments.add(filteringQuery);
+		queryFragments = queryFragments.stream()
 			.map(q -> q.trim())
 			.filter(q -> !q.isEmpty())
 			.map(q -> "("+q+")")
@@ -487,7 +489,9 @@ public class HighlightsViewer extends JPanel {
 		if(nuixCase != null) {
 			try {
 				Map<String,Object> searchOptions = new HashMap<String,Object>();
-				searchOptions.put("defaultFields", List.of("content"));
+				List<String> defaultFields = new ArrayList<String>();
+				defaultFields.add("content");
+				searchOptions.put("defaultFields", defaultFields);
 				List<Item> items = nuixCase.search(fullQuery,searchOptions);
 				logger.info(String.format("%s items returned by query: %s", items.size(), fullQuery));
 				itemTable.setItems(items);
