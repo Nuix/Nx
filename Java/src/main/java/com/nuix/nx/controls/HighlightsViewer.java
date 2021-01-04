@@ -9,17 +9,18 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +43,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -69,19 +71,68 @@ import nuix.TokenInfo;
 import nuix.Utilities;
 import nuix.WordList;
 import nuix.WordListStore;
-import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("serial")
 public class HighlightsViewer extends JPanel {
 	private static Logger logger = Logger.getLogger(HighlightsViewer.class);
 	
-	public class ExtendedHighlight {
+	public class ExtendedHighlight implements Comparable<ExtendedHighlight> {
 		private Highlight base;
+		private Color highlightColor = Color.YELLOW;
+		private Set<String> sources = new HashSet<String>();
 		
 		public ExtendedHighlight(Highlight h) { base = h; }
+		public ExtendedHighlight(Highlight h, Color c) { base = h; highlightColor = c; }
+		public ExtendedHighlight(Highlight h, Color c, String source) { base = h; highlightColor = c; sources.add(source); }
 		public int getEnd() { return base.getEnd(); }
 		public int getStart() { return base.getStart(); }
 		public String getText() { return base.getText(); }
+		public Color getHighlightColor() { return highlightColor; }
+		public void setHighlightColor(Color highlightColor) { this.highlightColor = highlightColor; }
+		public void setHighlightColor(String hexColor) { setHighlightColor(Color.decode(hexColor)); }
+		public String getSources() { return String.join("; ", sources); }
+		public void addSource(String source) { this.sources.add(source); }
+		
+		@Override
+		public int compareTo(ExtendedHighlight other) {
+			if(this.getStart() != other.getStart()) {
+				return Integer.compare(this.getStart(), other.getStart());
+			} else {
+				return Integer.compare(this.getEnd(), other.getEnd());
+			}
+		}
+		
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getEnclosingInstance().hashCode();
+			result = prime * result + getEnd();
+			result = prime * result + getStart();
+			return result;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ExtendedHighlight other = (ExtendedHighlight) obj;
+			if (!getEnclosingInstance().equals(other.getEnclosingInstance()))
+				return false;
+			if (getEnd() != other.getEnd())
+				return false;
+			if (getStart() != other.getStart())
+				return false;
+			return true;
+		}
+		
+		private HighlightsViewer getEnclosingInstance() {
+			return HighlightsViewer.this;
+		}
 	}
 	
 	private Item visualizedItem = null;
@@ -94,13 +145,18 @@ public class HighlightsViewer extends JPanel {
 	private String filteringQuery = "";
 	private boolean termDataModified = false;
 	
+	private Color queryHighlightColor = Color.YELLOW;
+	private Color wordListHighlightColor = Color.MAGENTA;
+	private Color otherTermHighlightColor = Color.ORANGE;
+	private Color expressionHighlightColor = Color.WHITE;
+	
 	private Map<Color,DefaultHighlighter.DefaultHighlightPainter> painters = new HashMap<Color,DefaultHighlighter.DefaultHighlightPainter>();
 	
 	private JTextArea textArea;
 	private ItemTable itemTable;
 	private List<Pattern> highlightExpressions = new ArrayList<Pattern>();
 	private JTextField txtQuery;
-	private JLabel lblHighlighIndex;
+	private JLabel lblHighlighIndexValue;
 	private JTextField txtFilteringQuery;
 	private ItemMetadataTable itemMetadataTable;
 	private JSplitPane horizontalSplitPane;
@@ -109,6 +165,8 @@ public class HighlightsViewer extends JPanel {
 	private ChoiceTableControl<String> wordListChoices;
 	private JTabbedPane tabbedPane;
 	private JTextArea txtOtherTerms;
+	private JLabel lblHighlightTextValue;
+	private JLabel lblHighlightSourcesValue;
 
 	public HighlightsViewer() {
 		this(null);
@@ -243,9 +301,29 @@ public class HighlightsViewer extends JPanel {
 		
 		btnNextHighlight.setIcon(new ImageIcon(HighlightsViewer.class.getResource("/com/nuix/nx/controls/book_next.png")));
 		
-		lblHighlighIndex = new JLabel("Highlight: 0/0");
-		panel.add(lblHighlighIndex);
-		lblHighlighIndex.setFont(new Font("Dialog", Font.PLAIN, 16));
+		JLabel lblHighlightIndex = new JLabel("Highlight:");
+		lblHighlightIndex.setFont(new Font("Dialog", Font.BOLD, 16));
+		panel.add(lblHighlightIndex);
+		
+		lblHighlighIndexValue = new JLabel("0/0");
+		panel.add(lblHighlighIndexValue);
+		lblHighlighIndexValue.setFont(new Font("Dialog", Font.PLAIN, 16));
+		
+		JLabel lblHighlightText = new JLabel("Text:");
+		lblHighlightText.setFont(new Font("Dialog", Font.BOLD, 16));
+		panel.add(lblHighlightText);
+		
+		lblHighlightTextValue = new JLabel("    ");
+		lblHighlightTextValue.setFont(new Font("Dialog", Font.PLAIN, 16));
+		panel.add(lblHighlightTextValue);
+		
+		JLabel lblHighlightSources = new JLabel("Sources:");
+		lblHighlightSources.setFont(new Font("Dialog", Font.BOLD, 16));
+		panel.add(lblHighlightSources);
+		
+		lblHighlightSourcesValue = new JLabel("    ");
+		lblHighlightSourcesValue.setFont(new Font("Dialog", Font.PLAIN, 16));
+		panel.add(lblHighlightSourcesValue);
 		
 		horizontalSplitPane = new JSplitPane();
 		horizontalSplitPane.setContinuousLayout(true);
@@ -428,7 +506,7 @@ public class HighlightsViewer extends JPanel {
 		try {
 			scrollToHighlightIndex(currentHighlightIndex);
 			rebuildHighlighters();
-			updateHighlightLabel();
+			updateCurrentHighlightLabels();
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
@@ -440,35 +518,40 @@ public class HighlightsViewer extends JPanel {
 		try {
 			scrollToHighlightIndex(currentHighlightIndex);
 			rebuildHighlighters();
-			updateHighlightLabel();
+			updateCurrentHighlightLabels();
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void updateHighlightLabel() {
+	private void updateCurrentHighlightLabels() {
 		if(highlights.size() == 0) {
-			lblHighlighIndex.setText("Highlight: 0/0");
+			lblHighlighIndexValue.setText("0/0");
+			lblHighlightTextValue.setText("    ");
+			lblHighlightSourcesValue.setText("    ");
 		} else {
 			ExtendedHighlight eh = highlights.get(currentHighlightIndex);
-			lblHighlighIndex.setText(String.format("Highlight: %s/%s, Range: %s-%s, Text: %s",
-					currentHighlightIndex+1, highlights.size(), eh.getStart(), eh.getEnd(), eh.getText()));	
+			
+			lblHighlighIndexValue.setText(String.format("%s/%s",currentHighlightIndex+1, highlights.size()));
+			lblHighlightTextValue.setText(eh.getText());
+			lblHighlightSourcesValue.setText(eh.getSources());
 		}
 	}
 	
 	public void setContentQuery(String query) {
-		this.contentQuery = query;
 		txtQuery.setText(query);
 		realoadItems();
 	}
 	
 	public void setFilteringQuery(String query) {
-		this.filteringQuery = query;
 		txtFilteringQuery.setText(query);
 		realoadItems();
 	}
 	
 	private void realoadItems() {
+		contentQuery = txtQuery.getText();
+		filteringQuery = txtFilteringQuery.getText();
+		
 		// We accept 2 queries:
 		// - Content Query: used for searching and highlight generation
 		// - Filtering Query: used for searching, but not highlight generation
@@ -548,75 +631,137 @@ public class HighlightsViewer extends JPanel {
 		itemTextObject.usingText(textOperation);
 		currentTextLength = textArea.getText().length();
 		
-		rebuildHighlightsFromItem();
-		rebuildHighlighters();
-		scrollTo(0);
-		itemMetadataTable.setItem(visualizedItem);
+		SwingUtilities.invokeLater(()->{
+			itemMetadataTable.setItem(visualizedItem);
+			
+			rebuildHighlightsFromItem();
+			rebuildHighlighters();
+			scrollTo(0);	
+		});
 	}
 	
 	private void rebuildHighlightsFromItem() {
 		try {
 			currentHighlightIndex = 0;
-			Set<String> otherTermsSet = new HashSet<String>();
+			highlights.clear();
 			
-			// If we have word list names, then we need to fetch terms in those word lists
-			Utilities util = NuixConnection.getUtilities();
-			WordListStore wordListStore = util.getWordListStore();
-			Set<String> existingWordListNames = wordListStore.getWordListNames()
-					.stream()
-					.map(wln -> wln.trim().toLowerCase())
-					.collect(Collectors.toSet());
-			for(String wordListName : getSelectedWordListNames()) {
-				String normalizedWordListName = wordListName.trim().toLowerCase();
-				if(!existingWordListNames.contains(normalizedWordListName)) {
-					logger.info("Skipping inclusion of non-existent word list: "+wordListName);
+			
+			buildQueryHighlights();
+			buildOtherTermsHighlights();
+			buildExpressionHighlights();
+			buildWordListHighlights();
+			
+			// We will now merge together duplicative highlights, partially because
+			// highlight painters in text area act a little funny when they overlap
+			Map<ExtendedHighlight,ExtendedHighlight> mergedHighlights = new HashMap<ExtendedHighlight,ExtendedHighlight>();
+			for(ExtendedHighlight eh : highlights) {
+				if(mergedHighlights.containsKey(eh)) {
+					mergedHighlights.get(eh).addSource(eh.getSources());
 				} else {
-					WordList wordList = wordListStore.getWordList(normalizedWordListName);
-					for(String term : wordList) {
-						// Item.getHighlights says this should be done
-						List<TokenInfo> tokenInfos = visualizedItem.tokenise(term);
-						for(TokenInfo tokenInfo : tokenInfos) {
-							otherTermsSet.add(tokenInfo.getText());
-						}
-					}
+					mergedHighlights.put(eh, eh);
 				}
 			}
 			
-			// Also include directly provided other terms
-			for(String term : getOtherTerms()) {
-				// Item.getHighlights says this should be done
-				List<TokenInfo> tokenInfos = visualizedItem.tokenise(term);
-				for(TokenInfo tokenInfo : tokenInfos) {
-					otherTermsSet.add(tokenInfo.getText());
-				}
-			}
+			highlights.clear();
+			highlights.addAll(mergedHighlights.keySet());
+			Collections.sort(highlights);
 			
-			if(highlightExpressions.size() > 0) {
-				CaseStatistics caseStats = nuixCase.getStatistics();
-				Map<String,Long> termStats = caseStats.getTermStatistics(String.format("guid:(%s)", visualizedItem.getGuid()));
-				for(Map.Entry<String,Long> termStat : termStats.entrySet()) {
-					for(Pattern expression : highlightExpressions) {
-						if(expression.matcher(termStat.getKey()).find()) {
-							List<TokenInfo> tokenInfos = visualizedItem.tokenise(termStat.getKey());
-							for(TokenInfo tokenInfo : tokenInfos) {
-								otherTermsSet.add(tokenInfo.getText());
-							}
-						}
-					}
-				}
-			}
-			
-			highlights = visualizedItem.getHighlights(contentQuery, otherTermsSet)
-					.stream()
-					.filter(h -> h.getStart() <= currentTextLength) // Don't bother if beyond truncation
-					.map(ex -> new ExtendedHighlight(ex))
-					.collect(Collectors.toList());
-			
-			updateHighlightLabel();
-		} catch (IOException e) {
+			updateCurrentHighlightLabels();
+		} catch (Exception e) {
 			CommonDialogs.showError("Error Rebuilding Highlights: "+e.getMessage());
 			logger.error(e);
 		}
+	}
+	
+	private void buildWordListHighlights() throws Exception {
+		Set<String> termSet = new HashSet<String>();
+		
+		// If we have word list names, then we need to fetch terms in those word lists
+		Utilities util = NuixConnection.getUtilities();
+		WordListStore wordListStore = util.getWordListStore();
+		
+		Set<String> existingWordListNames = wordListStore.getWordListNames()
+				.stream()
+				.map(wln -> wln.trim().toLowerCase())
+				.collect(Collectors.toSet());
+		
+		for(String wordListName : getSelectedWordListNames()) {
+			String normalizedWordListName = wordListName.trim().toLowerCase();
+			
+			if(!existingWordListNames.contains(normalizedWordListName)) {
+				logger.info("Skipping inclusion of non-existent word list: "+wordListName);
+			} else {
+				termSet.clear();
+				WordList wordList = wordListStore.getWordList(normalizedWordListName);
+				for(String term : wordList) {
+					// Item.getHighlights says this should be done
+					List<TokenInfo> tokenInfos = visualizedItem.tokenise(term);
+					for(TokenInfo tokenInfo : tokenInfos) {
+						termSet.add(tokenInfo.getText());
+					}
+				}
+				
+				highlights.addAll(visualizedItem.getHighlights("", termSet)
+						.stream()
+						.filter(h -> h.getStart() <= currentTextLength) // Don't bother if beyond truncation
+						.map(ex -> new ExtendedHighlight(ex,wordListHighlightColor,"WORD_LIST:"+wordListName))
+						.collect(Collectors.toList()));
+			}
+		}
+	}
+	
+	private void buildOtherTermsHighlights() throws Exception {
+		Set<String> termSet = new HashSet<String>();
+		
+		// Also include directly provided other terms
+		for(String term : getOtherTerms()) {
+			// Item.getHighlights says this should be done
+//			List<TokenInfo> tokenInfos = visualizedItem.tokenise(term);e
+//			for(TokenInfo tokenInfo : tokenInfos) {
+//				termSet.add(tokenInfo.getText());
+//			}
+			
+			termSet.add(term);
+		}
+		
+		highlights.addAll(visualizedItem.getHighlights("", termSet)
+				.stream()
+				.filter(h -> h.getStart() <= currentTextLength) // Don't bother if beyond truncation
+				.map(ex -> new ExtendedHighlight(ex,otherTermHighlightColor,"OTHER_TERMS"))
+				.collect(Collectors.toList()));
+	}
+	
+	private void buildExpressionHighlights() throws Exception {
+		Set<String> termSet = new HashSet<String>();
+		
+		if(highlightExpressions.size() > 0) {
+			CaseStatistics caseStats = nuixCase.getStatistics();
+			Map<String,Long> termStats = caseStats.getTermStatistics(String.format("guid:(%s)", visualizedItem.getGuid()));
+			for(Map.Entry<String,Long> termStat : termStats.entrySet()) {
+				for(Pattern expression : highlightExpressions) {
+					if(expression.matcher(termStat.getKey()).find()) {
+						List<TokenInfo> tokenInfos = visualizedItem.tokenise(termStat.getKey());
+						for(TokenInfo tokenInfo : tokenInfos) {
+							termSet.add(tokenInfo.getText());
+						}
+					}
+				}
+			}
+		}
+		
+		highlights.addAll(visualizedItem.getHighlights("", termSet)
+				.stream()
+				.filter(h -> h.getStart() <= currentTextLength) // Don't bother if beyond truncation
+				.map(ex -> new ExtendedHighlight(ex,expressionHighlightColor,"EXPRESSION"))
+				.collect(Collectors.toList()));
+	}
+	
+	private void buildQueryHighlights() throws Exception {
+		highlights.addAll(visualizedItem.getHighlights(contentQuery, null)
+				.stream()
+				.filter(h -> h.getStart() <= currentTextLength) // Don't bother if beyond truncation
+				.map(ex -> new ExtendedHighlight(ex,queryHighlightColor,"QUERY"))
+				.collect(Collectors.toList()));
 	}
 	
 	private void rebuildHighlighters() {
@@ -628,7 +773,7 @@ public class HighlightsViewer extends JPanel {
 					if(currentHighlightIndex == i) {
 						addHighlighter(eh.getStart(),eh.getEnd(),Color.GREEN);	
 					} else {
-						addHighlighter(eh.getStart(),eh.getEnd(),Color.YELLOW);
+						addHighlighter(eh.getStart(),eh.getEnd(),eh.getHighlightColor());
 					}
 					
 				}
@@ -640,15 +785,18 @@ public class HighlightsViewer extends JPanel {
 	}
 	
 	private void scrollTo(int position) {
-		SwingUtilities.invokeLater(()->{
-			try {
-				Rectangle2D viewRect = textArea.modelToView2D(position);
-				textArea.scrollRectToVisible(viewRect.getBounds());
-				textArea.setCaretPosition(position);
-			} catch (Exception e) {
-				logger.info(String.format("Error Scrolling to Position %s", position), e);
-			}
-		});
+		try {
+			// < Sad Java 8 Sounds >
+			// Rectangle2D viewRect = textArea.modelToView2D(position);
+			// textArea.scrollRectToVisible(viewRect.getBounds());
+			
+			@SuppressWarnings("deprecation")
+			Rectangle viewRect = textArea.modelToView(position);
+			textArea.scrollRectToVisible(viewRect.getBounds());
+			textArea.setCaretPosition(position);
+		} catch (Exception e) {
+			logger.info(String.format("Error Scrolling to Position %s", position), e);
+		}
 	}
 	
 	private void scrollToHighlight(ExtendedHighlight h) throws BadLocationException {
@@ -711,4 +859,21 @@ public class HighlightsViewer extends JPanel {
 		wordListChoices.uncheckAllChoices();
 		wordListChoices.setCheckedByLabels(wordListNames, true);
 	}
+
+	public Color getQueryHighlightColor() { return queryHighlightColor; }
+
+	public void setQueryHighlightColor(Color queryHighlightColor) { this.queryHighlightColor = queryHighlightColor; }
+
+	public Color getWordListHighlightColor() { return wordListHighlightColor; }
+
+	public void setWordListHighlightColor(Color wordListHighlightColor) { this.wordListHighlightColor = wordListHighlightColor; }
+
+	public Color getOtherTermHighlightColor() { return otherTermHighlightColor; }
+
+	public void setOtherTermHighlightColor(Color otherTermHighlightColor) { this.otherTermHighlightColor = otherTermHighlightColor; }
+
+	public Color getExpressionHighlightColor() { return expressionHighlightColor; }
+
+	public void setExpressionHighlightColor(Color expressionHighlightColor) { this.expressionHighlightColor = expressionHighlightColor; }
+	
 }
