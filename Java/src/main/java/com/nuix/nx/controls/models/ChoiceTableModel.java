@@ -260,16 +260,16 @@ public class ChoiceTableModel<T> extends AbstractTableModel {
 	public void checkDisplayedChoices(){
 		for(Choice<T> choice : displayedChoices){
 			choice.setSelected(true);
-			this.fireTableCellUpdated(displayedChoices.indexOf(choice), 0);
 		}
+		refreshTable();
 		notifyChanged();
 	}
 	
 	public void uncheckDisplayedChoices(){
 		for(Choice<T> choice : displayedChoices){
 			choice.setSelected(false);
-			this.fireTableCellUpdated(displayedChoices.indexOf(choice), 0);
 		}
+		refreshTable();
 		notifyChanged();
 	}
 	
