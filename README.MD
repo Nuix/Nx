@@ -1,7 +1,7 @@
 ﻿Nx
 ==========
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) ![This script was last tested in Nuix 7.8](https://img.shields.io/badge/Script%20Tested%20in%20Nuix-7.8-green.svg)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) ![This script was last tested in Nuix 9.4](https://img.shields.io/badge/Script%20Tested%20in%20Nuix-9.4-green.svg)
 
 View the GitHub project [here](https://github.com/Nuix/Nx) or download the latest release [here](https://github.com/Nuix/Nx/releases).
 
@@ -163,10 +163,14 @@ A tab may have controls such as:
 
 Refer to the [documentation for the CustomTabPanel](https://nuix.github.io/Nx/com/nuix/nx/dialogs/CustomTabPanel.html) class for a list of methods which add controls to a tab.  Further examples can be found in the Examples directory.
 
+# Using Python
+
+Nuix uses Jython to run Python scripts (JRuby for Ruby scripts).  This allows you to use this library from Python as well by adapting the paradigms to their Jython equivalent.  While this repository has a Ruby focus, see [TabbedCustomDialog.py](https://github.com/Nuix/Nx/blob/master/Examples/TabbedCustomDialog.py) which demonstrates the porting of [TabbedCustomDialog.rb](https://github.com/Nuix/Nx/blob/master/Examples/TabbedCustomDialog.rb) from Ruby to Python.
+
 # License
 
 ```
-Copyright 2018 Nuix
+Copyright 2021 Nuix
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
