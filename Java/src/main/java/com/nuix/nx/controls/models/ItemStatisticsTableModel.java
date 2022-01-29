@@ -82,8 +82,18 @@ public class ItemStatisticsTableModel extends AbstractTableModel {
 	public Object getValueAt(int row, int col) {
 		Stat stat = sortedStats.get(row);
 		switch (col) {
-			case 0:  return typeLookup.get(stat.mimeType)[0];
-			case 1: return typeLookup.get(stat.mimeType)[1];
+			case 0:
+				if(typeLookup.containsKey(stat.mimeType)) {
+					return typeLookup.get(stat.mimeType)[0];
+				} else {
+					return "Unknown";
+				}
+			case 1:
+				if(typeLookup.containsKey(stat.mimeType)) {
+					return typeLookup.get(stat.mimeType)[1];
+				} else {
+					return "Unknown";
+				}
 			case 2: return stat.mimeType;
 			case 3: return FormatHelpers.formatNumber(stat.totalProcessed);
 			case 4: return FormatHelpers.formatNumber(stat.totalCorrupted);
