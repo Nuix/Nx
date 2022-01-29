@@ -44,7 +44,7 @@ import java.awt.Toolkit;
  */
 @SuppressWarnings("serial")
 public class ProgressDialog extends JDialog {
-
+	
 	private final JPanel contentPanel = new JPanel();
 	private boolean abortWasRequested = false;
 	private boolean closeAllowed = false;
@@ -375,6 +375,15 @@ public class ProgressDialog extends JDialog {
 		} else {
 			System.out.println(message);	
 		}
+	}
+	
+	/***
+	 * Sets whether text in the message area show be line/word wrapped.
+	 * @param wrapText True enables wrapping, false (default) disables it.
+	 */
+	public void setTextWrapping(boolean wrapText) {
+		txtrLog.setLineWrap(wrapText);
+		txtrLog.setWrapStyleWord(wrapText);
 	}
 	
 	/***
