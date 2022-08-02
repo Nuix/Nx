@@ -1,7 +1,7 @@
 ﻿Nx
 ==========
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) ![This script was last tested in Nuix 9.4](https://img.shields.io/badge/Script%20Tested%20in%20Nuix-9.4-green.svg)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) ![This script was last tested in Nuix 9.8](https://img.shields.io/badge/Script%20Tested%20in%20Nuix-9.8-green.svg)
 
 View the GitHub project [here](https://github.com/Nuix/Nx) or download the latest release [here](https://github.com/Nuix/Nx/releases).
 
