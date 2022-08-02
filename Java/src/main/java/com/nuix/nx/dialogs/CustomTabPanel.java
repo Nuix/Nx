@@ -1454,7 +1454,7 @@ public class CustomTabPanel extends JPanel{
 	public String getText(String identifier) throws Exception{
 		Component component = controls.get(identifier);
 		if(component instanceof JPasswordField){
-			return ((JPasswordField)component).getPassword().toString();
+			return new String(((JPasswordField)component).getPassword());
 		}
 		else if (component instanceof JTextField){
 			return ((JTextField)component).getText();
