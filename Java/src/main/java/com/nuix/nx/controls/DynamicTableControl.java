@@ -103,6 +103,14 @@ public class DynamicTableControl extends JPanel {
 						lblLblcounts.setText("Checked: " + tableModel.getCheckedValueCount() + 
 								" Visible: " + tableModel.getVisibleValueCount() +
 								" Total: " + tableModel.getTotalValueCount());
+						
+					}
+
+					@Override
+					public void structureChanged() {
+						TableColumn checkColumn = dataTable.getColumnModel().getColumn(0);
+						checkColumn.setMinWidth(25);
+						checkColumn.setMaxWidth(25);
 					}
 				});
 				

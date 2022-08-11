@@ -86,6 +86,13 @@ public class ChoiceTableControl<T> extends JPanel {
 								" Visible: " + tableModel.getVisibleValueCount() +
 								" Total: " + tableModel.getTotalValueCount());
 					}
+
+					@Override
+					public void structureChanged() {
+						TableColumn checkColumn = choiceTable.getColumnModel().getColumn(0);
+						checkColumn.setMinWidth(25);
+						checkColumn.setMaxWidth(25);
+					}
 				});
 				
 				lblFilter = new JLabel("Filter:");

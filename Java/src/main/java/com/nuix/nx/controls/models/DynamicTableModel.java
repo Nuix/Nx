@@ -121,6 +121,15 @@ public class DynamicTableModel extends AbstractTableModel {
 		}
 	}
 	
+	public void setColumnName(int columnIndex, String updatedValue) {
+		if(columnIndex == 0){ return; }
+		else {
+			headers.set(columnIndex-1, updatedValue);
+			fireTableStructureChanged();
+			changeListener.structureChanged();
+		}
+	}
+	
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		switch(columnIndex){

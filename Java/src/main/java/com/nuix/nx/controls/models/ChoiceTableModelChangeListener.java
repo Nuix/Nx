@@ -12,4 +12,5 @@ package com.nuix.nx.controls.models;
  */
 public interface ChoiceTableModelChangeListener {
 	public void dataChanged();
+	public void structureChanged();
 }
