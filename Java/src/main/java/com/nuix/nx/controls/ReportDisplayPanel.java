@@ -1,3 +1,7 @@
+/******************************************
+ Copyright 2022 Nuix
+ http://www.apache.org/licenses/LICENSE-2.0
+ *******************************************/
 package com.nuix.nx.controls;
 
 import com.nuix.nx.controls.models.ReportDataModel;
