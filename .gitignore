@@ -6,6 +6,9 @@ Ignored
 .settings
 .classpath
 .project
+.idea
+*.iml
+out
 
 # =============
 # Maven entries
