@@ -5,12 +5,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 package com.nuix.nx.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -18,22 +13,14 @@ import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import com.nuix.nx.controls.ReportDisplayPanel;
+import com.nuix.nx.controls.models.ReportDataModel;
 import org.joda.time.DateTime;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Toolkit;
+import java.net.URL;
 
 /***
  * Provides a configurable progress dialog.  Note that you do not create an instance of it
@@ -57,6 +44,8 @@ public class ProgressDialog extends JDialog {
 	private Runnable abortCallback;
 	private JTextArea txtrLog;
 	private JScrollPane scrollPane;
+
+	private ReportDisplayPanel reportDisplay;
 	private ProgressDialogLoggingCallback loggingCallback;
 	private JPanel buttonsPanel;
 	private JButton btnClose;
@@ -64,7 +53,8 @@ public class ProgressDialog extends JDialog {
 
 	private ProgressDialog() {
 		super((JDialog)null);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(ProgressDialog.class.getResource("/com/nuix/nx/dialogs/nuix_icon.png")));
+		URL iconUri = ProgressDialog.class.getResource("/com/nuix/nx/dialogs/nuix_icon.png");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(iconUri));
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setTitle("Progress Dialog");
 		setSize(new Dimension(800,600));
@@ -127,13 +117,22 @@ public class ProgressDialog extends JDialog {
 		txtrLog.setBackground(Color.WHITE);
 		txtrLog.setEditable(false);
 		scrollPane.setViewportView(txtrLog);
-		
+
+		reportDisplay = new ReportDisplayPanel();
+		GridBagConstraints reportConstraints = new GridBagConstraints();
+		reportConstraints.anchor = GridBagConstraints.EAST;
+		reportConstraints.fill = GridBagConstraints.HORIZONTAL;
+		reportConstraints.gridx = 0;
+		reportConstraints.gridy = 5;
+		contentPanel.add(reportDisplay, reportConstraints);
+
+
 		buttonsPanel = new JPanel();
 		GridBagConstraints gbc_buttonsPanel = new GridBagConstraints();
 		gbc_buttonsPanel.anchor = GridBagConstraints.EAST;
 		gbc_buttonsPanel.fill = GridBagConstraints.VERTICAL;
 		gbc_buttonsPanel.gridx = 0;
-		gbc_buttonsPanel.gridy = 5;
+		gbc_buttonsPanel.gridy = 6;
 		contentPanel.add(buttonsPanel, gbc_buttonsPanel);
 		buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -492,6 +491,18 @@ public class ProgressDialog extends JDialog {
 	public void setTimestampLoggedMessages(boolean timestampLoggedMessages) {
 		this.timestampLoggedMessages = timestampLoggedMessages;
 	}
-	
+
+	/**
+	 * Adds a section to the bottom of the dialog as a Report.  Uses the provided
+	 * ReportDataModel to make a ReportDisplayPanel which gets inserted under the
+	 * log area and above the buttons.
+	 * @param reportDataModel The data model to display at the bottom of the dialog.  Must
+	 *                        not be null.
+	 */
+	public void addReport(ReportDataModel reportDataModel) {
+		SwingUtilities.invokeLater(() -> {
+			reportDisplay.setReportDataModel(reportDataModel);
+		});
+	}
 	
 }
