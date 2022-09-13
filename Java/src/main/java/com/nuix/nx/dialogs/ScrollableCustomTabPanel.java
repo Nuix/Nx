@@ -33,7 +33,7 @@ public class ScrollableCustomTabPanel extends CustomTabPanel {
 		outerScroller.setViewportView(wrappedPanel);
 		
 		rootLayout = new GridBagLayout();
-		rootLayout.columnWidths = new int[]{LABEL_COLUMN_WIDTH,CONTROL_COLUMN_WIDTH};
+		rootLayout.columnWidths = new int[]{LABEL_COLUMN_WIDTH, CONTROL_COLUMN_WIDTH};
 		wrappedPanel.setLayout(rootLayout);
 	}
 

@@ -7,6 +7,8 @@ import java.beans.PropertyChangeListener;
 import java.util.*;
 
 /**
+ * Data model for use with the {@link com.nuix.nx.controls.ReportDisplayPanel}.
+ *
  * The report is represented by a group of sections, each section being a group of data labels and their values.
  * A report might be displayed as:
  *
@@ -25,7 +27,7 @@ import java.util.*;
  *  object that has a reasonable toString() representation.
  *
  *  No effort is made by this class to make building the list of sections and data labels threadsafe.  As such, the
- *  sections and data should be build prior to displaying the data in any UI.  Adding updating data values will be
+ *  sections and data should be built prior to displaying the data in any UI.  Updating data values will be
  *  run from the Swing thread so updating these values during display is safe.
  */
 public class ReportDataModel {
@@ -34,10 +36,21 @@ public class ReportDataModel {
 
     List<PropertyChangeListener> listeners = new ArrayList<>();
 
+    /**
+     * Add a PropertyChangeListener to this object.  The listener will be updated when new sections are added and when
+     * data field values are updated.  When a section is added, the Property Name will be the name of the section.  When
+     * a data field value is updated the property name will be a string containing the Section Name and the Data Field
+     * Name connected with the SECTION_FIELD_DELIM (for example, "Section 1::Data Field 1".)
+     * @param listener A property change listener to be informed when section and data changes are made.
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         SwingUtilities.invokeLater( () -> { if (!listeners.contains(listener)) listeners.add(listener); } );
     }
 
+    /**
+     * Remove the provided listener from this object.
+     * @param listener The PropertyChangeListener to remove.
+     */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         SwingUtilities.invokeLater( () -> { if (!listeners.contains(listener)) listeners.remove(listener); } );
     }
@@ -73,8 +86,7 @@ public class ReportDataModel {
     /**
      * Add a new, empty section to the report.
      *
-     * This method is not guaranteed to be thread safe and likely will not result in the UI being updated, so it should
-     * only be called prior to showing the UI.
+     * This method is not guaranteed to be thread safe.
      *
      * @param sectionName The name of the new section.  The name is both an id and displayed, so make it meaningful and
      *                    unique. If the section already exists, it will be replaced and the data in it will be lost.
@@ -87,9 +99,8 @@ public class ReportDataModel {
      * Add data to the given section.  If the section doesn't already exist it will be added with the new data.  If
      * the data field already exists in the section, it will be replaced with the new value.
      *
-     * Since this method may result in new sections being added and that process is not thread safe (it likely won't
-     * update UI properly) this method should only be used prior to showing UI.  After that the updateData() method
-     * shold be used.
+     * This method is not guaranteed to be thread safe.  It will not notify the UI of a new data field, though if
+     * it results in a new section, that section will be added to the UI with the new data field.
      *
      * @param sectionName The name of the section to add the data to.
      * @param dataField The name of the data to add - this will be used both for id and display so make it unique in the

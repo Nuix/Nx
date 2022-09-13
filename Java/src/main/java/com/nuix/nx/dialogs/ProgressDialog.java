@@ -64,9 +64,9 @@ public class ProgressDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[]{0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 25, 25, 25, 300, 0, 0};
+		//gbl_contentPanel.rowHeights = new int[]{0, 25, 25, 25, 300, 0, 0, 0}; // Sections control their own size
 		gbl_contentPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.5, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 		
 		lblMainStatus = new JLabel("...");
@@ -105,6 +105,7 @@ public class ProgressDialog extends JDialog {
 		contentPanel.add(subProgress, gbc_subProgress);
 		
 		scrollPane = new JScrollPane();
+		scrollPane.setPreferredSize(new Dimension(700, 300));
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
@@ -120,8 +121,8 @@ public class ProgressDialog extends JDialog {
 
 		reportDisplay = new ReportDisplayPanel();
 		GridBagConstraints reportConstraints = new GridBagConstraints();
-		reportConstraints.anchor = GridBagConstraints.EAST;
-		reportConstraints.fill = GridBagConstraints.HORIZONTAL;
+		//reportConstraints.anchor = GridBagConstraints.EAST;
+		reportConstraints.fill = GridBagConstraints.BOTH;
 		reportConstraints.gridx = 0;
 		reportConstraints.gridy = 5;
 		contentPanel.add(reportDisplay, reportConstraints);
@@ -504,5 +505,14 @@ public class ProgressDialog extends JDialog {
 			reportDisplay.setReportDataModel(reportDataModel);
 		});
 	}
-	
+
+	/***
+	 * Sets whether the report section is visible.
+	 * @param value True for visible, false for hidden.
+	 */
+	public void setReportDisplayVisible(boolean value){
+		reportDisplay.setVisible(value);
+	}
+
+
 }

@@ -14,7 +14,19 @@ import java.util.Map;
  * This class is designed to display a ReportDataModel
  */
 public class ReportDisplayPanel extends JPanel {
-    Map<String, Map<String, JLabel>> dataValues = new HashMap<>();
+    private static final int LABEL_COLUMN_WIDTH = 50;
+    private static final int CONTROL_COLUMN_WIDTH = 50;
+    private int activeRow = 0;
+    private static final Insets sectionInsets = new Insets(5, 2, 2, 2);
+    private static final Insets separatorInsets = new Insets(0, 0, 0, 0);
+    private static final Insets dataRowInsets = new Insets(2,2,2,2);
+    private GridBagLayout rootLayout;
+
+    private JPanel filler;
+
+    Map<String, JLabel> sectionLabels = new HashMap<>();
+    Map<String, JSeparator> separators = new HashMap<>();
+    Map<String, Map<String, JLabel[]>> dataValues = new HashMap<>();
 
     public ReportDisplayPanel() {
         super();
@@ -39,29 +51,37 @@ public class ReportDisplayPanel extends JPanel {
         setLayout(rootLayout);
 
         for (String sectionName : dataModel.getSections()) {
-            Map<String, JLabel> section = buildSection(sectionName, dataModel);
-            dataValues.put(sectionName, section);
+            buildSection(sectionName, dataModel);
         }
 
-        addVerticalFiller();
+        //filler = addVerticalFiller();
     }
 
-    private Map<String, JLabel> buildSection(String sectionName, ReportDataModel data) {
-        addSectionHeader(sectionName);
-        addHorizontalSeparator();
+    private void buildSection(String sectionName, ReportDataModel data) {
+        Map<String, JLabel[]> section = makeSection(sectionName);
 
-        Map<String, JLabel> section = new HashMap<>();
 
         for (String dataField : data.getDataFieldsInSection(sectionName)) {
             String dataValue = data.getDataFieldValue(sectionName, dataField);
-            JLabel dataValueDisplay = buildDataRow(dataField, dataValue);
+            JLabel[] dataValueDisplay = buildDataRow(dataField, dataValue);
             section.put(dataField, dataValueDisplay);
         }
+    }
+
+    private Map<String, JLabel[]> makeSection(String sectionName) {
+        JLabel label = addSectionHeader(sectionName);
+        JSeparator separator = addHorizontalSeparator();
+
+        sectionLabels.put(sectionName, label);
+        separators.put(sectionName, separator);
+
+        Map<String, JLabel[]> section = new HashMap<>();
+        dataValues.put(sectionName, section);
 
         return section;
     }
 
-    private JLabel buildDataRow(String label, String value) {
+    private JLabel[] buildDataRow(String label, String value) {
         return addDataFieldDisplay(label, value);
     }
 
@@ -71,32 +91,57 @@ public class ReportDisplayPanel extends JPanel {
 
             String[] fieldNames = changedProperty.split(ReportDataModel.SECTION_FIELD_DELIM);
             String sectionName = fieldNames[0];
-            String dataField = fieldNames[1];
+            String newValue = event.getNewValue().toString();
 
-            if (dataValues.containsKey(sectionName)) {
-                Map<String, JLabel> section = dataValues.get(sectionName);
-                if (section.containsKey(dataField)) {
-                    JLabel valueField = section.get(dataField);
-                    valueField.setText(event.getNewValue().toString());
+            if (fieldNames.length > 1) {
+                // Section and Data Field present
+                String dataField = fieldNames[1];
+
+                if (!dataValues.containsKey(sectionName)) {
+                    //The section does not exist, make it
+                    makeSection(sectionName);
                 }
+
+                Map<String, JLabel[]> section = dataValues.get(sectionName);
+
+                if (section.containsKey(dataField)) {
+                    // field exists, update it
+                    JLabel valueField = section.get(dataField)[1];
+                    valueField.setText(newValue);
+                } else {
+                    // field does not exist, make a new one
+                    JLabel[] dataFieldDisplays = addDataFieldDisplay(dataField, newValue);
+                    section.put(dataField, dataFieldDisplays);
+                }
+            } else {
+                // Section only
+                if (dataValues.containsKey(sectionName)) {
+                    // Section already exists, remove it first
+
+                    Map<String, JLabel[]> section = dataValues.get(sectionName);
+                    for (JLabel[] fields : section.values()) {
+                        for (JLabel field : fields) {
+                            ReportDisplayPanel.this.remove(field);
+                        }
+                    }
+
+                    dataValues.remove(sectionName);
+                    sectionLabels.remove(sectionName);
+                    separators.remove(sectionName);
+                }
+
+                buildSection(sectionName, (ReportDataModel)event.getSource());
             }
+
         }
     }
 
-    protected int LABEL_COLUMN_WIDTH = 50;
-    protected int CONTROL_COLUMN_WIDTH = 50;
-    protected int activeRow = 0;
-    private static final Insets sectionInsets = new Insets(5, 2, 2, 2);
-    private static final Insets separatorInsets = new Insets(0, 0, 0, 0);
-    private static final Insets dataRowInsets = new Insets(2,2,2,2);
-    GridBagLayout rootLayout;
-
-    protected void addComponent(Component component, GridBagConstraints c){
+    private void addComponent(Component component, GridBagConstraints c){
         rootLayout.setConstraints(component,c);
         add(component);
     }
 
-    protected JLabel addDataFieldDisplay(String label, String initialValue){
+    private JLabel[] addDataFieldDisplay(String label, String initialValue){
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = activeRow;
@@ -132,10 +177,10 @@ public class ReportDisplayPanel extends JPanel {
         activeRow++;
 
 
-        return valueComponent;
+        return new JLabel[] { labelComponent, valueComponent};
     }
 
-    protected void addSectionHeader(String label) {
+    private JLabel addSectionHeader(String label) {
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = activeRow;
@@ -156,9 +201,11 @@ public class ReportDisplayPanel extends JPanel {
         addComponent(labelComponent,c);
 
         activeRow++;
+
+        return labelComponent;
     }
 
-    void addHorizontalSeparator() {
+    private JSeparator addHorizontalSeparator() {
         GridBagConstraints c = new GridBagConstraints();
         c = new GridBagConstraints();
         c.gridx = 0;
@@ -174,8 +221,10 @@ public class ReportDisplayPanel extends JPanel {
         addComponent(separator, c);
 
         activeRow++;
+
+        return separator;
     }
-    void addVerticalFiller(){
+    private JPanel addVerticalFiller(){
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = activeRow;
@@ -190,6 +239,8 @@ public class ReportDisplayPanel extends JPanel {
         addComponent(filler,c);
 
         activeRow++;
+
+        return filler;
     }
 
 }
