@@ -66,7 +66,7 @@ public class ProgressDialog extends JDialog {
 		gbl_contentPanel.columnWidths = new int[]{0, 0};
 		//gbl_contentPanel.rowHeights = new int[]{0, 25, 25, 25, 300, 0, 0, 0}; // Sections control their own size
 		gbl_contentPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.5, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0};
 		contentPanel.setLayout(gbl_contentPanel);
 		
 		lblMainStatus = new JLabel("...");
