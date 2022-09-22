@@ -36,7 +36,7 @@ import java.util.*;
  */
 public class ReportDataModel {
 
-    Map<String, Map<String, Object>> report = new HashMap<>();
+    Map<String, Map<String, Object>> report = new LinkedHashMap<>();
 
     List<PropertyChangeListener> listeners = new ArrayList<>();
 
@@ -71,7 +71,7 @@ public class ReportDataModel {
      *                      are used both for display and as ids, so make them meaningful and unique.
      */
     public void addSection(String sectionName, Map<String, Object> dataInSection) {
-        Map<String, Object> copied = new HashMap<>();
+        Map<String, Object> copied = new LinkedHashMap<>();
 
         for (String dataField : dataInSection.keySet()) {
            Object value = dataInSection.get(dataField);
@@ -96,7 +96,7 @@ public class ReportDataModel {
      *                    unique. If the section already exists, it will be replaced and the data in it will be lost.
      */
     public void addSection(String sectionName) {
-        addSection(sectionName, Map.of());
+        addSection(sectionName, new LinkedHashMap<String, Object>());
     }
 
     /**
@@ -192,7 +192,7 @@ public class ReportDataModel {
      */
     public Set<String> getDataFieldsInSection(String sectionName) {
         if (report.containsKey(sectionName)) {
-            return new HashSet<>(report.get(sectionName).keySet());
+            return new LinkedHashSet<>(report.get(sectionName).keySet());
         }
 
         // Section not in report, return an empty Set

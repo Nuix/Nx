@@ -12,6 +12,7 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -28,9 +29,9 @@ public class ReportDisplayPanel extends JPanel {
 
     private JPanel filler;
 
-    Map<String, JLabel> sectionLabels = new HashMap<>();
+    Map<String, JLabel> sectionLabels = new LinkedHashMap<>();
     Map<String, JSeparator> separators = new HashMap<>();
-    Map<String, Map<String, JLabel[]>> dataValues = new HashMap<>();
+    Map<String, Map<String, JLabel[]>> dataValues = new LinkedHashMap<>();
 
     public ReportDisplayPanel() {
         super();
