@@ -4,7 +4,6 @@
  *******************************************/
 package com.nuix.nx;
 
-import com.nuix.nx.controls.ReportDisplayPanel;
 import com.nuix.nx.controls.models.ReportDataModel;
 import com.nuix.nx.dialogs.ProgressDialog;
 
