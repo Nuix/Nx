@@ -28,6 +28,7 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -347,8 +348,28 @@ public class DynamicTableControl extends JPanel {
 		return tableModel;
 	}
 
+	/**
+	 * Apply the new table model to the table view.
+	 * <p>
+	 *     This method will apply the new data model, while also transferring exising listeners from the old model
+	 *     to the new one (removing them from the old model in the process).  Finally, it will fire a table data changed
+	 *     event on the table model to force an update of the UI.
+	 * </p>
+	 * @param model The new model.  It will have existing {@link ChoiceTableModelChangeListener} and TableModelListeners
+	 *              added to it as a result of this method.
+	 */
 	public void setTableModel(DynamicTableModel model) {
+		DynamicTableModel oldModel = tableModel;
+
+		ChoiceTableModelChangeListener changeListener = oldModel.getChangeListener();
+
 		tableModel = model;
+		tableModel.setChangeListener(changeListener);
+		dataTable.setModel(tableModel);
+
+		oldModel.removeChangeListener(changeListener);
+
+		//tableModel.fireTableDataChanged();
 	}
 
 	public void setEnabled(boolean value){

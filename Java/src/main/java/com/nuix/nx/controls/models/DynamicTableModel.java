@@ -62,7 +62,21 @@ public class DynamicTableModel extends AbstractTableModel {
 	public void setChangeListener(ChoiceTableModelChangeListener listener){
 		changeListener = listener;
 	}
-	
+
+	/**
+	 * Get the listener which will be notified whn changes are made.
+	 * @return the listener that is notified of changes
+	 */
+	public ChoiceTableModelChangeListener getChangeListener() {
+		return changeListener;
+	}
+
+	public void removeChangeListener(ChoiceTableModelChangeListener listener) {
+		if(null != changeListener && changeListener.equals(listener)) {
+			changeListener = null;
+		}
+	}
+
 	@Override
 	public int getColumnCount() {
 		return headers.size()+1;
