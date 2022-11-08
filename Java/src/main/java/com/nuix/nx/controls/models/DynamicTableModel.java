@@ -77,6 +77,14 @@ public class DynamicTableModel extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * A reference to the callback used for retrieving values for display.
+	 * @return {@link DynamicTableValueCallback} used to get the values displayed in the table
+	 */
+	public DynamicTableValueCallback getValueCallback() {
+		return this.valueCallback;
+	}
+
 	@Override
 	public int getColumnCount() {
 		return headers.size()+1;
