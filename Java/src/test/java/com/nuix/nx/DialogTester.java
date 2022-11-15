@@ -10,6 +10,8 @@ import com.nuix.nx.controls.models.DynamicTableModel;
 import com.nuix.nx.controls.models.DynamicTableValueCallback;
 import com.nuix.nx.dialogs.CustomTabPanel;
 import com.nuix.nx.dialogs.TabbedCustomDialog;
+import com.nuix.nx.controls.models.ReportDataModel;
+import com.nuix.nx.dialogs.ProgressDialog;
 
 import javax.swing.*;
 import javax.swing.border.Border;
