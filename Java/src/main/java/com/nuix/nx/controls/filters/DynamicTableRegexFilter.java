@@ -1,4 +1,4 @@
-epackage com.nuix.nx.controls.filters;
+package com.nuix.nx.controls.filters;
 
 import java.util.List;
 import java.util.Map;
