@@ -28,6 +28,7 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -36,6 +37,7 @@ import org.jdesktop.swingx.JXTable;
 import com.nuix.nx.controls.models.ChoiceTableModelChangeListener;
 import com.nuix.nx.controls.models.DynamicTableModel;
 import com.nuix.nx.controls.models.DynamicTableValueCallback;
+import org.jetbrains.annotations.NotNull;
 
 /***
  * Control for displaying a dynamically defined table of data.  Meant to mostly make this a little easier
@@ -347,9 +349,46 @@ public class DynamicTableControl extends JPanel {
 		return tableModel;
 	}
 
+	/**
+	 * Apply the new table model to the table view.
+	 * <p>
+	 *     This method will apply the new data model, while also transferring exising listeners from the old model
+	 *     to the new one (removing them from the old model in the process).  Finally, it will fire a table data changed
+	 *     event on the table model to force an update of the UI.
+	 * </p>
+	 * @param model The new model.  It will have existing {@link ChoiceTableModelChangeListener} and TableModelListeners
+	 *              added to it as a result of this method.
+	 */
 	public void setTableModel(DynamicTableModel model) {
+		DynamicTableModel oldModel = tableModel;
+
+		ChoiceTableModelChangeListener changeListener = oldModel.getChangeListener();
+
 		tableModel = model;
+		tableModel.setChangeListener(changeListener);
+		dataTable.setModel(tableModel);
+
+		oldModel.removeChangeListener(changeListener);
+
+		TableColumn checkColumn = dataTable.getColumnModel().getColumn(0);
+		checkColumn.setMinWidth(25);
+		checkColumn.setMaxWidth(25);
+
+		//tableModel.fireTableDataChanged();
 	}
+
+	/**
+	 * Set the {@link TableCellRenderer} to be used to render data of the provided type.
+	 * @param type The {@link Class} of the type the provided renderer.  If the TableModel returns an instance of this
+	 *             class from {@link javax.swing.table.TableModel#getColumnClass(int)} then the provided
+	 *             TableCellRenderer will be used to render the returned contents into the JTable.
+	 * @param renderer The {@link TableCellRenderer} used to calculate the displayed content for any JTable cells that
+	 *                 are of the type specified.
+	 */
+	public void setTableCellRenderer(@NotNull Class<?> type, @NotNull TableCellRenderer renderer) {
+		getTable().setDefaultRenderer(type, renderer);
+	}
+
 
 	public void setEnabled(boolean value){
 		dataTable.setEnabled(value);

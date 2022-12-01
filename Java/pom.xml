@@ -3,6 +3,10 @@
   <groupId>com.nuix.nx</groupId>
   <artifactId>Nx</artifactId>
   <version>1.1.0</version>
+  <properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+  </properties>
   <name>Nx</name>
   <description>Library to make it easier to create GUI from a Nuix script</description>
 </project>
