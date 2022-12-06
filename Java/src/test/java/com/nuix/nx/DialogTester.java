@@ -8,6 +8,7 @@ import com.nuix.nx.controls.ReportDisplayPanel;
 import com.nuix.nx.controls.models.ReportDataModel;
 import com.nuix.nx.dialogs.ProgressDialog;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DialogTester {
@@ -17,11 +18,21 @@ public class DialogTester {
         ProgressDialog.forBlock((ProgressDialog pd) -> {
             ReportDataModel rdm = new ReportDataModel();
 
-            Map<String, Object> someData = Map.of("Average", 0.0, "Count", 0, "Minimum", 0.0, "Maximum", 0.0);
+            Map<String, Object> someData = new LinkedHashMap<>();
+            someData.put("Average", 0.0);
+            someData.put("Count", 0);
+            someData.put("Minimum", 0.0);
+            someData.put("Maximum", 0.0);
+
             rdm.addSection("Summary Statistics", someData);
 
-            someData = Map.of("Height", 12.3, "Width", 3, "Fill", false);
+            someData = new LinkedHashMap<>();
+            someData.put("Height", 12.3);
+            someData.put("Width", 3);
+            someData.put("Fill", false);
+
             rdm.addSection("Sizes", someData);
+
 
             pd.addReport(rdm);
 

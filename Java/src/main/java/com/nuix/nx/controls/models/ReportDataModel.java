@@ -118,7 +118,12 @@ public class ReportDataModel {
             if (null == value) {
                 throw new IllegalArgumentException("The value being added must not be null.");
             } else {
-                section.put(dataField, value);
+                Object oldValue = section.getOrDefault(dataField, null);
+
+                if (!value.equals(oldValue)) {
+                    section.put(dataField, value);
+                    notifyOfChange(sectionName, dataField, oldValue, value);
+                }
             }
         } else {
             this.addSection(sectionName, Map.of(dataField, value));
@@ -205,7 +210,7 @@ public class ReportDataModel {
      * @return a Set of Strings with the names of all the sections in this report.
      */
     public Set<String> getSections() {
-        return new HashSet<>(report.keySet());
+        return new LinkedHashSet<>(report.keySet());
     }
 
     public static final String SECTION_FIELD_DELIM = "::";

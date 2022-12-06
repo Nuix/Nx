@@ -80,7 +80,7 @@ public class ReportDisplayPanel extends JPanel {
         sectionLabels.put(sectionName, label);
         separators.put(sectionName, separator);
 
-        Map<String, JLabel[]> section = new HashMap<>();
+        Map<String, JLabel[]> section = new LinkedHashMap<>();
         dataValues.put(sectionName, section);
 
         return section;
