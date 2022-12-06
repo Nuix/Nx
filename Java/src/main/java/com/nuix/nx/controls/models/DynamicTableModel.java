@@ -14,9 +14,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import javax.swing.table.AbstractTableModel;
+
+import com.nuix.nx.controls.filters.DynamicTableAllRecordsFilter;
+import com.nuix.nx.controls.filters.DynamicTableCheckedRecordsFilter;
+import com.nuix.nx.controls.filters.DynamicTableContainsFilter;
+import com.nuix.nx.controls.filters.DynamicTableFilterProvider;
+import com.nuix.nx.controls.filters.DynamicTableRegexFilter;
+import com.nuix.nx.controls.filters.DynamicTableUncheckedRecordsFilter;
 
 /***
  * Table model used to store data for a {@link com.nuix.nx.controls.DynamicTableControl}
@@ -25,15 +31,30 @@ import javax.swing.table.AbstractTableModel;
  */
 @SuppressWarnings("serial")
 public class DynamicTableModel extends AbstractTableModel {
+	// Built in handling for filters ":checked:" and ":unchecked:"
+	private static final DynamicTableFilterProvider checkedRecordsFilter = new DynamicTableCheckedRecordsFilter();
+	private static final DynamicTableFilterProvider uncheckedRecordsFilter = new DynamicTableUncheckedRecordsFilter();
+	
+	// Built in handling for when there are no externally provided filters that want to handle a filter expression.
+	// Logic goes:
+	// 1. If expression is null or empty or only whitespace, all records filter is used
+	// 2. If regex filter says it will handle the expression (expression compiles successfully to regex), then it will handle
+	// 3. Finally a "text contains" filter is used which just checks which records contain the provided expression
+	private static final DynamicTableFilterProvider allRecordsFilter = new DynamicTableAllRecordsFilter();
+	private static final DynamicTableFilterProvider regexRecordsFilter = new DynamicTableRegexFilter();
+	private static final DynamicTableFilterProvider textContainsRecordsFilter = new DynamicTableContainsFilter();
+	
 	private List<String> headers;
 	private List<Object> records;
 	private List<Boolean> recordSelection;
 	private DynamicTableValueCallback valueCallback;
-	private String filter = "";
+	private String filterExpression = "";
 	private ChoiceTableModelChangeListener changeListener;
 	private Map<Integer,Integer> filterMap;
 	private Set<Integer> additionalEditableColumns = new HashSet<Integer>();
 	private boolean defaultCheckState = false;
+	
+	private List<DynamicTableFilterProvider> customFilterProviders = new ArrayList<>();
 	
 	/***
 	 * Create a new instance
@@ -62,7 +83,29 @@ public class DynamicTableModel extends AbstractTableModel {
 	public void setChangeListener(ChoiceTableModelChangeListener listener){
 		changeListener = listener;
 	}
-	
+
+	/**
+	 * Get the listener which will be notified whn changes are made.
+	 * @return the listener that is notified of changes
+	 */
+	public ChoiceTableModelChangeListener getChangeListener() {
+		return changeListener;
+	}
+
+	public void removeChangeListener(ChoiceTableModelChangeListener listener) {
+		if(null != changeListener && changeListener.equals(listener)) {
+			changeListener = null;
+		}
+	}
+
+	/**
+	 * A reference to the callback used for retrieving values for display.
+	 * @return {@link DynamicTableValueCallback} used to get the values displayed in the table
+	 */
+	public DynamicTableValueCallback getValueCallback() {
+		return this.valueCallback;
+	}
+
 	@Override
 	public int getColumnCount() {
 		return headers.size()+1;
@@ -148,72 +191,102 @@ public class DynamicTableModel extends AbstractTableModel {
 			changeListener.dataChanged();
 		}
 		
-		if(filter.equalsIgnoreCase(":checked:") || filter.equalsIgnoreCase(":unchecked:")){
+		if(filterExpression.equalsIgnoreCase(":checked:") || filterExpression.equalsIgnoreCase(":unchecked:")){
 			applyFiltering();
 		}
 	}
 	
 	/***
-	 * Filter the displayed records
+	 * Filter the displayed records.  When a method such as {@link #getValueAt(int, int)} is called by DynamicTable, the given method will use
+	 * the index mapping stored in {@value #filterMap} to determine for the given display index what item to fetch from
+	 * the actual underlying full collection of records.  The act of applying filtering is therefore really just building
+	 * a modified mapping.  This method takes the filter expression that has been provided and iteratively apply it to each record
+	 * while building a new index mapping.  Once a new mapping has been constructed the associated DynamicTable is informed that data
+	 * has changed and it will re-populate.
 	 */
 	private void applyFiltering(){
 		Map<Integer,Integer> tempFilterMap = new HashMap<Integer,Integer>();
 		
-		if(filter == null || filter.isEmpty()){
-			for (int i = 0; i < records.size(); i++) {
-				tempFilterMap.put(i,i);
-			}
-			filterMap = tempFilterMap;
-			//System.out.println("Filtered Count: "+filterMap.size());
-			this.fireTableDataChanged();
-		}else{
-			int filterIndex = 0;
-			if(filter.equalsIgnoreCase(":checked:")){
-				for (int i = 0; i < records.size(); i++) {
-					if(recordSelection.get(i) == true){
-						tempFilterMap.put(filterIndex,i);
-						filterIndex++;
-					}
-				}
-				filterMap = tempFilterMap;
-				//System.out.println("Filtered Count: "+filterMap.size());
-				this.fireTableDataChanged();
-			} else if(filter.equalsIgnoreCase(":unchecked:")){
-				for (int i = 0; i < records.size(); i++) {
-					if(recordSelection.get(i) == false){
-						tempFilterMap.put(filterIndex,i);
-						filterIndex++;
-					}
-				}
-				filterMap = tempFilterMap;
-				//System.out.println("Filtered Count: "+filterMap.size());
-				this.fireTableDataChanged();
+		DynamicTableFilterProvider filterProviderToUse = null;
+		
+		// If filter expression is empty or null, we interpret that as a "all records" filter
+		// so we can effectively just build a filter map where each index is present and maps to
+		// the same index value (key == value).
+		if(filterExpression == null || filterExpression.trim().isEmpty()) {
+			filterProviderToUse = allRecordsFilter;
+		} else {
+			// If we reach here, that means we have an expression so we need to determine who will
+			// handle the filtering.  We will first check a few built in DynamicTableFilterProviders, then
+			// any user supplied ones and then finally the fall back built-in regex based filter if nobody
+			// takes ownership for handling the provided filter expression.
+			if(checkedRecordsFilter.handlesExpression(filterExpression)) {
+				filterProviderToUse = checkedRecordsFilter;
+			} else if(uncheckedRecordsFilter.handlesExpression(filterExpression)) {
+				filterProviderToUse = uncheckedRecordsFilter;
 			} else {
-				Pattern filterPattern = Pattern.compile(Pattern.quote(filter), Pattern.CASE_INSENSITIVE);
-				//System.out.println("Filter: "+filter);
-				int columnCount = headers.size();
-				for (int i = 0; i < records.size(); i++) {
-					Object record = records.get(i);
-					for (int c = 0; c < columnCount; c++) {
-						String value = "";
-						try {
-							value = valueCallback.interact(record, c, false, null).toString();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						if (filterPattern.matcher(value).find()) {
-							//System.out.println("Matched: "+value);
-							tempFilterMap.put(filterIndex, i);
-							filterIndex++;
+				
+				// Now we will see if there is a user provided filter that wants to handle filtering
+				if(customFilterProviders != null) {
+					for(DynamicTableFilterProvider customFilterProvider : customFilterProviders) {
+						if(customFilterProvider.handlesExpression(filterExpression)) {
+							filterProviderToUse = customFilterProvider;
 							break;
 						}
 					}
 				}
-				filterMap = tempFilterMap;
-				//System.out.println("Filtered Count: "+filterMap.size());
-				DynamicTableModel.this.fireTableDataChanged();
+				
+				// Finally, if we still haven't determined a filter provider to use, then we are going to use
+				// the built in Regex based filter if it tells us that the provided filter can be compiled into
+				// a regex properly.  If it cannot, we will finally fall back to a basic "text contains" type filter.
+				if(filterProviderToUse == null) {
+					if(regexRecordsFilter.handlesExpression(filterExpression)) { filterProviderToUse = regexRecordsFilter; }
+					else { filterProviderToUse = textContainsRecordsFilter; }
+				}
 			}
 		}
+		
+		// Now that we have determined the filter to use, we use it to actual filter the records and build our
+		// new index mapping.  First we call beforeFilter method, then keepRecord on each record and finally afterFilter.
+		filterProviderToUse.beforeFiltering(filterExpression, records);
+		
+		int columnCount = headers.size();
+		Map<String,Object> recordValues = new HashMap<String,Object>();
+		int filterIndex = 0;
+		
+		for (int i = 0; i < records.size(); i++) {
+			boolean recordIsChecked = recordSelection.get(i);
+			
+			// Convert record to columns map using values callback to that filter can inspect displayed values without
+			// needing deeper knowledge of the underlying record
+			Object record = records.get(i);
+			recordValues.clear();
+			for (int c = 0; c < columnCount; c++) {
+				Object colValue = "";
+				try {
+					colValue = valueCallback.interact(record, c, false, null);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				recordValues.put(headers.get(c), colValue);
+			}
+			
+			boolean keepRecord = filterProviderToUse.keepRecord(i, recordIsChecked, filterExpression, record, recordValues);
+			if(keepRecord) {
+				// Here we record the actual mapping where filter index is the index that will be
+				// asked for externally and i is the actual index into the full records collection.
+				tempFilterMap.put(filterIndex, i);
+				filterIndex++;
+			}
+		}
+		
+		filterProviderToUse.afterFiltering();
+		
+		// Make the models filter map the one we just built
+		filterMap = tempFilterMap;
+		
+		// Tell the outside world we changed the data
+		this.fireTableDataChanged();
+		
 	}
 	
 	/***
@@ -236,7 +309,7 @@ public class DynamicTableModel extends AbstractTableModel {
 	 * @param filter The filter string to use
 	 */
 	public void setFilter(String filter){
-		this.filter = filter;
+		this.filterExpression = filter;
 		applyFiltering();
 		notifyChanged();
 	}
@@ -504,4 +577,23 @@ public class DynamicTableModel extends AbstractTableModel {
 	public void setDefaultCheckState(boolean defaultCheckState) {
 		this.defaultCheckState = defaultCheckState;
 	}
+
+	/***
+	 * Gets the list of filter providers beyond those that are built in, allowing you to add or remove
+	 * custom filter providers.
+	 * @return The current list of custom filter providers
+	 */
+	public List<DynamicTableFilterProvider> getCustomFilterProviders() {
+		return customFilterProviders;
+	}
+
+	/***
+	 * Sets the list of filter providers beyond those that are built in.
+	 * @param customFilterProviders The new list of custom filter providers
+	 */
+	public void setCustomFilterProviders(List<DynamicTableFilterProvider> customFilterProviders) {
+		this.customFilterProviders = customFilterProviders;
+	}
+	
+	
 }

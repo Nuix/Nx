@@ -18,6 +18,7 @@ import java.util.Map;
 /**
  * This class is designed to display a ReportDataModel
  */
+@SuppressWarnings("serial")
 public class ReportDisplayPanel extends JPanel {
     private static final int LABEL_COLUMN_WIDTH = 50;
     private static final int CONTROL_COLUMN_WIDTH = 50;
@@ -27,7 +28,8 @@ public class ReportDisplayPanel extends JPanel {
     private static final Insets dataRowInsets = new Insets(2,2,2,2);
     private GridBagLayout rootLayout;
 
-    private JPanel filler;
+    @SuppressWarnings("unused")
+	private JPanel filler;
 
     Map<String, JLabel> sectionLabels = new LinkedHashMap<>();
     Map<String, JSeparator> separators = new HashMap<>();
@@ -229,7 +231,9 @@ public class ReportDisplayPanel extends JPanel {
 
         return separator;
     }
-    private JPanel addVerticalFiller(){
+    
+    @SuppressWarnings("unused")
+	private JPanel addVerticalFiller(){
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = activeRow;
