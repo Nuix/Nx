@@ -12,10 +12,11 @@ import java.util.*;
 
 /**
  * Data model for use with the {@link com.nuix.nx.controls.ReportDisplayPanel}.
- *
+ *<p>
  * The report is represented by a group of sections, each section being a group of data labels and their values.
  * A report might be displayed as:
- *
+ * </p>
+ *<pre>
  *  SECTION 1
  *  --------
  *  Data Field 1                  Value 1
@@ -26,13 +27,16 @@ import java.util.*;
  *  Data Field 3                  Value 3
  *
  *  ...
- *
+ *</pre>
+ * <p>
  *  The sections names should be strings, the data field names should be strings, and the data values can be any
  *  object that has a reasonable toString() representation.
- *
+ * </p>
+ * <p>
  *  No effort is made by this class to make building the list of sections and data labels threadsafe.  As such, the
  *  sections and data should be built prior to displaying the data in any UI.  Updating data values will be
  *  run from the Swing thread so updating these values during display is safe.
+ * </p>
  */
 public class ReportDataModel {
 

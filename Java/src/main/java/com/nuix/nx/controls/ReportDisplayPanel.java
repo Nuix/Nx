@@ -16,7 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * This class is designed to display a ReportDataModel
+ * This class is designed to display the contents of a ReportDataModel at the bottom of a
+ * {@link com.nuix.nx.dialogs.ProgressDialog}
  */
 public class ReportDisplayPanel extends JPanel {
     private static final int LABEL_COLUMN_WIDTH = 50;
@@ -29,19 +30,52 @@ public class ReportDisplayPanel extends JPanel {
 
     private JPanel filler;
 
+    /**
+     * The names of each section presented as JLabels, and mapped to the section name.
+     */
     Map<String, JLabel> sectionLabels = new LinkedHashMap<>();
+
+    /**
+     * JSeparators used to separate the section label from the section contents.
+     */
     Map<String, JSeparator> separators = new HashMap<>();
+
+    /**
+     * This stores the displays for the data in the report.  There is a map of JLabels for each data value in the
+     * report.  These maps are stored in an outer map keyed to the section name the values belong in.
+     */
     Map<String, Map<String, JLabel[]>> dataValues = new LinkedHashMap<>();
 
+    /**
+     * Create a new ReportDisplayPanel with no {@link ReportDataModel}.  No UI will be built until a data model is
+     * added via the {@link #setReportDataModel(ReportDataModel)} method.
+     */
     public ReportDisplayPanel() {
         super();
     }
+
+    /**
+     * Create a new ReportDisplayPanel based on the data stored in the provided {@link ReportDataModel}.
+     *
+     * @param dataModel The {@link ReportDataModel} containing the data for display.  This will be used to build a UI
+     *                  from.  This class will also begin to listen to the model for changes and update the UI
+     *                  accordingly.
+     */
     public ReportDisplayPanel(ReportDataModel dataModel) {
         super();
 
         setReportDataModel(dataModel);
     }
 
+    /**
+     * Set or replace the data used for this report with the supplied {@link ReportDataModel}.
+     * <p>
+     *     This will trigger a re-build of the user interface based on the contents of the data model and will also
+     *     add a property change listener to the the model so the UI can be kept up to data with changes in the data.
+     * </p>
+     * @param dataModel The {@link ReportDataModel} to add to or replace the existing data model for display on this
+     *                  control.
+     */
     public void setReportDataModel(ReportDataModel dataModel) {
         ReportDataChangeListener listener = new ReportDataChangeListener();
         dataModel.addPropertyChangeListener(listener);
@@ -90,7 +124,28 @@ public class ReportDisplayPanel extends JPanel {
         return addDataFieldDisplay(label, value);
     }
 
+    /**
+     * This inner class of {@link ReportDisplayPanel} implements a PropertyChangeListener.
+     * <p>
+     *     It is non-static, so it has access to the ReportDisplayPanel's content, and uses that access to apply the
+     *     changes made in the data model to the display of the content.
+     * </p>
+     */
     public class ReportDataChangeListener implements PropertyChangeListener {
+
+        /**
+         * Update the surrounding {@link ReportDisplayPanel} instance based on changes to the underlying
+         * {@link ReportDataModel}.
+         * <p>
+         *      It is expected properties will come in with a name formatted to include both the Section that is being
+         *      changed and the name of the particular data field being changed.  The two names should be delimited
+         *      with {@link ReportDataModel#SECTION_FIELD_DELIM}. The results of the events in this class may result
+         *      in the structure of the report changing: such as new sections or fields being added, as well as
+         *      updates to fields that already exist.
+         * </p>
+         * @param event A PropertyChangeEvent object describing the event source
+         *          and the property that has changed.
+         */
         public void propertyChange(PropertyChangeEvent event) {
             String changedProperty = event.getPropertyName();
 
