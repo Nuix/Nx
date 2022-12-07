@@ -12,10 +12,11 @@ import java.util.*;
 
 /**
  * Data model for use with the {@link com.nuix.nx.controls.ReportDisplayPanel}.
- *
+ *<p>
  * The report is represented by a group of sections, each section being a group of data labels and their values.
  * A report might be displayed as:
- *
+ * </p>
+ *<pre>
  *  SECTION 1
  *  --------
  *  Data Field 1                  Value 1
@@ -26,17 +27,20 @@ import java.util.*;
  *  Data Field 3                  Value 3
  *
  *  ...
- *
+ *</pre>
+ * <p>
  *  The sections names should be strings, the data field names should be strings, and the data values can be any
  *  object that has a reasonable toString() representation.
- *
+ * </p>
+ * <p>
  *  No effort is made by this class to make building the list of sections and data labels threadsafe.  As such, the
  *  sections and data should be built prior to displaying the data in any UI.  Updating data values will be
  *  run from the Swing thread so updating these values during display is safe.
+ * </p>
  */
 public class ReportDataModel {
 
-    Map<String, Map<String, Object>> report = new HashMap<>();
+    Map<String, Map<String, Object>> report = new LinkedHashMap<>();
 
     List<PropertyChangeListener> listeners = new ArrayList<>();
 
@@ -71,7 +75,7 @@ public class ReportDataModel {
      *                      are used both for display and as ids, so make them meaningful and unique.
      */
     public void addSection(String sectionName, Map<String, Object> dataInSection) {
-        Map<String, Object> copied = new HashMap<>();
+        Map<String, Object> copied = new LinkedHashMap<>();
 
         for (String dataField : dataInSection.keySet()) {
            Object value = dataInSection.get(dataField);
@@ -96,7 +100,7 @@ public class ReportDataModel {
      *                    unique. If the section already exists, it will be replaced and the data in it will be lost.
      */
     public void addSection(String sectionName) {
-        addSection(sectionName, Map.of());
+        addSection(sectionName, new LinkedHashMap<String, Object>());
     }
 
     /**
@@ -118,7 +122,12 @@ public class ReportDataModel {
             if (null == value) {
                 throw new IllegalArgumentException("The value being added must not be null.");
             } else {
-                section.put(dataField, value);
+                Object oldValue = section.getOrDefault(dataField, null);
+
+                if (!value.equals(oldValue)) {
+                    section.put(dataField, value);
+                    notifyOfChange(sectionName, dataField, oldValue, value);
+                }
             }
         } else {
             this.addSection(sectionName, Map.of(dataField, value));
@@ -192,7 +201,7 @@ public class ReportDataModel {
      */
     public Set<String> getDataFieldsInSection(String sectionName) {
         if (report.containsKey(sectionName)) {
-            return new HashSet<>(report.get(sectionName).keySet());
+            return new LinkedHashSet<>(report.get(sectionName).keySet());
         }
 
         // Section not in report, return an empty Set
@@ -205,7 +214,7 @@ public class ReportDataModel {
      * @return a Set of Strings with the names of all the sections in this report.
      */
     public Set<String> getSections() {
-        return new HashSet<>(report.keySet());
+        return new LinkedHashSet<>(report.keySet());
     }
 
     public static final String SECTION_FIELD_DELIM = "::";

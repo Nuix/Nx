@@ -494,24 +494,30 @@ public class ProgressDialog extends JDialog {
 	}
 
 	/**
-	 * Adds a section to the bottom of the dialog as a Report.  Uses the provided
-	 * ReportDataModel to make a ReportDisplayPanel which gets inserted under the
-	 * log area and above the buttons.
+	 * Adds a section to the bottom of the dialog as a Report.  Uses the provided {@link ReportDataModel} to make a
+	 * {@link ReportDisplayPanel} which gets inserted under the log area and above the buttons.  This method will
+	 * ensure the report is visible.  Use {@link #setReportDisplayVisible(boolean)} with {@code false} to hide the
+	 * panel once it is made visible.
 	 * @param reportDataModel The data model to display at the bottom of the dialog.  Must
 	 *                        not be null.
 	 */
 	public void addReport(ReportDataModel reportDataModel) {
 		SwingUtilities.invokeLater(() -> {
 			reportDisplay.setReportDataModel(reportDataModel);
+			reportDisplay.setVisible(true);
 		});
 	}
 
-	/***
-	 * Sets whether the report section is visible.
+	/**
+	 * Sets whether the report section is visible.  If the section is made visible with no {@link ReportDataModel}
+	 * provided via the {@link #addReport(ReportDataModel)} method, then the report will take no space and not be
+	 * visible.
 	 * @param value True for visible, false for hidden.
 	 */
 	public void setReportDisplayVisible(boolean value){
-		reportDisplay.setVisible(value);
+		SwingUtilities.invokeLater(() -> {
+			reportDisplay.setVisible(value);
+		});
 	}
 
 
