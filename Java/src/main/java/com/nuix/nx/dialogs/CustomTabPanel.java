@@ -43,6 +43,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
+import com.nuix.nx.controls.models.*;
 import org.jdesktop.swingx.JXDatePicker;
 import org.joda.time.DateTime;
 
@@ -69,10 +70,6 @@ import com.nuix.nx.controls.PathSelectedCallback;
 import com.nuix.nx.controls.PathSelectionControl;
 import com.nuix.nx.controls.PathSelectionControl.ChooserType;
 import com.nuix.nx.controls.StringList;
-import com.nuix.nx.controls.models.Choice;
-import com.nuix.nx.controls.models.ControlDeserializationHandler;
-import com.nuix.nx.controls.models.ControlSerializationHandler;
-import com.nuix.nx.controls.models.DynamicTableValueCallback;
 
 /***
  * This class represents a tab in the {@link TabbedCustomDialog} class.  This tab component hosts all the
@@ -498,7 +495,9 @@ public class CustomTabPanel extends JPanel{
 	}
 
 	public CustomTabPanel appendSlider(String identifier, String controlLabel, double initialValue, double min, double max) throws Exception {
-		JSlider component = new JSlider(JSlider.HORIZONTAL, (int)(min * 1000.0), (int)(max * 1000.0), (int)(initialValue * 1000.0));
+		JSlider component = new JSlider(JSlider.HORIZONTAL);
+		DoubleBoundedRangeModel model = new DoubleBoundedRangeModel(initialValue, 0.0, min, max,5);
+
 		return this;
 	}
 
