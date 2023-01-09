@@ -35,21 +35,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
@@ -510,7 +496,12 @@ public class CustomTabPanel extends JPanel{
 		addComponent(buttonRow,controls.size()+headersCount,0,2,1);
 		return buttonRow;
 	}
-	
+
+	public CustomTabPanel appendSlider(String identifier, String controlLabel, double initialValue, double min, double max) throws Exception {
+		JSlider component = new JSlider(JSlider.HORIZONTAL, (int)(min * 1000.0), (int)(max * 1000.0), (int)(initialValue * 1000.0));
+		return this;
+	}
+
 	/***
 	 * Creates a up/down number picker control (known in Java as a Spinner).
 	 * @param identifier The unique identifier for this control.
@@ -525,8 +516,8 @@ public class CustomTabPanel extends JPanel{
 	public CustomTabPanel appendSpinner(String identifier, String controlLabel, int initialValue, int min, int max, int step) throws Exception {
 		JSpinner component = new JSpinner();
 		component.setValue(initialValue);
-		Double preferredHeight = component.getPreferredSize().getHeight();
-		component.setPreferredSize(new Dimension(150,preferredHeight.intValue()));
+		double preferredHeight = component.getPreferredSize().getHeight();
+		component.setPreferredSize(new Dimension(150, (int) preferredHeight));
 		component.setModel(new SpinnerNumberModel(initialValue, min, max, step));
 		addBasicLabelledComponent(controlLabel, component, false, false);
 		trackComponent(identifier, component);
