@@ -8,7 +8,7 @@ import com.nuix.nx.controls.models.DynamicTableValueCallback;
 
 public abstract class DynamicTableFilterProvider {
 	/***
-	 * Whether this filter provider handles the given filter expression.  If true is returned, {@link #keepRecord(int, String, Object)}
+	 * Whether this filter provider handles the given filter expression.  If true is returned, {@link #keepRecord(int, boolean, String, Object, Map)}
 	 * will be called for each record to determine whether the given record is filtered out or not.  If false is returned then
 	 * the dynamic table model will continue looking for a filter handler.  Filter expression should never be null or an all whitespace or empty
 	 * string since {@link DynamicTableModel} has built in logic to handle that before asking filters.
@@ -24,7 +24,7 @@ public abstract class DynamicTableFilterProvider {
 	 * @param isChecked Whether the given record is currently checked
 	 * @param filterExpression The filter expression provided by the user.  This value should never be null, only whitespace or empty.
 	 * @param record The record to inspect and make a decision about.
-	 * @param tableValues A map of the values actual represented as columns in the table.  Relies on table model's {@link DynamicTableValueCallback}.
+	 * @param rowValues A map of the values actual represented as columns in the table.  Relies on table model's {@link DynamicTableValueCallback}.
 	 * @return True to keep the record, false to filter it out.
 	 */
 	public abstract boolean keepRecord(int sourceIndex, boolean isChecked, String filterExpression,
@@ -32,7 +32,7 @@ public abstract class DynamicTableFilterProvider {
 	
 	/***
 	 * Invoked once before filtering begins, allowing for up front work to be performed that might
-	 * then be leveraged in subsequent calls to {@link #keepRecord(int, boolean, String, Object)}.
+	 * then be leveraged in subsequent calls to {@link #keepRecord(int, boolean, String, Object, Map)}.
 	 * Override in derived implementation, default implementation does nothing.
 	 * @param filterExpression The filter expression that was provided
 	 * @param allRecords All the of records pre-filtering
@@ -41,7 +41,7 @@ public abstract class DynamicTableFilterProvider {
 	
 	/***
 	 * Called once after filtering.  Can be used to clean up any resources that may have been created by calls to {@link #beforeFiltering(String, List)}
-	 * and/or {@link #keepRecord(int, boolean, String, Object)}.
+	 * and/or {@link #keepRecord(int, boolean, String, Object, Map)}.
 	 */
 	public void afterFiltering() {}
 }
