@@ -32,22 +32,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 
+import com.nuix.nx.controls.models.DoubleBoundedRangeModel;
 import org.apache.log4j.Logger;
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -708,6 +695,14 @@ public class TabbedCustomDialog extends JDialog {
 				}
 				else if(control instanceof JSpinner){
 					((JSpinner)control).setValue(entry.getValue());
+				}
+				else if(control instanceof JSlider) {
+					BoundedRangeModel model = ((JSlider) control).getModel();
+					if(model instanceof DoubleBoundedRangeModel) {
+						((DoubleBoundedRangeModel)model).setValue(((Number)entry.getValue()).doubleValue());
+					} else {
+						model.setValue(((Number)entry.getValue()).intValue());
+					}
 				}
 				// These require a bit more logic to deserialize
 				else if(control instanceof ChoiceTableControl){

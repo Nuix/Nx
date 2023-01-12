@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
@@ -116,11 +117,8 @@ public class CustomTabPanel extends JPanel{
 	protected void addBasicLabelledComponent(String label, Component component, boolean fillVertical) {
 		addBasicLabelledComponent(label,component,fillVertical,true);
 	}
-	
-	protected void addBasicLabelledComponent(String label, Component component, boolean fillVertical, boolean fillHorizontal){
-		if(fillVertical)
-			hasVerticalFiller = true;
-		
+
+	protected GridBagConstraints makeLabelConstraintsForNextRow() {
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = controls.size()+headersCount;
@@ -131,14 +129,26 @@ public class CustomTabPanel extends JPanel{
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = genericInsets;
 		c.anchor = GridBagConstraints.EAST;
-		JLabel labelComponent = new JLabel(label);
+		return c;
+	}
+
+	protected JLabel makeComponentLabel(String text) {
+		JLabel labelComponent = new JLabel(text);
 		labelComponent.setHorizontalAlignment(SwingConstants.RIGHT);
 		labelComponent.setHorizontalTextPosition(SwingConstants.RIGHT);
 		labelComponent.setVerticalAlignment(SwingConstants.CENTER);
 		Font font = labelComponent.getFont();
 		Font boldFont = new Font(font.getFontName(), Font.BOLD, font.getSize());
 		labelComponent.setFont(boldFont);
-		addComponent(labelComponent,c);
+
+		return labelComponent;
+	}
+	
+	protected void addBasicLabelledComponent(String label, Component component, boolean fillVertical, boolean fillHorizontal){
+		if(fillVertical)
+			hasVerticalFiller = true;
+		GridBagConstraints c = makeLabelConstraintsForNextRow();
+		addComponent(makeComponentLabel(label),c);
 		
 		c = new GridBagConstraints();
 		c.gridx = 1;
@@ -494,11 +504,174 @@ public class CustomTabPanel extends JPanel{
 		return buttonRow;
 	}
 
-	public CustomTabPanel appendSlider(String identifier, String controlLabel, double initialValue, double min, double max) throws Exception {
+	protected CustomTabPanel buildGenericSlider(String identifier, String controlLabel,
+												BoundedRangeModel model,
+												Consumer<JLabel> displayAdapter) throws Exception {
 		JSlider component = new JSlider(JSlider.HORIZONTAL);
-		DoubleBoundedRangeModel model = new DoubleBoundedRangeModel(initialValue, 0.0, min, max,5);
+		component.setModel(model);
 
+		JLabel valueDisplay = new JLabel();
+		displayAdapter.accept(valueDisplay);
+		valueDisplay.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+		model.addChangeListener(event -> {
+			displayAdapter.accept(valueDisplay);
+		});
+
+		GridBagConstraints c = makeLabelConstraintsForNextRow();
+		addComponent(makeComponentLabel(controlLabel),c);
+
+		addComponent(component, controls.size()+headersCount, 1, 1, 1, false);
+		addComponent(valueDisplay, controls.size()+headersCount, 2, 1, 1, false);
+
+
+		//addBasicLabelledComponent(controlLabel, component, false, false);
+		trackComponent(identifier, component);
 		return this;
+	}
+
+	/**
+	 * Creates a new slider control that lets the user specify a value within a range using doubles.
+	 * <p>
+	 *     A slider is best used for setting a value over a long, continuous range where precision may not be most
+	 *     important.  For example, on a scale of 0 to 10,000 selecting 15 or 16 isn't all that important, but
+	 *     moving along the range of that length of scale would be.
+	 * </p>
+	 * <p>
+	 *     This method uses doubles for storage, and allows the selection of numbers up to 5 decimal places deep.
+	 *     Behind the spinner is an instance of {@link DoubleBoundedRangeModel} which stores the range and value
+	 *     and can be used to update the field.  This can be retrieved using:
+	 * </p>
+	 * <pre>
+	 *     panel = panel.appendSlider(identifier, label, 0.0, 0.0, 1.0);
+	 *     JSlider slider = (JSlider)panel.getControl(identifier);
+	 *     DoubleBoundedRangeModel model = slider.getModel();
+	 * </pre>
+	 * @param identifier The unique identifier for this control, used to modify the control or get its result value
+	 * @param controlLabel String to display in the UI to label this control
+	 * @param initialValue The initial position for slider and resulting value
+	 * @param min The minimum assignable value
+	 * @param max The maximum assignable value
+	 * @return this CustomTabPanel instance to allow method chaining
+	 * @throws Exception if the identifier has already been used
+	 */
+	public CustomTabPanel appendSlider(String identifier, String controlLabel, double initialValue, double min, double max) throws Exception {
+		DoubleBoundedRangeModel model = new DoubleBoundedRangeModel(initialValue, 0.0, min, max,5);
+		model.setValue(initialValue);
+		return buildGenericSlider(identifier, controlLabel, model, label -> {
+			label.setText(String.format("%.5f", model.getValueAsDouble()));
+		});
+	}
+
+	/**
+	 * Creates a new slider control that lets the user specify a value within the range of 0.0 to 1.0.
+	 * <p>
+	 *     A slider is best used for setting a value over a long, continuous range where precision may not be most
+	 *     important.  For example, on a scale of 0 to 10,000 selecting 15 or 16 isn't all that important, but
+	 *     moving along the range of that length of scale would be.
+	 * </p>
+	 * <p>
+	 *     This method uses doubles for storage, and allows the selection of numbers from 0 to 1 with up to 5 decimal
+	 *     places precision.  Behind the spinner is an instance of {@link DoubleBoundedRangeModel} which stores the
+	 *     range and value and can be used to update the field.  This can be retrieved using:
+	 * </p>
+	 * <pre>
+	 *     panel = panel.appendSlider(identifier, label, 0.0);
+	 *     JSlider slider = (JSlider)panel.getControl(identifier);
+	 *     DoubleBoundedRangeModel model = (DoubleBoundedRangeModel)slider.getModel();
+	 * </pre>
+	 * @param identifier The unique identifier for this control, used to modify the control or get its result value
+	 * @param controlLabel String to display in the UI to label this control
+	 * @param initialValue The initial position for slider and resulting value
+	 * @return this CustomTabPanel instance to allow method chaining
+	 * @throws Exception if the identifier has already been used
+	 */
+	public CustomTabPanel appendSlider(String identifier, String controlLabel, double initialValue) throws Exception {
+		return appendSlider(identifier, controlLabel, initialValue, 0.0, 1.0);
+	}
+
+	/**
+	 * Creates a new slider control that lets the user specify a value within a range using integers.
+	 * <p>
+	 *     A slider is best used for setting a value over a long, continuous range where precision may not be most
+	 *     important.  For example, on a scale of 0 to 10,000 selecting 15 or 16 isn't all that important, but
+	 *     moving along the range of that length of scale would be.
+	 * </p>
+	 * <p>
+	 *     This method uses ints for storage  Behind the spinner is an instance of {@link DefaultBoundedRangeModel}
+	 *     which stores the range and value and can be used to update the field.  This can be retrieved using:
+	 * </p>
+	 * <pre>
+	 *     panel = panel.appendSlider(identifier, label, 10, 0, 100);
+	 *     JSlider slider = (JSlider)panel.getControl(identifier);
+	 *     BoundedRangeModel model = slider.getModel();
+	 * </pre>
+	 * @param identifier The unique identifier for this control, used to modify the control or get its result value
+	 * @param controlLabel String to display in the UI to label this control
+	 * @param initialValue The initial position for slider and resulting value
+	 * @param min The minimum assignable value
+	 * @param max The maximum assignable value
+	 * @return this CustomTabPanel instance to allow method chaining
+	 * @throws Exception if the identifier has already been used
+	 */
+	public CustomTabPanel appendSlider(String identifier, String controlLabel, int initialValue, int min, int max) throws Exception {
+		DefaultBoundedRangeModel model = new DefaultBoundedRangeModel(initialValue, 0, min, max);
+		model.setValue(initialValue);
+		return buildGenericSlider(identifier, controlLabel, model, label -> {
+			label.setText(String.format("%d", model.getValue()));
+		});
+	}
+
+	/**
+	 * Creates a new slider control that lets the user specify a value in the range 0 to 100.
+	 * <p>
+	 *     A slider is best used for setting a value over a long, continuous range where precision may not be most
+	 *     important.  For example, on a scale of 0 to 10,000 selecting 15 or 16 isn't all that important, but
+	 *     moving along the range of that length of scale would be.
+	 * </p>
+	 * <p>
+	 *     This method uses ints for storage  Behind the spinner is an instance of {@link DefaultBoundedRangeModel}
+	 *     which stores the range and value and can be used to update the field.  This can be retrieved using:
+	 * </p>
+	 * <pre>
+	 *     panel = panel.appendSlider(identifier, label, 10);
+	 *     JSlider slider = (JSlider)panel.getControl(identifier);
+	 *     BoundedRangeModel model = slider.getModel();
+	 * </pre>
+	 * @param identifier The unique identifier for this control, used to modify the control or get its result value
+	 * @param controlLabel String to display in the UI to label this control
+	 * @param initialValue The initial position for slider and resulting value
+	 * @return this CustomTabPanel instance to allow method chaining
+	 * @throws Exception if the identifier has already been used
+	 */
+	public CustomTabPanel appendSlider(String identifier, String controlLabel, int initialValue) throws Exception {
+		return appendSlider(identifier, controlLabel, initialValue, 0, 100);
+	}
+
+	/**
+	 * Creates a new slider control that lets the user specify a value in the range 0 to 100 with an initial value  of
+	 * 50.
+	 * <p>
+	 *     A slider is best used for setting a value over a long, continuous range where precision may not be most
+	 *     important.  For example, on a scale of 0 to 10,000 selecting 15 or 16 isn't all that important, but
+	 *     moving along the range of that length of scale would be.
+	 * </p>
+	 * <p>
+	 *     This method uses ints for storage  Behind the spinner is an instance of {@link DefaultBoundedRangeModel}
+	 *     which stores the range and value and can be used to update the field.  This can be retrieved using:
+	 * </p>
+	 * <pre>
+	 *     panel = panel.appendSlider(identifier, label);
+	 *     JSlider slider = (JSlider)panel.getControl(identifier);
+	 *     BoundedRangeModel model = slider.getModel();
+	 * </pre>
+	 * @param identifier The unique identifier for this control, used to modify the control or get its result value
+	 * @param controlLabel String to display in the UI to label this control
+	 * @return
+	 * @throws Exception
+	 */
+	public CustomTabPanel appendSlider(String identifier, String controlLabel) throws Exception {
+		return appendSlider(identifier, controlLabel, 50, 0, 100);
 	}
 
 	/***
@@ -1601,6 +1774,14 @@ public class CustomTabPanel extends JPanel{
 			}
 			else if(component instanceof JSpinner){
 				value = ((JSpinner)component).getValue();
+			}
+			else if (component instanceof JSlider) {
+				BoundedRangeModel model = ((JSlider)component).getModel();
+				if(model instanceof  DoubleBoundedRangeModel) {
+					value = ((DoubleBoundedRangeModel) model).getValueAsDouble();
+				} else {
+					value = model.getValue();
+				}
 			}
 			else if(component instanceof DynamicTableControl){
 				if(forJsonCreation){
