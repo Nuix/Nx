@@ -504,6 +504,22 @@ public class CustomTabPanel extends JPanel{
 		return buttonRow;
 	}
 
+	/**
+	 * Put together the UI for a Slider control
+	 * <p>
+	 *     This method doesn't know about the underlying data or its type.  But given the name, label, the data model
+	 *     which does know this information, and a callback that can translate into a JLabel text, this method can
+	 *     construct the visual UI.
+	 * </p>
+	 * @param identifier The unique identifier for this control, used to modify the control or get its result value
+	 * @param controlLabel String to display in the UI to label this control
+	 * @param model The {@link BoundedRangeModel} which controls and stores the value and its range limits
+	 * @param displayAdapter A {@link Consumer} which can take a JLabel and display the model's current value in it.
+	 *                       The consumer will need its own reference to the model, as it will not get the model from
+	 *                       this callback.
+	 * @return this CustomTabPanel instance to allow method chaining
+	 * @throws Exception if the identifier has already been used
+	 */
 	protected CustomTabPanel buildGenericSlider(String identifier, String controlLabel,
 												BoundedRangeModel model,
 												Consumer<JLabel> displayAdapter) throws Exception {
@@ -524,8 +540,6 @@ public class CustomTabPanel extends JPanel{
 		addComponent(component, controls.size()+headersCount, 1, 1, 1, false);
 		addComponent(valueDisplay, controls.size()+headersCount, 2, 1, 1, false);
 
-
-		//addBasicLabelledComponent(controlLabel, component, false, false);
 		trackComponent(identifier, component);
 		return this;
 	}
