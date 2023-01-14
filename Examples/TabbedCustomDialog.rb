@@ -7,7 +7,7 @@ require_relative "NxBootstrap.rb"
 # ==========================================================================
 
 # Open a test case, change this to a case on your system
-$current_case = $utilities.getCaseFactory.open('D:\cases\Fake Data 20200601_172517',{:migrate=>true})
+$current_case = $utilities.getCaseFactory.open('D:\cases\FakeData_8.0',{:migrate=>true})
 
 # Tell the library what the current case is
 NuixConnection.setCurrentCase($current_case)
@@ -131,6 +131,13 @@ other_tab.appendSpinner("spinner001","Spinner Control 1")
 other_tab.appendSpinner("spinner002","Spinner Control 2",1337)
 other_tab.appendSpinner("spinner003","Spinner Control 3",1337,100,2000)
 other_tab.appendSpinner("spinner004","Spinner Control 4",1000,100,2000,100)
+
+other_tab.appendSlider("slider001","Slider Control 1",50_000.0,1.0,100_000.0)
+other_tab.appendSlider("slider002","Slider Control 2",0.5)
+other_tab.appendSlider("slider003","Slider Control 3",50_000,1,100_000)
+other_tab.appendSlider("slider004","Slider Control 4",50)
+other_tab.appendSlider("slider005","Slider Control 5")
+
 
 combo_choices = [
 	"Cat",
