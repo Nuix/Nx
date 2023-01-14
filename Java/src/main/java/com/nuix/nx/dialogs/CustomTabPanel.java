@@ -1921,7 +1921,7 @@ public class CustomTabPanel extends JPanel{
 	/***
 	 * Gets a JSON String equivalent of the dialog's values.  This is a convenience method for calling
 	 * {@link #toMap} and then converting that Map to a JSON string.
-	 * @return A JSON string representation of the dialogs values (based on the Map returned by {@link toMap}).
+	 * @return A JSON string representation of the dialogs values (based on the Map returned by {@link #toMap()}).
 	 */
 	public String toJson(){
 		GsonBuilder builder = new GsonBuilder();

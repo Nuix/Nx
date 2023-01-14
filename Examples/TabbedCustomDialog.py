@@ -147,6 +147,13 @@ other_tab.appendSpinner("spinner002","Spinner Control 2",1337)
 other_tab.appendSpinner("spinner003","Spinner Control 3",1337,100,2000)
 other_tab.appendSpinner("spinner004","Spinner Control 4",1000,100,2000,100)
 
+other_tab.appendSlider("slider001","Slider Control 1",50000.0,1.0,100000.0)
+other_tab.appendSlider("slider002","Slider Control 2",0.5)
+other_tab.appendSlider("slider003","Slider Control 3",50000,1,100000)
+other_tab.appendSlider("slider004","Slider Control 4",50)
+other_tab.appendSlider("slider005","Slider Control 5")
+
+
 combo_choices = []
 combo_choices.append("Cat")
 combo_choices.append("Dog")
