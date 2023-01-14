@@ -527,8 +527,9 @@ public class CustomTabPanel extends JPanel{
 		component.setModel(model);
 
 		JLabel valueDisplay = new JLabel();
-		displayAdapter.accept(valueDisplay);
+		valueDisplay.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
 		valueDisplay.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		displayAdapter.accept(valueDisplay);
 
 		model.addChangeListener(event -> {
 			displayAdapter.accept(valueDisplay);
@@ -572,8 +573,14 @@ public class CustomTabPanel extends JPanel{
 	public CustomTabPanel appendSlider(String identifier, String controlLabel, double initialValue, double min, double max) throws Exception {
 		DoubleBoundedRangeModel model = new DoubleBoundedRangeModel(initialValue, 0.0, min, max,5);
 		model.setValue(initialValue);
+
+		long integral = Double.valueOf(max).longValue();
+		int integralLength = String.valueOf(integral).length();
+		int decimalLength = 6; // Period plus 5 decimal places
+		String displayFormat = "%" + (integralLength + decimalLength) + ".5f";
+
 		return buildGenericSlider(identifier, controlLabel, model, label -> {
-			label.setText(String.format("%.5f", model.getValueAsDouble()));
+			label.setText(String.format(displayFormat, model.getValueAsDouble()));
 		});
 	}
 
@@ -631,8 +638,12 @@ public class CustomTabPanel extends JPanel{
 	public CustomTabPanel appendSlider(String identifier, String controlLabel, int initialValue, int min, int max) throws Exception {
 		DefaultBoundedRangeModel model = new DefaultBoundedRangeModel(initialValue, 0, min, max);
 		model.setValue(initialValue);
+		int integralLength = String.valueOf(max).length();
+
+		String displayFormat = "%" + integralLength + "d";
+
 		return buildGenericSlider(identifier, controlLabel, model, label -> {
-			label.setText(String.format("%d", model.getValue()));
+			label.setText(String.format(displayFormat, model.getValue()));
 		});
 	}
 

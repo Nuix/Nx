@@ -62,6 +62,7 @@ public class DialogTester {
         try {
             panel.appendSlider("a_slider", "A Slider", 0.2, 0.2, 1.0);
             panel.appendSlider("b_slider", "B Slider");
+            panel.appendSlider("c_slider", "C Slider", 0.2, 0.2, 100.0);
         } catch (Exception e) {
             fail();
         }
