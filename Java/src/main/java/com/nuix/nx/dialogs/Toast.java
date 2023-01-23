@@ -29,7 +29,7 @@ import java.awt.event.ActionListener;
  *
  *         String message = "Title\nThis is a brief message about something, but no worries, won't kill the application.";
  *         Rectangle position = new Rectangle(1400, 1000, 500, 80);
- *         toast.showMessage(message, position);
+ *         toast.showToast(message, position);
  * </pre>
  * <p>
  *     TODO: I have found the threading can cause slower than expected motion when the computer is under heavy load.
