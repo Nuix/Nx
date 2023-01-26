@@ -4,6 +4,7 @@
  *******************************************/
 package com.nuix.nx;
 
+import com.nuix.nx.controls.filters.DynamicTableFilterProvider;
 import com.nuix.nx.controls.models.DoubleBoundedRangeModel;
 import com.nuix.nx.controls.models.ReportDataModel;
 import com.nuix.nx.dialogs.CustomTabPanel;
@@ -11,8 +12,7 @@ import com.nuix.nx.dialogs.ProgressDialog;
 import com.nuix.nx.dialogs.TabbedCustomDialog;
 
 import javax.swing.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -79,10 +79,68 @@ public class DialogTester {
 
     }
 
+    public void runFilterTests() {
+      List<DynamicTableFilterProvider> filters = new ArrayList<>();
+
+      filters.add(new DynamicTableFilterProvider() {
+            @Override
+            public boolean handlesExpression(String filterExpression) {
+                return true;
+            }
+
+            @Override
+            public boolean keepRecord(int sourceIndex, boolean isChecked, String filterExpression, Object record, Map<String, Object> rowValues) {
+                boolean result = (sourceIndex % 3) > 0;
+                System.out.printf("`(%2d %% 3) > 0`: %b%n", sourceIndex, result);
+                return result;
+            }
+        });
+
+        filters.add(new DynamicTableFilterProvider() {
+            @Override
+            public boolean handlesExpression(String filterExpression) {
+                return true;
+            }
+
+            @Override
+            public boolean keepRecord(int sourceIndex, boolean isChecked, String filterExpression, Object record, Map<String, Object> rowValues) {
+                boolean result = (sourceIndex % 2) == 1;
+                System.out.printf("`(%2d %% 2) == 1`: %b%n", sourceIndex, result);
+                return result;
+            }
+        });
+
+        filters.add(new DynamicTableFilterProvider() {
+            @Override
+            public boolean handlesExpression(String filterExpression) {
+                return true;
+            }
+
+            @Override
+            public boolean keepRecord(int sourceIndex, boolean isChecked, String filterExpression, Object record, Map<String, Object> rowValues) {
+                boolean result = sourceIndex > 1 && sourceIndex < 8;
+                System.out.printf("`%2d > 1 && sourceIndex < 8`: %b%n", sourceIndex, result);
+                return result;
+            }
+        });
+
+        int[] id = {0};
+        List<Integer> keepThese = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            id[0] = i;
+            Optional results = filters.stream().filter(filter -> !filter.keepRecord(id[0], true, "", null, null)).findFirst();
+            if(results.isEmpty()) {
+                keepThese.add(i);
+            }
+        }
+        keepThese.forEach(value -> System.out.printf("Keep [%2d]%n", value));
+    }
+
     public static void main(String[] arg) throws Exception {
         DialogTester dt = new DialogTester();
         //dt.runProgressTest();
-        dt.runCustomDialogTest();
+        //dt.runCustomDialogTest();
+        dt.runFilterTests();
     }
 
 }

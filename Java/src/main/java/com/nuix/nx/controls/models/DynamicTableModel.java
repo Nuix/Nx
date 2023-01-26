@@ -17,6 +17,7 @@ import java.util.Set;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.nuix.nx.controls.DynamicTableControl;
 import com.nuix.nx.controls.filters.DynamicTableAllRecordsFilter;
 import com.nuix.nx.controls.filters.DynamicTableCheckedRecordsFilter;
 import com.nuix.nx.controls.filters.DynamicTableContainsFilter;
@@ -55,6 +56,7 @@ public class DynamicTableModel extends AbstractTableModel {
 	private boolean defaultCheckState = false;
 	
 	private List<DynamicTableFilterProvider> customFilterProviders = new ArrayList<>();
+	private List<DynamicTableFilterProvider> andedFilterProviders = new ArrayList<>();
 	
 	/***
 	 * Create a new instance
@@ -248,6 +250,7 @@ public class DynamicTableModel extends AbstractTableModel {
 		// Now that we have determined the filter to use, we use it to actual filter the records and build our
 		// new index mapping.  First we call beforeFilter method, then keepRecord on each record and finally afterFilter.
 		filterProviderToUse.beforeFiltering(filterExpression, records);
+		andedFilterProviders.forEach(filter -> filter.beforeFiltering(filterExpression, records));
 		
 		int columnCount = headers.size();
 		Map<String,Object> recordValues = new HashMap<String,Object>();
@@ -271,6 +274,12 @@ public class DynamicTableModel extends AbstractTableModel {
 			}
 			
 			boolean keepRecord = filterProviderToUse.keepRecord(i, recordIsChecked, filterExpression, record, recordValues);
+			int[] recordIndex = {i};
+			keepRecord = keepRecord && andedFilterProviders.stream()
+					// Note: inverting keepRecord() results - only keep a record if _no_ filters say it should _not_ be kept
+					//                                      - double negative represented by !keepRecord()...isEmpty()
+					.filter(filterProvider -> !filterProvider.keepRecord(recordIndex[0], recordIsChecked, filterExpression, record, recordValues))
+					.findFirst().isEmpty();
 			if(keepRecord) {
 				// Here we record the actual mapping where filter index is the index that will be
 				// asked for externally and i is the actual index into the full records collection.
@@ -280,6 +289,7 @@ public class DynamicTableModel extends AbstractTableModel {
 		}
 		
 		filterProviderToUse.afterFiltering();
+		andedFilterProviders.forEach(filter -> filter.afterFiltering());
 		
 		// Make the models filter map the one we just built
 		filterMap = tempFilterMap;
@@ -587,6 +597,8 @@ public class DynamicTableModel extends AbstractTableModel {
 		return customFilterProviders;
 	}
 
+	public List<DynamicTableFilterProvider> getAndedFilterProviders() { return andedFilterProviders; }
+
 	/***
 	 * Sets the list of filter providers beyond those that are built in.
 	 * @param customFilterProviders The new list of custom filter providers
@@ -594,6 +606,9 @@ public class DynamicTableModel extends AbstractTableModel {
 	public void setCustomFilterProviders(List<DynamicTableFilterProvider> customFilterProviders) {
 		this.customFilterProviders = customFilterProviders;
 	}
-	
+
+	public void setAndedFilterProviders(List<DynamicTableFilterProvider> filterProviders) {
+		this.andedFilterProviders = filterProviders;
+	}
 	
 }
