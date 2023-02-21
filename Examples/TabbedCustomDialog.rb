@@ -207,6 +207,57 @@ text_settings_tab.appendBatchExporterTextSettings("text_settings")
 ocr_settings_tab = dialog.addTab("ocr_settings_tab","OCR Settings")
 ocr_settings_tab.appendOcrSettings("ocr_settings")
 
+# Define custom settings to configure the OCR settings control with
+regenerate_pdfs = true
+update_pdf_text = true
+update_item_text = true
+
+# text modification choices: append, overwrite
+text_modification = "append"
+
+# quality choices: default, document_archiving_accuracy, document_archiving_speed, book_archiving_accuracy
+#                  book_archiving_speed, document_conversion_accuracy, document_conversion_speed
+#                  text_extraction_accuracy, text_extraction_speed, field_level_recognition
+quality = "default" 
+
+# rotation choices: auto, no_rotation, left, right, upside_down
+rotation = "auto"
+
+deskew = true
+output_directory = "D:\\Temp\\MyOcrOutputDirectory"
+update_duplicates = true
+ocr_timeout_minutes = 73
+
+# Languages choices: see https://github.com/Nuix/Nx/blob/master/Java/src/main/java/com/nuix/nx/controls/OcrSettings.java#L297-L482
+languages = ["English","Catalan"]
+
+ocr_control = ocr_settings_tab.getControl("ocr_settings")
+ocr_control.getChckbxRegeneratePdfs.setSelected(regenerate_pdfs)
+ocr_control.getChckbxUpdatePdfText.setSelected(update_pdf_text)
+ocr_control.getChckbxUpdateItemText.setSelected(update_item_text)
+ocr_control.getComboTextModification.setSelectedValue(text_modification)
+ocr_control.getComboQuality.setSelectedValue(quality)
+ocr_control.getComboRotation.setSelectedValue(rotation)
+ocr_control.getChckbxDeskew.setSelected(deskew)
+ocr_control.getOutputDirectory.setPath(output_directory)
+ocr_control.setUpdateDuplicates(update_duplicates)
+ocr_control.setTimeoutMinutes(ocr_timeout_minutes)
+
+# Changing checked languages requires tweaking selected choices in the languages table
+languages_table = ocr_control.getLanguageChoices
+languages_table.getTableModel.uncheckAllChoices
+checked_language_choices = []
+languages.each do |language|
+	language_choice = languages_table.getTableModel.getFirstChoiceByLabel(language)
+	if !language_choice.nil?
+		languages_table.getTableModel.setChoiceSelection(language_choice,true)
+		checked_language_choices << language_choice
+	else
+		# Language wasn't able to be resolved to an available choice
+	end
+end
+languages_table.getTableModel.sortChoicesToTop(checked_language_choices)
+
 # ==========================
 # Test dynamic table control
 # ==========================
