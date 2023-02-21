@@ -154,6 +154,9 @@ other_tab.appendComboBox("combo02","Combo Box w/ Callback",combo_choices) do
 end
 other_tab.appendSearchableComboBox("combo03","Searchable Combo Box",combo_choices)
 
+# Force a specific choice to be selected by default that isn't the first choice in the list of choices
+other_tab.setText("combo01","Bird")
+
 # ========================
 # Radio button group tests
 # ========================
