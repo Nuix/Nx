@@ -18,7 +18,8 @@ import static org.junit.Assert.*;
 
 public class DialogTester {
 
-  private void runProgressTest() throws Exception {
+  @SuppressWarnings("unused")
+private void runProgressTest() throws Exception {
         LookAndFeelHelper.setWindowsIfMetal();
         ProgressDialog.forBlock((pd) -> {
             ReportDataModel rdm = new ReportDataModel();

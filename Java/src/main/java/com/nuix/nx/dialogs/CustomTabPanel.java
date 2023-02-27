@@ -32,11 +32,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoundedRangeModel;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultBoundedRangeModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
@@ -44,7 +61,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
-import com.nuix.nx.controls.models.*;
 import org.jdesktop.swingx.JXDatePicker;
 import org.joda.time.DateTime;
 
@@ -71,6 +87,11 @@ import com.nuix.nx.controls.PathSelectedCallback;
 import com.nuix.nx.controls.PathSelectionControl;
 import com.nuix.nx.controls.PathSelectionControl.ChooserType;
 import com.nuix.nx.controls.StringList;
+import com.nuix.nx.controls.models.Choice;
+import com.nuix.nx.controls.models.ControlDeserializationHandler;
+import com.nuix.nx.controls.models.ControlSerializationHandler;
+import com.nuix.nx.controls.models.DoubleBoundedRangeModel;
+import com.nuix.nx.controls.models.DynamicTableValueCallback;
 
 /***
  * This class represents a tab in the {@link TabbedCustomDialog} class.  This tab component hosts all the

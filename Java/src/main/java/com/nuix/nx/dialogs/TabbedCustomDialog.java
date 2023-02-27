@@ -479,6 +479,81 @@ public class TabbedCustomDialog extends JDialog {
 		});
 	}
 	
+	public void enabledOnlyWhenAllChecked(String dependentControlIdentifier, String... targetCheckableIdentifiers) throws Exception {
+		Component dependentComponent = controls.get(dependentControlIdentifier);
+		
+		for (int i = 0; i < targetCheckableIdentifiers.length; i++) {
+			Component targetComponent = controls.get(targetCheckableIdentifiers[i]);
+			if(targetComponent instanceof java.awt.ItemSelectable) {
+				((java.awt.ItemSelectable)targetComponent).addItemListener(new ItemListener(){
+					@Override
+					public void itemStateChanged(ItemEvent arg0) {
+						try {
+							boolean currentCheckedState = allAreChecked(targetCheckableIdentifiers);
+							dependentComponent.setEnabled(currentCheckedState);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}
+		
+		// Set initial state
+		boolean currentCheckedState = allAreChecked(targetCheckableIdentifiers);
+		dependentComponent.setEnabled(currentCheckedState);
+	}
+	
+	public void enabledOnlyWhenNoneChecked(String dependentControlIdentifier, String... targetCheckableIdentifiers) throws Exception {
+		Component dependentComponent = controls.get(dependentControlIdentifier);
+		
+		for (int i = 0; i < targetCheckableIdentifiers.length; i++) {
+			Component targetComponent = controls.get(targetCheckableIdentifiers[i]);
+			if(targetComponent instanceof java.awt.ItemSelectable) {
+				((java.awt.ItemSelectable)targetComponent).addItemListener(new ItemListener(){
+					@Override
+					public void itemStateChanged(ItemEvent arg0) {
+						try {
+							boolean currentCheckedState = noneAreChecked(targetCheckableIdentifiers);
+							dependentComponent.setEnabled(currentCheckedState);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}
+		
+		// Set initial state
+		boolean currentCheckedState = noneAreChecked(targetCheckableIdentifiers);
+		dependentComponent.setEnabled(currentCheckedState);
+	}
+	
+	public void enabledIfAnyChecked(String dependentControlIdentifier, String... targetCheckableIdentifiers) throws Exception {
+		Component dependentComponent = controls.get(dependentControlIdentifier);
+		
+		for (int i = 0; i < targetCheckableIdentifiers.length; i++) {
+			Component targetComponent = controls.get(targetCheckableIdentifiers[i]);
+			if(targetComponent instanceof java.awt.ItemSelectable) {
+				((java.awt.ItemSelectable)targetComponent).addItemListener(new ItemListener(){
+					@Override
+					public void itemStateChanged(ItemEvent arg0) {
+						try {
+							boolean currentCheckedState = anyAreChecked(targetCheckableIdentifiers);
+							dependentComponent.setEnabled(currentCheckedState);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}
+		
+		// Set initial state
+		boolean currentCheckedState = anyAreChecked(targetCheckableIdentifiers);
+		dependentComponent.setEnabled(currentCheckedState);
+	}
+	
 	/***
 	 * Registers an event handle such that a given control is only enabled when another checkable control is not checked.
 	 * @param dependentControlIdentifier The identifier of the already added control for which the enabled state depends on another checkable control.
@@ -519,6 +594,27 @@ public class TabbedCustomDialog extends JDialog {
 		}
 		else
 			throw new Exception("Control for identifier '"+identifier+"' is not a JCheckbox or JRadioButton");
+	}
+	
+	public boolean allAreChecked(String... identifiers) throws Exception {
+		for (int i = 0; i < identifiers.length; i++) {
+			if(!isChecked(identifiers[i])) { return false; }
+		}
+		return true;
+	}
+	
+	public boolean noneAreChecked(String... identifiers) throws Exception {
+		for (int i = 0; i < identifiers.length; i++) {
+			if(isChecked(identifiers[i])) { return false; }
+		}
+		return true;
+	}
+	
+	public boolean anyAreChecked(String... identifiers) throws Exception {
+		for (int i = 0; i < identifiers.length; i++) {
+			if(isChecked(identifiers[i])) { return true; }
+		}
+		return false;
 	}
 	
 	/***
