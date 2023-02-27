@@ -479,6 +479,15 @@ public class TabbedCustomDialog extends JDialog {
 		});
 	}
 	
+	/***
+	 * Similar to {@link #enabledOnlyWhenChecked(String, String)}, this method registers event handlers on one or more checkable controls
+	 * such that a given dependent control is only enabled when all of the specified target checkable controls are checked.
+	 * @param dependentControlIdentifier The identifier of the already added control for which the enabled state depends on another checkable control.
+	 * @param targetCheckableIdentifiers The identifier of the one or more already added checkable controls which will determine the enabled state
+	 * of the dependent control.
+	 * @throws Exception This could be caused by various things such as invalid identifiers or the identifier provided in targetCheckableIdentifier
+	 * does not point to a checkable control (CheckBox or RadioButton).
+	 */
 	public void enabledOnlyWhenAllChecked(String dependentControlIdentifier, String... targetCheckableIdentifiers) throws Exception {
 		Component dependentComponent = controls.get(dependentControlIdentifier);
 		
@@ -504,6 +513,15 @@ public class TabbedCustomDialog extends JDialog {
 		dependentComponent.setEnabled(currentCheckedState);
 	}
 	
+	/***
+	 * Similar to {@link #enabledOnlyWhenChecked(String, String)}, this method registers event handlers on one or more checkable controls
+	 * such that a given dependent control is only enabled when none of the specified target checkable controls are checked.
+	 * @param dependentControlIdentifier The identifier of the already added control for which the enabled state depends on another checkable control.
+	 * @param targetCheckableIdentifiers The identifier of the one or more already added checkable controls which will determine the enabled state
+	 * of the dependent control.
+	 * @throws Exception This could be caused by various things such as invalid identifiers or the identifier provided in targetCheckableIdentifier
+	 * does not point to a checkable control (CheckBox or RadioButton).
+	 */
 	public void enabledOnlyWhenNoneChecked(String dependentControlIdentifier, String... targetCheckableIdentifiers) throws Exception {
 		Component dependentComponent = controls.get(dependentControlIdentifier);
 		
@@ -529,6 +547,15 @@ public class TabbedCustomDialog extends JDialog {
 		dependentComponent.setEnabled(currentCheckedState);
 	}
 	
+	/***
+	 * Similar to {@link #enabledOnlyWhenChecked(String, String)}, this method registers event handlers on one or more checkable controls
+	 * such that a given dependent control is only enabled when at least one of the specified target checkable controls are checked.
+	 * @param dependentControlIdentifier The identifier of the already added control for which the enabled state depends on another checkable control.
+	 * @param targetCheckableIdentifiers The identifier of the one or more already added checkable controls which will determine the enabled state
+	 * of the dependent control.
+	 * @throws Exception This could be caused by various things such as invalid identifiers or the identifier provided in targetCheckableIdentifier
+	 * does not point to a checkable control (CheckBox or RadioButton).
+	 */
 	public void enabledIfAnyChecked(String dependentControlIdentifier, String... targetCheckableIdentifiers) throws Exception {
 		Component dependentComponent = controls.get(dependentControlIdentifier);
 		
