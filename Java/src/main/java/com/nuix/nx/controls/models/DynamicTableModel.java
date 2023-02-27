@@ -188,7 +188,7 @@ public class DynamicTableModel extends AbstractTableModel {
 	/***
 	 * Notify listeners that changes were made
 	 */
-	private void notifyChanged(){
+	protected void notifyChanged(){
 		if(changeListener != null){
 			changeListener.dataChanged();
 		}
@@ -206,7 +206,7 @@ public class DynamicTableModel extends AbstractTableModel {
 	 * while building a new index mapping.  Once a new mapping has been constructed the associated DynamicTable is informed that data
 	 * has changed and it will re-populate.
 	 */
-	private void applyFiltering(){
+	protected void applyFiltering(){
 		Map<Integer,Integer> tempFilterMap = new HashMap<Integer,Integer>();
 		
 		DynamicTableFilterProvider filterProviderToUse = null;
@@ -322,6 +322,15 @@ public class DynamicTableModel extends AbstractTableModel {
 		this.filterExpression = filter;
 		applyFiltering();
 		notifyChanged();
+	}
+
+	/***
+	 * Get the current filter string.
+	 * @return The current string filtering values in the table.  This may be an empty string if the table is not being
+	 * filtered.
+	 */
+	public String getFilter() {
+		return this.filterExpression;
 	}
 	
 	/***
