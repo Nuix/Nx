@@ -713,8 +713,8 @@ public class CustomTabPanel extends JPanel{
 	 * </pre>
 	 * @param identifier The unique identifier for this control, used to modify the control or get its result value
 	 * @param controlLabel String to display in the UI to label this control
-	 * @return
-	 * @throws Exception
+	 * @return Returns this CustomTabPanel instance to allow for method chaining.
+	 * @throws Exception if the identifier has already been used
 	 */
 	public CustomTabPanel appendSlider(String identifier, String controlLabel) throws Exception {
 		return appendSlider(identifier, controlLabel, 50, 0, 100);
