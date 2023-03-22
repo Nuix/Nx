@@ -2,6 +2,7 @@ package com.nuix.nx.controls.models;
 
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class DoubleBoundedRangeModel extends DefaultBoundedRangeModel {
     private int digitsToMaintain;
 
