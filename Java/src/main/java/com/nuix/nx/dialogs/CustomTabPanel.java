@@ -671,6 +671,7 @@ public class CustomTabPanel extends JPanel{
 				fireStateChanged();
 			}
 		};
+		model.addChangeListener(change -> spinnerModel.setValue(model.getValueAsDouble()));
 
 		return buildGenericSlider(identifier, controlLabel, model, spinnerModel);
 	}
@@ -813,6 +814,7 @@ public class CustomTabPanel extends JPanel{
 				fireStateChanged();
 			}
 		};
+		model.addChangeListener(change -> spinnerModel.setValue(model.getValue()));
 
 		return buildGenericSlider(identifier, controlLabel, model, spinnerModel);
 	}
