@@ -71,13 +71,18 @@ dynamic_table_control.setDefaultCheckState(true)
 
 # Enable adding records
 dynamic_table_control.setUserCanAddRecords(true) do
+	# Prompt user to select a file
 	key_file = CommonDialogs.openFileDialog("C:\\","Key File")
 	if !key_file.nil?
+		# If user selected a file, addtionally prompt user to enter a password
 		password = CommonDialogs.getInput("Password for #{key_file.getAbsolutePath}")
 		if !password.nil?
+			# If user provided both, yield a new record
 			next {key_file: key_file.getAbsolutePath, password: password}
 		end
 	end
+
+	# If we reached here, yield nil abort adding a new record
 	next nil
 end
 
