@@ -350,9 +350,11 @@ public class DynamicTableModel extends AbstractTableModel {
 	 * @param record The record to add
 	 */
 	public void addRecord(Object record){
-		this.records.add(record);
-		recordSelection.add(defaultCheckState);
-		setFilter("");
+		if(record != null) {
+			this.records.add(record);
+			recordSelection.add(defaultCheckState);
+			setFilter("");
+		}
 	}
 	
 	/***

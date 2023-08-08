@@ -233,7 +233,9 @@ public class DynamicTableControl extends JPanel {
 					public void actionPerformed(ActionEvent e) {
 						if(addRecordCallback != null){
 							Object newRecord = addRecordCallback.get();
-							getModel().addRecord(newRecord);
+							if(newRecord != null) {
+								getModel().addRecord(newRecord);	
+							}
 						}
 					}
 				});
