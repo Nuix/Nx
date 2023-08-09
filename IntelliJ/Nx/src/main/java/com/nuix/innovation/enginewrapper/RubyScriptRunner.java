@@ -121,7 +121,7 @@ public class RubyScriptRunner {
     /***
      * Sets the {@link Consumer} which will receive error output while script is running.  If null when a script is
      * executed, received messages will be logged by this instance via log4j2.
-     * @param errorOutput
+     * @param errorOutput The consumer of running script's error output
      */
     public void setErrorOutputConsumer(Consumer<String> errorOutput) {
         this.errorOutput = errorOutput;
