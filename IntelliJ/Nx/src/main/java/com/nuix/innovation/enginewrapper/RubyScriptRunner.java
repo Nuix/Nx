@@ -1,7 +1,6 @@
 package com.nuix.innovation.enginewrapper;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,9 +16,16 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.function.Consumer;
 
+/***
+ * Provides an easy way to execute Ruby scripts.
+ */
 public class RubyScriptRunner {
     private static final Logger log = LogManager.getLogger(RubyScriptRunner.class);
 
+    /***
+     * Writer implementation which specializes in forwarding to to consumer.  Used to forward
+     * standard out and err to consumer from script container.
+     */
     static class EventedWriter extends Writer {
         private Consumer<String> consumer;
 
@@ -59,12 +65,19 @@ public class RubyScriptRunner {
     public RubyScriptRunner() {
     }
 
+    /***
+     * Interrupts running script thread if there is one running.  See also {@link #isAlive()}.
+     */
     public void interrupt() {
         if (scriptThread != null) {
             scriptThread.interrupt();
         }
     }
 
+    /***
+     * Checks if script thread exists and is currently runnning.
+     * @return True if script thread exists (non-null) and {@link Thread#isAlive()} returns true.
+     */
     public boolean isAlive() {
         if (scriptThread != null) {
             return scriptThread.isAlive();
@@ -73,32 +86,54 @@ public class RubyScriptRunner {
         }
     }
 
+    /***
+     * Joins script thread (if it exists) via {@link Thread#join(long)}.
+     * @param timeoutMillis the time to wait in milliseconds
+     * @throws InterruptedException if any thread has interrupted the current thread. The interrupted status of the
+     * current thread is cleared when this exception is thrown.
+     */
     public void join(long timeoutMillis) throws InterruptedException {
         if (scriptThread != null) {
             scriptThread.join(timeoutMillis);
         }
     }
 
+    /***
+     * Joins script thread (if it exists) via {@link Thread#join()}.
+     * @throws InterruptedException if any thread has interrupted the current thread. The interrupted status of the
+     * current thread is cleared when this exception is thrown.
+     */
     public void join() throws InterruptedException {
-        join(0);
+        if (scriptThread != null) {
+            scriptThread.join();
+        }
     }
 
-    public Consumer<String> getStandardOutput() {
-        return standardOutput;
-    }
-
-    public void setStandardOutput(Consumer<String> standardOutput) {
+    /***
+     * Sets the {@link Consumer} which will receive standard output while script is running.  If null when a script is
+     * executed, received messages will be logged by this instance via log4j2.
+     * @param standardOutput The consumer of running script's standard output
+     */
+    public void setStandardOutputConsumer(Consumer<String> standardOutput) {
         this.standardOutput = standardOutput;
     }
 
-    public Consumer<String> getErrorOutput() {
-        return errorOutput;
-    }
-
-    public void setErrorOutput(Consumer<String> errorOutput) {
+    /***
+     * Sets the {@link Consumer} which will receive error output while script is running.  If null when a script is
+     * executed, received messages will be logged by this instance via log4j2.
+     * @param errorOutput
+     */
+    public void setErrorOutputConsumer(Consumer<String> errorOutput) {
         this.errorOutput = errorOutput;
     }
 
+    /***
+     * Runs a ruby script asynchronously
+     * @param script A string containing the Ruby script
+     * @param nuixVersion A string containing the Nuix version to be assigned to constant 'NUIX_VERSION'
+     * @param variables A map of variables to inject into the script container.  Key is variable name, value is the
+     *                  value to assign to that variable.  Prefix name with $ for global variables.
+     */
     public void runScriptAsync(String script, String nuixVersion, Map<String, Object> variables) {
         initialize(nuixVersion, variables);
 
@@ -109,6 +144,13 @@ public class RubyScriptRunner {
         scriptThread.start();
     }
 
+    /***
+     * Runs a ruby script asynchronously
+     * @param scriptFile A file containing a Ruby script
+     * @param nuixVersion A string containing the Nuix version to be assigned to constant 'NUIX_VERSION'
+     * @param variables A map of variables to inject into the script container.  Key is variable name, value is the
+     *                  value to assign to that variable.  Prefix name with $ for global variables.
+     */
     public void runFileAsync(File scriptFile, String nuixVersion, Map<String, Object> variables) {
         initialize(nuixVersion, variables);
 

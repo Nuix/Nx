@@ -89,8 +89,8 @@ public class RubyExamples {
             }
             variables.put("$utilities", utilities);
             RubyScriptRunner rubyScriptRunner = new RubyScriptRunner();
-            rubyScriptRunner.setStandardOutput(log::info);
-            rubyScriptRunner.setErrorOutput(log::error);
+            rubyScriptRunner.setStandardOutputConsumer(log::info);
+            rubyScriptRunner.setErrorOutputConsumer(log::error);
             rubyScriptRunner.runFileAsync(rubyScriptFile, nuixEngine.getNuixVersionString(), variables);
             rubyScriptRunner.join();
         }
@@ -108,8 +108,8 @@ public class RubyExamples {
         }
         variables.put("$utilities", "");
         RubyScriptRunner rubyScriptRunner = new RubyScriptRunner();
-        rubyScriptRunner.setStandardOutput(log::info);
-        rubyScriptRunner.setErrorOutput(log::error);
+        rubyScriptRunner.setStandardOutputConsumer(log::info);
+        rubyScriptRunner.setErrorOutputConsumer(log::error);
         rubyScriptRunner.runFileAsync(rubyScriptFile, "9000.0.0.0", variables);
         rubyScriptRunner.join();
     }

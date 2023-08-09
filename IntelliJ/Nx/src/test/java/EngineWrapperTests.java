@@ -94,8 +94,8 @@ public class EngineWrapperTests {
             Map<String, Object> globalVars = Map.of("$utilities", utilities);
             String script = "$utilities.getItemTypeUtility.getAllKinds.each{|kind| puts kind.getName}";
             RubyScriptRunner rubyScriptRunner = new RubyScriptRunner();
-            rubyScriptRunner.setStandardOutput(outputLines::add);
-            rubyScriptRunner.setErrorOutput(outputLines::add);
+            rubyScriptRunner.setStandardOutputConsumer(outputLines::add);
+            rubyScriptRunner.setErrorOutputConsumer(outputLines::add);
             rubyScriptRunner.runScriptAsync(script, nuixEngine.getNuixVersionString(), globalVars);
             rubyScriptRunner.join();
             log.info("Script Output:");
