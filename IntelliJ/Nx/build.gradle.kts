@@ -39,10 +39,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 
-    // ====================
-    // Engine Dependencies
-    // ====================
-
     implementation(fileTree(baseDir = engineLibDir) {
         include(
                 "**/*log*.jar",
@@ -173,5 +169,4 @@ tasks.test {
 // Customize where Javadoc output is written to
 tasks.getByName<Javadoc>("javadoc") {
     setDestinationDir(File("${projectDir}/../../docs"))
-    exclude("com/nuix/innovation/enginewrapper/**")
 }
