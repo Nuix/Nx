@@ -17,6 +17,7 @@ import java.util.Set;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.nuix.nx.controls.DynamicTableControl;
 import com.nuix.nx.controls.filters.DynamicTableAllRecordsFilter;
 import com.nuix.nx.controls.filters.DynamicTableCheckedRecordsFilter;
 import com.nuix.nx.controls.filters.DynamicTableContainsFilter;
@@ -55,6 +56,7 @@ public class DynamicTableModel extends AbstractTableModel {
 	private boolean defaultCheckState = false;
 	
 	private List<DynamicTableFilterProvider> customFilterProviders = new ArrayList<>();
+	private List<DynamicTableFilterProvider> andedFilterProviders = new ArrayList<>();
 	
 	/***
 	 * Create a new instance
@@ -186,7 +188,7 @@ public class DynamicTableModel extends AbstractTableModel {
 	/***
 	 * Notify listeners that changes were made
 	 */
-	private void notifyChanged(){
+	protected void notifyChanged(){
 		if(changeListener != null){
 			changeListener.dataChanged();
 		}
@@ -198,13 +200,13 @@ public class DynamicTableModel extends AbstractTableModel {
 	
 	/***
 	 * Filter the displayed records.  When a method such as {@link #getValueAt(int, int)} is called by DynamicTable, the given method will use
-	 * the index mapping stored in {@value #filterMap} to determine for the given display index what item to fetch from
+	 * the index mapping stored in {@link #filterMap} to determine for the given display index what item to fetch from
 	 * the actual underlying full collection of records.  The act of applying filtering is therefore really just building
 	 * a modified mapping.  This method takes the filter expression that has been provided and iteratively apply it to each record
 	 * while building a new index mapping.  Once a new mapping has been constructed the associated DynamicTable is informed that data
 	 * has changed and it will re-populate.
 	 */
-	private void applyFiltering(){
+	protected void applyFiltering(){
 		Map<Integer,Integer> tempFilterMap = new HashMap<Integer,Integer>();
 		
 		DynamicTableFilterProvider filterProviderToUse = null;
@@ -248,6 +250,7 @@ public class DynamicTableModel extends AbstractTableModel {
 		// Now that we have determined the filter to use, we use it to actual filter the records and build our
 		// new index mapping.  First we call beforeFilter method, then keepRecord on each record and finally afterFilter.
 		filterProviderToUse.beforeFiltering(filterExpression, records);
+		andedFilterProviders.forEach(filter -> filter.beforeFiltering(filterExpression, records));
 		
 		int columnCount = headers.size();
 		Map<String,Object> recordValues = new HashMap<String,Object>();
@@ -271,6 +274,12 @@ public class DynamicTableModel extends AbstractTableModel {
 			}
 			
 			boolean keepRecord = filterProviderToUse.keepRecord(i, recordIsChecked, filterExpression, record, recordValues);
+			int[] recordIndex = {i};
+			keepRecord = keepRecord && andedFilterProviders.stream()
+					// Note: inverting keepRecord() results - only keep a record if _no_ filters say it should _not_ be kept
+					//                                      - double negative represented by !keepRecord()...isEmpty()
+					.filter(filterProvider -> !filterProvider.keepRecord(recordIndex[0], recordIsChecked, filterExpression, record, recordValues))
+					.findFirst().isEmpty();
 			if(keepRecord) {
 				// Here we record the actual mapping where filter index is the index that will be
 				// asked for externally and i is the actual index into the full records collection.
@@ -280,6 +289,7 @@ public class DynamicTableModel extends AbstractTableModel {
 		}
 		
 		filterProviderToUse.afterFiltering();
+		andedFilterProviders.forEach(filter -> filter.afterFiltering());
 		
 		// Make the models filter map the one we just built
 		filterMap = tempFilterMap;
@@ -312,6 +322,15 @@ public class DynamicTableModel extends AbstractTableModel {
 		this.filterExpression = filter;
 		applyFiltering();
 		notifyChanged();
+	}
+
+	/***
+	 * Get the current filter string.
+	 * @return The current string filtering values in the table.  This may be an empty string if the table is not being
+	 * filtered.
+	 */
+	public String getFilter() {
+		return this.filterExpression;
 	}
 	
 	/***
@@ -589,6 +608,8 @@ public class DynamicTableModel extends AbstractTableModel {
 		return customFilterProviders;
 	}
 
+	public List<DynamicTableFilterProvider> getAndedFilterProviders() { return andedFilterProviders; }
+
 	/***
 	 * Sets the list of filter providers beyond those that are built in.
 	 * @param customFilterProviders The new list of custom filter providers
@@ -596,6 +617,9 @@ public class DynamicTableModel extends AbstractTableModel {
 	public void setCustomFilterProviders(List<DynamicTableFilterProvider> customFilterProviders) {
 		this.customFilterProviders = customFilterProviders;
 	}
-	
+
+	public void setAndedFilterProviders(List<DynamicTableFilterProvider> filterProviders) {
+		this.andedFilterProviders = filterProviders;
+	}
 	
 }

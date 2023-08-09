@@ -534,27 +534,21 @@ public class CustomTabPanel extends JPanel{
 	 * </p>
 	 * @param identifier The unique identifier for this control, used to modify the control or get its result value
 	 * @param controlLabel String to display in the UI to label this control
-	 * @param model The {@link BoundedRangeModel} which controls and stores the value and its range limits
-	 * @param displayAdapter A {@link Consumer} which can take a JLabel and display the model's current value in it.
-	 *                       The consumer will need its own reference to the model, as it will not get the model from
-	 *                       this callback.
+	 * @param model The {@link BoundedRangeModel} which controls and stores the value and its range limits used on the
+	 *              JSlider control
+	 * @param spinnerModel The {@link SpinnerNumberModel} which controls and stores the value in the JSpinner that will
+	 *                     get created.  This model should ensure the data is always in sync with the values in the
+	 *                     <code>model</code> for the JSlider component
 	 * @return this CustomTabPanel instance to allow method chaining
 	 * @throws Exception if the identifier has already been used
 	 */
 	protected CustomTabPanel buildGenericSlider(String identifier, String controlLabel,
 												BoundedRangeModel model,
-												Consumer<JLabel> displayAdapter) throws Exception {
+												SpinnerNumberModel spinnerModel) throws Exception {
 		JSlider component = new JSlider(JSlider.HORIZONTAL);
 		component.setModel(model);
 
-		JLabel valueDisplay = new JLabel();
-		valueDisplay.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-		valueDisplay.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		displayAdapter.accept(valueDisplay);
-
-		model.addChangeListener(event -> {
-			displayAdapter.accept(valueDisplay);
-		});
+		JSpinner valueDisplay = buildGenericSpinner(identifier + ".Spinner", spinnerModel, null);
 
 		GridBagConstraints c = makeLabelConstraintsForNextRow();
 		addComponent(makeComponentLabel(controlLabel),c);
@@ -583,6 +577,22 @@ public class CustomTabPanel extends JPanel{
 	 *     JSlider slider = (JSlider)panel.getControl(identifier);
 	 *     DoubleBoundedRangeModel model = slider.getModel();
 	 * </pre>
+	 * <p>
+	 *     This control also contains a JSpinner control that displays and allows direct modification of the slider
+	 *     value.  The spinner will have the same range as the slider, and its step size will be such that 10
+	 *     steps reaches the maximum value.  The JSpinner control can be retrieved from the panel using the provided
+	 *     identifier with <code>".Spinner"</code> appended to it:
+	 * </p>
+	 * <pre>
+	 *     panel = panel.appendSlider(identifier, label, 0.0, 0.0, 1.0);
+	 *     JSpinner spinner = (JSpinner)panel.getControl(identifier + ".Spinner");
+	 *     SpinnerNumberModel = spinner.getModel();
+	 * </pre>
+	 * <p>
+	 *     Internally, the JSpinner uses the JSlider's data model to store data.  Values will be kept the same between
+	 *     the but only the JSlider's model will be guaranteed to get all events from changes to both the slider and
+	 *     the spinner.  It is for this reason the JSlider's model is the preferred model to interact with.
+	 * </p>
 	 * @param identifier The unique identifier for this control, used to modify the control or get its result value
 	 * @param controlLabel String to display in the UI to label this control
 	 * @param initialValue The initial position for slider and resulting value
@@ -595,14 +605,75 @@ public class CustomTabPanel extends JPanel{
 		DoubleBoundedRangeModel model = new DoubleBoundedRangeModel(initialValue, 0.0, min, max,5);
 		model.setValue(initialValue);
 
-		long integral = Double.valueOf(max).longValue();
-		int integralLength = String.valueOf(integral).length();
-		int decimalLength = 6; // Period plus 5 decimal places
-		String displayFormat = "%" + (integralLength + decimalLength) + ".5f";
+		SpinnerNumberModel spinnerModel = new SpinnerNumberModel(initialValue, min, max, (max/10)) {
+			@Override public Comparable<?> getMaximum() {
+				return model.getMaximumAsDouble();
+			}
 
-		return buildGenericSlider(identifier, controlLabel, model, label -> {
-			label.setText(String.format(displayFormat, model.getValueAsDouble()));
-		});
+			@Override public Comparable<?> getMinimum() {
+				return model.getMinimumAsDouble();
+			}
+
+			@Override public Object getNextValue() {
+				double nextCandidate = model.getValueAsDouble() + getStepSize().doubleValue();
+				if(Double.compare(nextCandidate, model.getMaximumAsDouble()) > 0) {
+					return null;
+				} else {
+					return nextCandidate;
+				}
+			}
+
+			@Override public Number getNumber() {
+				return model.getValueAsDouble();
+			}
+
+			@Override public Object getPreviousValue() {
+				double nextCandidate = model.getValueAsDouble() - getStepSize().doubleValue();
+				if(Double.compare(nextCandidate, model.getMinimumAsDouble()) < 0) {
+					return null;
+				} else {
+					return nextCandidate;
+				}
+			}
+
+			@Override public Object getValue() {
+				return getNumber();
+			}
+
+			@Override public void setMinimum(Comparable<?> minimum) {
+				if(null == minimum || !Number.class.isAssignableFrom(minimum.getClass())) {
+					throw new IllegalArgumentException("The spinner's minimum must be a non-null Number.");
+				}
+
+				model.setMinimum(((Number)minimum).doubleValue());
+				fireStateChanged();
+			}
+
+			@Override public void setMaximum(Comparable<?> maximum) {
+				if(null == maximum || !Number.class.isAssignableFrom(maximum.getClass())) {
+					throw new IllegalArgumentException("The spinner's minimum must be a non-null Number.");
+				}
+
+				model.setMaximum(((Number)maximum).doubleValue());
+				fireStateChanged();
+			}
+
+			@Override public void setValue(Object value) {
+				if(null == value || !Number.class.isAssignableFrom(value.getClass())) {
+					throw new IllegalArgumentException("The spinner's value must be a non-null Number.");
+				}
+
+				Double valueAsDouble = ((Number)value).doubleValue();
+				if(valueAsDouble.compareTo(model.getMaximumAsDouble()) > 0) valueAsDouble = model.getMaximumAsDouble();
+				else if (valueAsDouble.compareTo(model.getMinimumAsDouble()) < 0) valueAsDouble = model.getMinimumAsDouble();
+
+				model.setValue(valueAsDouble);
+				fireStateChanged();
+			}
+		};
+		model.addChangeListener(change -> spinnerModel.setValue(model.getValueAsDouble()));
+
+		return buildGenericSlider(identifier, controlLabel, model, spinnerModel);
 	}
 
 	/**
@@ -648,6 +719,22 @@ public class CustomTabPanel extends JPanel{
 	 *     JSlider slider = (JSlider)panel.getControl(identifier);
 	 *     BoundedRangeModel model = slider.getModel();
 	 * </pre>
+	 * <p>
+	 *     This control also contains a JSpinner control that displays and allows direct modification of the slider
+	 *     value.  The spinner will have the same range as the slider, and its step size will be such that 10
+	 *     steps reaches the maximum value.  The JSpinner control can be retrieved from the panel using the provided
+	 *     identifier with <code>".Spinner"</code> appended to it:
+	 * </p>
+	 * <pre>
+	 *     panel = panel.appendSlider(identifier, label, 0, 0, 1);
+	 *     JSpinner spinner = (JSpinner)panel.getControl(identifier + ".Spinner");
+	 *     SpinnerNumberModel = spinner.getModel();
+	 * </pre>
+	 * <p>
+	 *     Internally, the JSpinner uses the JSlider's data model to store data.  Values will be kept the same between
+	 *     the but only the JSlider's model will be guaranteed to get all events from changes to both the slider and
+	 *     the spinner.  It is for this reason the JSlider's model is the preferred model to interact with.
+	 * </p>
 	 * @param identifier The unique identifier for this control, used to modify the control or get its result value
 	 * @param controlLabel String to display in the UI to label this control
 	 * @param initialValue The initial position for slider and resulting value
@@ -659,13 +746,77 @@ public class CustomTabPanel extends JPanel{
 	public CustomTabPanel appendSlider(String identifier, String controlLabel, int initialValue, int min, int max) throws Exception {
 		DefaultBoundedRangeModel model = new DefaultBoundedRangeModel(initialValue, 0, min, max);
 		model.setValue(initialValue);
-		int integralLength = String.valueOf(max).length();
+		model.setValue(initialValue);
 
-		String displayFormat = "%" + integralLength + "d";
+		SpinnerNumberModel spinnerModel = new SpinnerNumberModel(initialValue, min, max, (max/10)) {
+			@Override public Comparable<?> getMaximum() {
+				return model.getMaximum();
+			}
 
-		return buildGenericSlider(identifier, controlLabel, model, label -> {
-			label.setText(String.format(displayFormat, model.getValue()));
-		});
+			@Override public Comparable<?> getMinimum() {
+				return model.getMinimum();
+			}
+
+			@Override public Object getNextValue() {
+				double nextCandidate = model.getValue() + getStepSize().intValue();
+				if(Double.compare(nextCandidate, model.getMaximum()) > 0) {
+					return null;
+				} else {
+					return nextCandidate;
+				}
+			}
+
+			@Override public Number getNumber() {
+				return model.getValue();
+			}
+
+			@Override public Object getPreviousValue() {
+				double nextCandidate = model.getValue() - getStepSize().intValue();
+				if(Double.compare(nextCandidate, model.getMinimum()) < 0) {
+					return null;
+				} else {
+					return nextCandidate;
+				}
+			}
+
+			@Override public Object getValue() {
+				return getNumber();
+			}
+
+			@Override public void setMinimum(Comparable<?> minimum) {
+				if(null == minimum || !Number.class.isAssignableFrom(minimum.getClass())) {
+					throw new IllegalArgumentException("The spinner's minimum must be a non-null Number.");
+				}
+
+				model.setMinimum(((Number)minimum).intValue());
+				fireStateChanged();
+			}
+
+			@Override public void setMaximum(Comparable<?> maximum) {
+				if(null == maximum || !Number.class.isAssignableFrom(maximum.getClass())) {
+					throw new IllegalArgumentException("The spinner's maximum must be a non-null Number.");
+				}
+
+				model.setMaximum(((Number)maximum).intValue());
+				fireStateChanged();
+			}
+
+			@Override public void setValue(Object value) {
+				if(null == value || !Number.class.isAssignableFrom(value.getClass())) {
+					throw new IllegalArgumentException("The spinner's value must be a non-null Number.");
+				}
+
+				Integer valueAsInteger = ((Number)value).intValue();
+				if(valueAsInteger.compareTo(model.getMaximum()) > 0) valueAsInteger = model.getMaximum();
+				else if (valueAsInteger.compareTo(model.getMinimum()) < 0) valueAsInteger = model.getMinimum();
+
+				model.setValue(valueAsInteger);
+				fireStateChanged();
+			}
+		};
+		model.addChangeListener(change -> spinnerModel.setValue(model.getValue()));
+
+		return buildGenericSlider(identifier, controlLabel, model, spinnerModel);
 	}
 
 	/**
@@ -720,6 +871,25 @@ public class CustomTabPanel extends JPanel{
 		return appendSlider(identifier, controlLabel, 50, 0, 100);
 	}
 
+	protected JSpinner buildGenericSpinner(String identifier, SpinnerNumberModel spinnerModel, String controlLabel) throws Exception {
+		JSpinner component = new JSpinner();
+		//component.setValue(initialValue);
+		double preferredHeight = component.getPreferredSize().getHeight();
+		component.setPreferredSize(new Dimension(150, (int) preferredHeight));
+		component.setModel(spinnerModel);
+		if(null != controlLabel) {
+			addBasicLabelledComponent(controlLabel, component, false, false);
+		}
+		trackComponent(identifier, component);
+
+		return component;
+	}
+
+	public CustomTabPanel appendSpinner(String identifier, String controlLabel, double initialValue, double min, double max, double step) throws Exception {
+		JSpinner component = buildGenericSpinner(identifier, new SpinnerNumberModel(initialValue, min, max, step), controlLabel);
+		return this;
+	}
+
 	/***
 	 * Creates a up/down number picker control (known in Java as a Spinner).
 	 * @param identifier The unique identifier for this control.
@@ -732,13 +902,7 @@ public class CustomTabPanel extends JPanel{
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendSpinner(String identifier, String controlLabel, int initialValue, int min, int max, int step) throws Exception {
-		JSpinner component = new JSpinner();
-		component.setValue(initialValue);
-		double preferredHeight = component.getPreferredSize().getHeight();
-		component.setPreferredSize(new Dimension(150, (int) preferredHeight));
-		component.setModel(new SpinnerNumberModel(initialValue, min, max, step));
-		addBasicLabelledComponent(controlLabel, component, false, false);
-		trackComponent(identifier, component);
+		JSpinner component = buildGenericSpinner(identifier, new SpinnerNumberModel(initialValue, min, max, step), controlLabel);
 		return this;
 	}
 	
