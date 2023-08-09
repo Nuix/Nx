@@ -44,7 +44,7 @@ public class LogEventCallbackAppender extends AbstractAppender {
 
     /***
      * {@inheritDoc}
-     * @param event
+     * @param event {@inheritDoc}
      */
     @Override
     public void append(LogEvent event) {

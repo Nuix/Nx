@@ -218,7 +218,7 @@ public class LogHelper {
 
     /***
      * Attaches to logging system and returns a {@link LogMessageCallbackAppender} whose purpose is to forward rendered
-     * log event strings to a {@link Consumer<String>} which then in turn makes use of that message.
+     * log event strings to a {@link Consumer} which then in turn makes use of that message.
      * For example, if you wish to forward log messages to the Nuix script console you might do something like:
      * <pre>{@code
      * pattern = "%d{yyyy-MM-dd HH:mm:ss.SSS Z} [%t] %r %-5p %c - %m%n"
@@ -259,7 +259,7 @@ public class LogHelper {
 
     /***
      * Attaches to logging system and returns a {@link LogMessageCallbackAppender} whose purpose is to forward rendered
-     * log event strings to a {@link Consumer<String>} which then in turn makes use of that message.
+     * log event strings to a {@link Consumer} which then in turn makes use of that message.
      * This will also attach a {@link Filter} which will accept any LogEvents in which the logger name matches one of the
      * provided regex patterns.
      * For example, if you wish to forward log messages to the Nuix script console you might do something like:

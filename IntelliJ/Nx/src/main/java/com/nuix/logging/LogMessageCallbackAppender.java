@@ -43,6 +43,7 @@ public class LogMessageCallbackAppender extends AbstractAppender {
     /***
      * Creates a new instance with the given name and a filter that accepts ALL events
      * @param name The name to assign
+     * @param layout The layout to use
      */
     public LogMessageCallbackAppender(String name, @NonNull Layout layout) {
         this(name,layout, (Filter) null);
@@ -51,7 +52,7 @@ public class LogMessageCallbackAppender extends AbstractAppender {
 
     /***
      * {@inheritDoc}
-     * @param event
+     * @param event {@inheritDoc}
      */
     @Override
     public void append(LogEvent event) {
