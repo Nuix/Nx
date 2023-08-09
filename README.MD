@@ -1,7 +1,7 @@
 ﻿Nx
 ==========
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) ![This script was last tested in Nuix 9.8](https://img.shields.io/badge/Script%20Tested%20in%20Nuix-9.8-green.svg)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) ![This script was last tested in Nuix 9.10](https://img.shields.io/badge/Script%20Tested%20in%20Nuix-9.10-green.svg)
 
 View the GitHub project [here](https://github.com/Nuix/Nx) or download the latest release [here](https://github.com/Nuix/Nx/releases).
 
@@ -26,9 +26,37 @@ Additionally [TabbedCustomDialog](https://github.com/Nuix/Nx/blob/master/Java/sr
 
 ## Setup
 
-To build the JAR from source, load the source code into your IDE of choice.  Make sure the build path includes `\lib\*.jar` from the Nuix install directory.  For example, if you have Nuix 7.4 installed, include all JAR files located in `C:\Program Files\Nuix\Nuix 7.4\lib` in you build path.
+If you wish to compile/view/alter the code, open the `IntelliJ/Nx` directory in [IntelliJ IDEA](https://www.jetbrains.com/idea/download/other.html) (note that community edition should be fine).  You will need accomplish a few additional steps to build/test the project.
 
-Once you have downloaded or built `Nx.jar`, copy `Nx.jar` to the same directory as your script.  From your script you then bootstrap the library like so:
+First you will need to download a Nuix Engine Release from [here](https://download.nuix.com/releases/engine/).  Then extract the downloaded zip file's contents somewhere such as `C:\EngineRelease`.
+
+![image](https://github.com/Nuix/Nx/assets/11775738/81d9c057-532a-4622-ae7f-b857fbef1578)
+
+Then head over to your environment variables and configure the following:
+
+| Variable                 | Optional     | Description |
+|--------------------------|--------------|-------------|
+| `NUIX_ENGINE_DIR`        | **REQUIRED** | Gradle build file uses this to resolve some Nuix run-time dependencies Nx builds against as well as necessary pieces to run tests. |
+| `NUIX_USERNAME`          | **OPTIONAL** | Used by tests which need a running Nuix Engine instance to obtain a CLS (Cloud License Server) license.                            |
+| `NUIX_PASSWORD`          | **OPTIONAL** | Used by tests which need a running Nuix Engine instance to obtain a CLS (Cloud License Server) license.                            |
+
+![image](https://github.com/Nuix/Nx/assets/11775738/54b47ad3-7292-4daa-b2d4-da4ae5971c95)
+
+If you just wish to build the JAR then run the task **nxOnlyJar** which will produce a jar in the `JAR` directory at the repository root.
+
+![image](https://github.com/Nuix/Nx/assets/11775738/d44e1b76-b48c-4d91-8cec-f2b58753541d)
+
+If you wish to execute some of the Ruby examples, locate the `RubyExamples` tests
+
+![image](https://github.com/Nuix/Nx/assets/11775738/87be071c-7c8d-4b3b-affb-15d7a50c1ce2)
+
+Then from within that file, you can execute any individual example test
+
+![RunTest](https://github.com/Nuix/Nx/assets/11775738/0ac840c2-ada5-4f8f-98f3-4fb64f8d2f2f)
+
+## Using Ruby
+
+Once you have downloaded or built an Nx JAR file, copy it to the same directory as your script.  From your script you can then [bootstrap](https://github.com/Nuix/Nx/blob/master/Examples/NxBootstrap.rb) the library like so:
 
 ```ruby
 # This essentially "bootstraps" the library from a Ruby script
@@ -64,6 +92,10 @@ NuixConnection.setUtilities($utilities)
 # branch logic based on version in use via the NuixVersion class in the library
 NuixConnection.setCurrentNuixVersion(NUIX_VERSION)
 ```
+
+## Using Python
+
+Nuix uses Jython to run Python scripts (JRuby for Ruby scripts).  This allows you to use this library from Python as well by adapting the paradigms to their Jython equivalent.  While this repository has a Ruby focus, see [TabbedCustomDialog.py](https://github.com/Nuix/Nx/blob/master/Examples/TabbedCustomDialog.py) which demonstrates the porting of [TabbedCustomDialog.rb](https://github.com/Nuix/Nx/blob/master/Examples/TabbedCustomDialog.rb) from Ruby to Python.
 
 ## Example Settings Dialog
 
@@ -161,16 +193,12 @@ A tab may have controls such as:
 - Tables
 - More complex controls for things like worker settings and OCR settings
 
-Refer to the [documentation for the CustomTabPanel](https://nuix.github.io/Nx/com/nuix/nx/dialogs/CustomTabPanel.html) class for a list of methods which add controls to a tab.  Further examples can be found in the Examples directory.
-
-# Using Python
-
-Nuix uses Jython to run Python scripts (JRuby for Ruby scripts).  This allows you to use this library from Python as well by adapting the paradigms to their Jython equivalent.  While this repository has a Ruby focus, see [TabbedCustomDialog.py](https://github.com/Nuix/Nx/blob/master/Examples/TabbedCustomDialog.py) which demonstrates the porting of [TabbedCustomDialog.rb](https://github.com/Nuix/Nx/blob/master/Examples/TabbedCustomDialog.rb) from Ruby to Python.
+Refer to the [documentation for the CustomTabPanel](https://nuix.github.io/Nx/com/nuix/nx/dialogs/CustomTabPanel.html) class for a list of methods which add controls to a tab.  Further examples can be found in the [Examples directory](https://github.com/Nuix/Nx/tree/master/Examples).
 
 # License
 
 ```
-Copyright 2021 Nuix
+Copyright 2023 Nuix
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
