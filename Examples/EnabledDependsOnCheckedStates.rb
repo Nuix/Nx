@@ -6,8 +6,10 @@ require_relative "NxBootstrap.rb"
 # dialog in your script
 # ==========================================================================
 
+case_directory ||= "FALLBACK_VALUE"
+
 # Open a test case, change this to a case on your system
-$current_case = $utilities.getCaseFactory.open('D:\cases\FakeData_8.0',{:migrate=>true})
+$current_case = $utilities.getCaseFactory.create(case_directory,{})
 
 # Tell the library what the current case is
 NuixConnection.setCurrentCase($current_case)

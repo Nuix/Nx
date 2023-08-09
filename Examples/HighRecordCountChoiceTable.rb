@@ -8,7 +8,6 @@ require_relative "NxBootstrap.rb"
 
 # Create an instance of the tabbed dialog
 dialog = TabbedCustomDialog.new
-dialog.enableStickySettings("D:\\temp\\TestStickSettings.json")
 
 require 'securerandom'
 

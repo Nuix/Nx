@@ -1,12 +1,13 @@
 # Bootstrap the library
 require_relative "NxBootstrap.rb"
 
+# Following variables are expected to be set elsewhere
+test_case_location ||= "FALLBACK_VALUE"
+test_evidence_location ||= "FALLBACK_VALUE"
+
 java_import "com.nuix.nx.dialogs.ProcessingStatusDialog"
 
-test_case_location = "D:\\cases\\FakeData_8.0"
-test_evidence_location = "D:\\natives\\FakeData"
-
-$current_case = $utilities.getCaseFactory.open(test_case_location)
+$current_case = $utilities.getCaseFactory.create(test_case_location,{})
 
 processor = $current_case.createProcessor
 
@@ -61,11 +62,11 @@ processor.setProcessingSettings(processing_settings)
 # should set them explicitly
 processor.setParallelProcessingSettings({
 	"workerCount" => 4,
-	"workerTemp" => "D:\\WorkerTemp",
 })
 
 processing_status_dialog = ProcessingStatusDialog.new
 # This will begin processing and display the processing status dialog
+puts "Handing off to processing status dialog..."
 processing_status_dialog.displayAndBeginProcessing(processor)
 
 $current_case.close
