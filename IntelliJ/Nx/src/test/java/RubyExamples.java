@@ -78,14 +78,13 @@ public class RubyExamples {
                 .setLogDirectory(new File(testOutputDirectory, "Logs_" + System.currentTimeMillis()));
     }
 
-    public void executeRubyFile(File rubyScriptFile) throws Exception {
+    public void executeRubyFileInNuix(File rubyScriptFile) throws Exception {
         log.info("Preparing to run: " + rubyScriptFile.getCanonicalPath());
         List<String> outputLines = new ArrayList<>();
         try (NuixEngine nuixEngine = constructNuixEngine()) {
             Utilities utilities = nuixEngine.getUtilities();
             Map<String, Object> globalVars = Map.of(
-                    "$utilities", utilities,
-                    "NUIX_VERSION", nuixEngine.getNuixVersionString()
+                    "$utilities", utilities
             );
             RubyScriptRunner rubyScriptRunner = new RubyScriptRunner();
             rubyScriptRunner.setStandardOutput(outputLines::add);
@@ -95,6 +94,26 @@ public class RubyExamples {
             log.info("Script Output:");
             log.info(String.join("", outputLines));
         }
+    }
+
+    public void executeRubyExampleInNuix(String exampleFileName) throws Exception {
+        File exampleFile = new File(rubyExamplesDirectory, exampleFileName);
+        executeRubyFileInNuix(exampleFile);
+    }
+
+    public void executeRubyFile(File rubyScriptFile) throws Exception {
+        log.info("Preparing to run: " + rubyScriptFile.getCanonicalPath());
+        List<String> outputLines = new ArrayList<>();
+        Map<String, Object> globalVars = Map.of(
+                "$utilities", ""
+        );
+        RubyScriptRunner rubyScriptRunner = new RubyScriptRunner();
+        rubyScriptRunner.setStandardOutput(outputLines::add);
+        rubyScriptRunner.setErrorOutput(outputLines::add);
+        rubyScriptRunner.runFileAsync(rubyScriptFile, "9000.0.0.0", globalVars);
+        rubyScriptRunner.join();
+        log.info("Script Output:");
+        log.info(String.join("", outputLines));
     }
 
     public void executeRubyExample(String exampleFileName) throws Exception {
