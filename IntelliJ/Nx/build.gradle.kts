@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "com.nuix.nx"
-version = "1.19.0-SNAPSHOT"
+version = "1.19.0"
 
 val sourceCompatibility = 11
 val targetCompatibility = 11
@@ -128,17 +128,18 @@ fun configureTestEnvironment(test: Test) {
 }
 
 // Builds JAR without any of the Engine wrapper stuff included
-tasks.create<Jar>("pluginOnlyJar") {
-    println("Producing plug-in only JAR file")
+tasks.create<Jar>("nxOnlyJar") {
+    println("Producing NX only JAR file")
     from(sourceSets.main.get().output)
-    exclude("com.nuix.innovation.enginewrapper.*")
+    exclude("com/nuix/innovation/enginewrapper/**")
+    destinationDirectory.set(File("${projectDir}/../../JAR"))
 }
 
 // Copies plug-in JAR to lib directory of engine release we're running against
 tasks.register<Copy>("copyJarsToEngine") {
     val name = "@nx"
     val jarName = "${name}.jar"
-    dependsOn(tasks.findByName("pluginOnlyJar"))
+    dependsOn(tasks.findByName("nxOnlyJar"))
 
     duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
 
@@ -156,7 +157,7 @@ tasks.register<Copy>("copyJarsToEngine") {
     }
 
     copy {
-        from(tasks.findByName("pluginOnlyJar"))
+        from(tasks.findByName("nxOnlyJar"))
         into(File(engineLibDir))
         rename(".*\\.jar", jarName)
     }
