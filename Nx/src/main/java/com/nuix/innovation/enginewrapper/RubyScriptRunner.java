@@ -7,9 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jruby.embed.LocalVariableBehavior;
 import org.jruby.embed.ScriptingContainer;
-import org.jruby.embed.internal.BiVariableMap;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,11 +23,12 @@ public class RubyScriptRunner {
     private static final Logger log = LogManager.getLogger(RubyScriptRunner.class);
 
     /***
-     * Writer implementation which specializes in forwarding to to consumer.  Used to forward
+     * Writer implementation which specializes in forwarding to a consumer.  Used to forward
      * standard out and err to consumer from script container.
      */
     static class EventedWriter extends Writer {
         private Consumer<String> consumer;
+        private final StringBuilder buffer = new StringBuilder();
 
         public EventedWriter(Consumer<String> consumer) {
             this.consumer = consumer;
@@ -42,13 +41,15 @@ public class RubyScriptRunner {
                     char[] subchars = new char[len];
                     System.arraycopy(cbuf, off, subchars, 0, len);
                     String value = new String(subchars);
-                    consumer.accept(value);
+                    buffer.append(value);
                 }
             }
         }
 
         @Override
         public void flush() throws IOException {
+            consumer.accept(buffer.toString());
+            buffer.setLength(0); // Clear for reuse
         }
 
         @Override

@@ -13,7 +13,7 @@ public class RubyScriptRunnerTests {
     @Test
     public void RunScript() throws Exception {
         // Validate that script runs and output is captured
-        String script = "puts 'hello'";
+        String script = "5.times{puts 'hello'}";
         List<String> output = new ArrayList<>();
         RubyScriptRunner rubyScriptRunner = new RubyScriptRunner();
         rubyScriptRunner.setStandardOutputConsumer(output::add);
@@ -21,6 +21,7 @@ public class RubyScriptRunnerTests {
         rubyScriptRunner.runScriptAsync(script, "0.0.0.0", Map.of());
         rubyScriptRunner.join();
         assertTrue(output.size() > 0);
+        System.out.println(String.join("",output));
     }
 
     @Test
