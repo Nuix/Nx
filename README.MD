@@ -26,7 +26,7 @@ Additionally [TabbedCustomDialog](https://github.com/Nuix/Nx/blob/master/Java/sr
 
 ## Setup
 
-If you wish to compile/view/alter the code, open the `IntelliJ/Nx` directory in [IntelliJ IDEA](https://www.jetbrains.com/idea/download/other.html) (note that community edition should be fine).  You will need accomplish a few additional steps to build/test the project.
+If you wish to compile/view/alter the code, open the `Nx` sub-directory in [IntelliJ IDEA](https://www.jetbrains.com/idea/download/other.html) (note that community edition should be fine).  You will need accomplish a few additional steps to build/test the project.
 
 First you will need to download a Nuix Engine Release from [here](https://download.nuix.com/releases/engine/).  Then extract the downloaded zip file's contents somewhere such as `C:\EngineRelease`.
 
