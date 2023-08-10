@@ -97,7 +97,8 @@ fun configureTestEnvironment(test: Test) {
     println("Running 'configureTestEnvironment'...")
 
     // Engine runtime temp directory
-    val nuixTempDirectory = findProperty("tempDir") ?: Paths.get(System.getenv("LOCALAPPDATA"),"Temp","Nuix").pathString
+    val nuixTempDirectory = findProperty("tempDir")
+            ?: Paths.get(System.getenv("LOCALAPPDATA"), "Temp", "Nuix").pathString
 
     // Args passed to JVM running tests
     test.jvmArgs(
@@ -108,19 +109,19 @@ fun configureTestEnvironment(test: Test) {
     )
 
     // Directory used to store data a test may rely on (like sample data)
-    val testDataDirectory = findProperty("testDataDir") ?: Paths.get("$projectDir", "..", "..", "TestData").pathString
+    val testDataDirectory = findProperty("testDataDir") ?: Paths.get("$projectDir", "..", "TestData").pathString
 
     // Directory used to store data a test may rely on (like sample data)
     val rubyExamplesDirectory = findProperty("rubyExamplesDirectory")
-            ?: Paths.get("$projectDir", "..", "..", "Examples").pathString
+            ?: Paths.get("$projectDir", "..", "Examples").pathString
 
     // Directory that tests may write data to, unique to each test invocation
     val testOutputDirectoryRoot = findProperty("testOutputDirectoryRoot")
-            ?: Paths.get("$projectDir", "..", "..", "TestOutput").pathString
+            ?: Paths.get("$projectDir", "..", "TestOutput").pathString
     val testOutputDirectory = Paths.get(testOutputDirectoryRoot.toString(), "${System.currentTimeMillis()}").pathString
 
-    val binDir = Paths.get(nuixEngineDirectory,"bin").pathString
-    val binX86Dir = Paths.get(nuixEngineDirectory,"bin","x86").pathString
+    val binDir = Paths.get(nuixEngineDirectory, "bin").pathString
+    val binX86Dir = Paths.get(nuixEngineDirectory, "bin", "x86").pathString
 
     // Configure ENV vars for JVM tests run in
     test.setEnvironment(
@@ -158,7 +159,7 @@ tasks.create<Jar>("nxOnlyJar") {
     println("Producing NX only JAR file")
     from(sourceSets.main.get().output)
     exclude("com/nuix/innovation/enginewrapper/**")
-    destinationDirectory.set(Paths.get("$projectDir","..","..","JAR").toFile())
+    destinationDirectory.set(Paths.get("$projectDir", "..", "JAR").toFile())
 }
 
 // Copies plug-in JAR to lib directory of engine release we're running against
@@ -198,5 +199,5 @@ tasks.test {
 
 // Customize where Javadoc output is written to
 tasks.getByName<Javadoc>("javadoc") {
-    setDestinationDir(Paths.get("$projectDir","..","..","docs").toFile())
+    setDestinationDir(Paths.get("$projectDir", "..", "docs").toFile())
 }
