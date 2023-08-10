@@ -69,7 +69,7 @@ public class RubyScriptRunner {
 
     /***
      * Allows you to provide a callback to be invoked when script finishes.
-     * @param completedCallback A {@link BiConsumer} that accepts an Object (the final returned value) and
+     * @param completedCallback A {@link Consumer} that accepts an Object (the final returned value) and
      *                          a Map containing all the variables in the scripting container upon completion.
      */
     public void whenScriptCompletes(Consumer<Object> completedCallback) {
@@ -86,7 +86,7 @@ public class RubyScriptRunner {
     }
 
     /***
-     * Checks if script thread exists and is currently runnning.
+     * Checks if script thread exists and is currently running.
      * @return True if script thread exists (non-null) and {@link Thread#isAlive()} returns true.
      */
     public boolean isAlive() {
