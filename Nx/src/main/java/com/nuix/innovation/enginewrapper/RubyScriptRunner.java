@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jruby.embed.LocalVariableBehavior;
 import org.jruby.embed.ScriptingContainer;
+import org.jruby.embed.internal.BiVariableMap;
 
 import javax.swing.*;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /***
@@ -40,9 +42,7 @@ public class RubyScriptRunner {
                     char[] subchars = new char[len];
                     System.arraycopy(cbuf, off, subchars, 0, len);
                     String value = new String(subchars);
-                    SwingUtilities.invokeLater(() -> {
-                        consumer.accept(value);
-                    });
+                    consumer.accept(value);
                 }
             }
         }
@@ -61,8 +61,18 @@ public class RubyScriptRunner {
     protected Thread scriptThread;
     protected Consumer<String> standardOutput;
     protected Consumer<String> errorOutput;
+    protected Consumer<Object> completedCallback;
 
     public RubyScriptRunner() {
+    }
+
+    /***
+     * Allows you to provide a callback to be invoked when script finishes.
+     * @param completedCallback A {@link BiConsumer} that accepts an Object (the final returned value) and
+     *                          a Map containing all the variables in the scripting container upon completion.
+     */
+    public void whenScriptCompletes(Consumer<Object> completedCallback) {
+        this.completedCallback = completedCallback;
     }
 
     /***
@@ -138,7 +148,8 @@ public class RubyScriptRunner {
         initialize(nuixVersion, variables);
 
         scriptThread = new Thread(() -> {
-            scriptingContainer.runScriptlet(script);
+            Object returnedValue = scriptingContainer.runScriptlet(script);
+            fireCompletedCallback(returnedValue);
         });
 
         scriptThread.start();
@@ -156,7 +167,8 @@ public class RubyScriptRunner {
 
         scriptThread = new Thread(() -> {
             try (InputStream scriptFileInputStream = FileUtils.openInputStream(scriptFile)) {
-                scriptingContainer.runScriptlet(scriptFileInputStream, scriptFile.getAbsolutePath());
+                Object returnedValue = scriptingContainer.runScriptlet(scriptFileInputStream, scriptFile.getAbsolutePath());
+                fireCompletedCallback(returnedValue);
             } catch (Exception exc) {
                 errorOutput.accept(ExceptionUtils.getMessage(exc) + "\n" + ExceptionUtils.getStackTrace(exc));
             }
@@ -192,6 +204,12 @@ public class RubyScriptRunner {
         for (Map.Entry<String, Object> variableToSet : variablesToSet.entrySet()) {
             log.info("Setting variable: '{}' to '{}'", variableToSet.getKey(), variableToSet.getValue());
             scriptingContainer.put(variableToSet.getKey(), variableToSet.getValue());
+        }
+    }
+
+    private void fireCompletedCallback(Object returnedValue) {
+        if(completedCallback != null) {
+            completedCallback.accept(returnedValue);
         }
     }
 }
