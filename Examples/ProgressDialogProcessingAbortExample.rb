@@ -14,10 +14,10 @@ our script, allowing use to check for and act on the user requesting we abort.
 require_relative "NxBootstrap.rb"
 
 # Directory of an existing Nuix case which will be opened by the script
-case_directory = "C:\\@Nuix\\Cases\\Ziggy"
+case_directory ||= "C:\\Cases\\Ziggy"
 
 # Source data directory or file path
-source_data_path = "C:\\@NUIX\\Natives\\Fake Invoices\\10 Images"
+source_data_path ||= "C:\\Natives\\Fake Invoices"
 
 # Name of the evidence container we will process data under
 evidence_name = "Data #{Time.now.to_i}" # Just use name based on current time
@@ -72,7 +72,7 @@ ProgressDialog.forBlock do |pd|
 	pd.setAbortButtonVisible(false)
 
 	# Open the case we will be working with
-	$current_case = $utilities.getCaseFactory.open(case_directory)
+	$current_case = $utilities.getCaseFactory.create(case_directory,{})
 
 	# Create our processor
 	processor = $current_case.createProcessor
