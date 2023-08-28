@@ -24,8 +24,15 @@ plugins {
     id("java")
 }
 
+// Was returning "unspecified" rather than null, leading to elvis operator below
+// not working properly so we manually nullify "unspecified" string value
+var versionProperty = findProperty("version")
+if (versionProperty == "unspecified") {
+    versionProperty = null;
+}
+
 group = findProperty("group") ?: "com.nuix.nx"
-version = findProperty("version") ?: "1.19.0"
+version = versionProperty ?: "1.19.0"
 
 val sourceCompatibility = findProperty("targetJreVersion") ?: 11
 val targetCompatibility = findProperty("targetJreVersion") ?: 11
