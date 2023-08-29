@@ -46,9 +46,14 @@ public class StringList extends JPanel {
 	private JButton btnImportFile;
 	private JPanel buttonLayoutPanel;
 	private JTable table;
-	private StringListTableModel model = new StringListTableModel();
+	private StringListTableModel model;
 
 	public StringList() {
+		this(new StringListTableModel());
+	}
+	public StringList(StringListTableModel tableModel) {
+		model = tableModel;
+
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0};
