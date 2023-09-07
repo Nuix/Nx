@@ -1,3 +1,4 @@
+import java.net.URI
 import java.nio.file.Paths
 import kotlin.io.path.pathString
 
@@ -18,9 +19,10 @@ Below values can be overridden when invoking gradle build using property argumen
 testOutputDirectoryRoot => Root directory where tests may write data while running.  Each test run will create a timestamp subdirectory
            nuixUsername => Username used to authenticate with CLS (Cloud License Server).  Otherwise, would be pulled from ENV var NUIX_USERNAME
            nuixPassword => Password used to authenticate with CLS (Cloud License Server).  Otherwise, would be pulled from ENV var NUIX_PASSWORD
-           artifactoryRepo => The internal artifactory repo used to publish team packages.  Publish defaults to the snapshot repo
-           ArtifactoryUser => Username to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable,  If not present there then don't publish
-           ArtifactoryToken => API Token used to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable.  If not present there then don't publish
+        artifactoryRepo => The internal artifactory repo used to publish team packages.  Publish defaults to the snapshot repo
+        ArtifactoryUser => Username to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable,  If not present there then don't publish
+       ArtifactoryToken => API Token used to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable.  If not present there then don't publish
+         nuixEngineRepo => A URL to a repository used to access Nuix engine libraries.  If this is provided, nuix libs will be pulled as maven dependencies, if not they will be read as file dependencies
 */
 
 plugins {
@@ -43,6 +45,8 @@ val targetCompatibility = findProperty("targetJreVersion") ?: 11
 // The artifactory repo used for publishing.  Default to the snapshot repo when building from IDE, override to move to dev
 val publish_artifactory_repo = findProperty("artifactoryRepo") ?: "innovation-proserv-snapshot-local"
 
+val nuixEngineRepo = findProperty("nuixEngineRepo")
+
 // Directory containing Nuix Engine release.  We first attempt to pull from ENV
 var nuixEngineDirectory: String = System.getenv("NUIX_ENGINE_DIR")
 // If we have it provided externally via a property, use that instead
@@ -50,15 +54,21 @@ if (properties.containsKey("nuixEngineDir")) {
     nuixEngineDirectory = findProperty("nuixEngineDir").toString()
 }
 // Finally, if we don't have a value, throw exception since we require this
-println("NUIX_ENGINE_DIR: ${nuixEngineDirectory}")
-if (nuixEngineDirectory.isEmpty()) {
-    throw InvalidUserDataException("Please populate the environment variable 'NUIX_ENGINE_DIR' with directory containing a Nuix Engine release")
+println("NUIX_ENGINE_DIR: ${nuixEngineDirectory} NUIX_ENGINE_REPO: ${nuixEngineRepo}")
+if (nuixEngineDirectory.isEmpty() && ((null == nuixEngineRepo) || nuixEngineRepo.toString().isEmpty())) {
+    throw InvalidUserDataException("Either the NUIX_ENGINE_DIR environment variable or nuixEngineRepo property must be set.")
 }
 
-val engineLibDir = Paths.get(nuixEngineDirectory, "lib").pathString
+val engineLibDir = if (nuixEngineDirectory.isNotEmpty()) Paths.get(nuixEngineDirectory, "lib").pathString else ""
 println("engineLibDir: ${engineLibDir}")
 
 repositories {
+    if (null != nuixEngineRepo && nuixEngineRepo.toString().isNotEmpty()) {
+        maven {
+            url = URI(nuixEngineRepo.toString())
+        }
+    }
+
     mavenCentral()
 }
 
@@ -76,24 +86,53 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 
-    implementation(fileTree(baseDir = engineLibDir) {
-        include(
-                "**/*log*.jar",
-                "**/*aspect*.jar",
-                "**/*joda*.jar",
-                "**/*commons*.jar",
-                "**/*guava*.jar",
-                "**/*gson*.jar",
-                "**/nuix-*.jar",
-                "**/*jruby*.jar",
-                "**/*swing*.jar",
-                "**/*jide*.jar",
-                "**/*csv*.jar",
-                "**/*beansbinding*.jar",
-                "**/*xml.bind*.jar",
-                "**/*itext*.jar",
-        )
-    })
+    if(null == nuixEngineRepo || nuixEngineRepo.toString().isEmpty()) {
+        implementation(fileTree(baseDir = engineLibDir) {
+            include(
+                    "**/*log*.jar",
+                    "**/*aspect*.jar",
+                    "**/*joda*.jar",
+                    "**/*commons*.jar",
+                    "**/*guava*.jar",
+                    "**/*gson*.jar",
+                    "**/nuix-*.jar",
+                    "**/*jruby*.jar",
+                    "**/*swing*.jar",
+                    "**/*jide*.jar",
+                    "**/*csv*.jar",
+                    "**/*beansbinding*.jar",
+                    "**/*xml.bind*.jar",
+                    "**/*itext*.jar",
+            )
+        })
+    } else {
+        compileOnly("com.nuix:nuix-scripting-api:+")
+        compileOnly("com.nuix:nuix-engine-api:+")
+        compileOnly("com.nuix:nuix-plugin-api:+")
+        compileOnly("com.google.code.gson:gson:+")
+        compileOnly("com.google.guava:guava:+")
+        compileOnly("org.apache.commons:commons-io:+")
+        compileOnly("commons-lang:commons-lang:+")
+        compileOnly("org.apache.commons:commons-lang3:+")
+        compileOnly("org.apache.logging.log4j:log4j-api:2.17.1")
+        compileOnly("org.apache.logging.log4j:log4j-core:2.17.1")
+        compileOnly("org.slf4j:slf4j-log4j12:+")
+        compileOnly("com.jidesoft:jide-components:+")
+        compileOnly("com.jidesoft:jide-grids:+")
+        compileOnly("joda-time:joda-time:+")
+        compileOnly("org.jruby:jruby:+")
+        compileOnly("org.swinglabs.swingx:swingx-core:+")
+        compileOnly("gj-csv:gj-csv:+")
+        compileOnly("org.jdesktop:beansbinding:+")
+        compileOnly("jakarta.xml.bind:jakarta.xml.bind-api:2.3.2")
+        compileOnly("com.itextpdf:itextpdf:+")
+
+        testCompileOnly("com.nuix:nuix-scripting-api:+")
+        testCompileOnly("org.apache.commons:commons-io:+")
+        testCompileOnly("org.apache.logging.log4j:log4j-api:2.17.1")
+        testCompileOnly("org.apache.logging.log4j:log4j-core:2.17.1")
+        //compileOnly("org.slf4j:slf4j-log4j12:+")
+    }
 
     testRuntimeOnly(fileTree(baseDir = engineLibDir) {
         include("*.jar")
