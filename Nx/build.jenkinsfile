@@ -1,0 +1,67 @@
+pipeline {
+    agent {
+        label 'windows-2019'
+    }
+
+    parameters {
+        string(name: 'NxVersion', defaultValue: '1.20', description: 'Set the MAJOR.MINOR version of the NX Jar being built.')
+    }
+
+    environment {
+        PROJ_VERSION="${params.NxVersion}.${BUILD_NUMBER}"
+
+        TEST_TEMP_PATH = "${WORKSPACE}\\Temp"
+    }
+
+    stages {
+        stage("Build") {
+            steps {
+                bat 'gradlew clean classes testClasses'
+            }
+        }
+
+        /*stage("Unit Tests") {
+            steps {
+                fileOperations ([folderCreateOperation(env.TEST_TEMP_PATH)])
+                bat 'gradlew -PtempDir=\"%TEST_TEMP_PATH%\" test'
+            }
+        }
+
+        stage("Integration Tests") {
+            steps {
+                bat 'gradlew -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest'
+            }
+        }*/
+
+        stage("JAR") {
+            steps {
+                bat 'gradlew -Pversion=%PROJ_VERSION% jar'
+                archiveArtifacts artifacts: 'build/libs/*.jar',
+                        allowEmptyArchive: true,
+                        fingerprint: true,
+                        onlyIfSuccessful: true
+            }
+        }
+
+        stage("Publish") {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'ArtifactorySLUKE',
+                        passwordVariable: 'ArtifactoryToken',
+                        usernameVariable: 'ArtifactoryUser')]) {
+
+                    bat 'gradlew -Pversion=%PROJ_VERSION% -PartifactoryRepo="innovation-proserv-dev-local" artifactoryPublish'
+                }
+
+            }
+        }
+
+    }
+
+    post {
+        always {
+            junit allowEmptyResults: true,
+                    testResults: 'build/test-results/**/*.xml'
+        }
+    }
+
+}

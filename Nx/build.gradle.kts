@@ -196,24 +196,23 @@ artifactory {
     publish {
         contextUrl = "https://artifactory.uat.nuix.com/artifactory"
 
-
         if (null != user && null != token) {
             repository {
-                    repoKey = publish_artifactory_repo.toString()
-                    username = user.toString()
-                    password = token.toString()
+                repoKey = publish_artifactory_repo.toString()
+                username = user.toString()
+                password = token.toString()
             }
 
             defaults {
-                    publications("mavenJava")
-                    setPublishArtifacts(true)
-                    isPublishBuildInfo = false
-                    setPublishPom(true)
-                    setPublishIvy(false)
+                publications("mavenJava")
+                setPublishArtifacts(true)
+                isPublishBuildInfo = false
+                setPublishPom(true)
+                setPublishIvy(false)
             }
-            } else {
-                println("Package not published: No Artifactory Credentials")
-            }
+        } else {
+            println("Package not published: No Artifactory Credentials")
+        }
     }
 }
 
