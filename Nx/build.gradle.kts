@@ -190,29 +190,40 @@ publishing {
 artifactory {
     clientConfig.setIncludeEnvVars(false)
 
+    val user = findProperty("ArtifactoryUser") ?: System.getenv("ArtifactoryUser")
+    val token = findProperty("ArtifactoryToken") ?: System.getenv("ArtifactoryToken")
+
     publish {
         contextUrl = "https://artifactory.uat.nuix.com/artifactory"
 
-        val user = findProperty("ArtifactoryUser") ?: System.getenv("ArtifactoryUser")
-        val token = findProperty("ArtifactoryToken") ?: System.getenv("ArtifactoryToken")
 
+        if (null != user && null != token) {
             repository {
-                if (null != user && null != token) {
                     repoKey = publish_artifactory_repo.toString()
                     username = user.toString()
                     password = token.toString()
-                }
             }
 
             defaults {
                     publications("mavenJava")
-                println("Publishing: Group=${project.group}, Artifact=${project.name}, Version=${project.version}")
                     setPublishArtifacts(true)
                     isPublishBuildInfo = false
                     setPublishPom(true)
                     setPublishIvy(false)
             }
+            } else {
+                println("Package not published: No Artifactory Credentials")
+            }
     }
+}
+
+tasks.artifactoryDeploy {
+    val user = findProperty("ArtifactoryUser") ?: System.getenv("ArtifactoryUser")
+    val token = findProperty("ArtifactoryToken") ?: System.getenv("ArtifactoryToken")
+    onlyIf {
+        null != user && null != token
+    }
+
 }
 
 // Copies plug-in JAR to lib directory of engine release we're running against
