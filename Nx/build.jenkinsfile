@@ -16,27 +16,39 @@ pipeline {
     stages {
         stage("Build") {
             steps {
-                bat 'gradlew clean classes testClasses'
+                bat """
+                       cd Nx
+                       call gradlew clean classes testClasses
+                    """
             }
         }
 
         /*stage("Unit Tests") {
             steps {
                 fileOperations ([folderCreateOperation(env.TEST_TEMP_PATH)])
-                bat 'gradlew -PtempDir=\"%TEST_TEMP_PATH%\" test'
+                bat """
+                       cd Nx
+                       call gradlew -PtempDir=\"%TEST_TEMP_PATH%\" test
+                    """
             }
         }
 
         stage("Integration Tests") {
             steps {
-                bat 'gradlew -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest'
+                bat """
+                       cd Nx
+                       call gradlew -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest
+                    """
             }
         }*/
 
         stage("JAR") {
             steps {
-                bat 'gradlew -Pversion=%PROJ_VERSION% jar'
-                archiveArtifacts artifacts: 'build/libs/*.jar',
+                bat """
+                       cd Nx
+                       call gradlew -Pversion=%PROJ_VERSION% jar
+                    """
+                archiveArtifacts artifacts: 'Nx/build/libs/*.jar',
                         allowEmptyArchive: true,
                         fingerprint: true,
                         onlyIfSuccessful: true
@@ -49,7 +61,10 @@ pipeline {
                         passwordVariable: 'ArtifactoryToken',
                         usernameVariable: 'ArtifactoryUser')]) {
 
-                    bat 'gradlew -Pversion=%PROJ_VERSION% -PartifactoryRepo="innovation-proserv-dev-local" artifactoryPublish'
+                    bat """
+                       cd Nx
+                       call gradlew -Pversion=%PROJ_VERSION% -PartifactoryRepo="innovation-proserv-dev-local" artifactoryPublish
+                    """
                 }
 
             }
@@ -60,7 +75,7 @@ pipeline {
     post {
         always {
             junit allowEmptyResults: true,
-                    testResults: 'build/test-results/**/*.xml'
+                    testResults: 'Nx/build/test-results/**/*.xml'
         }
     }
 
