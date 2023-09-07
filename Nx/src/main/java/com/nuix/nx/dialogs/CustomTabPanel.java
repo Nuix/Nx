@@ -548,7 +548,7 @@ public class CustomTabPanel extends JPanel{
 		JSlider component = new JSlider(JSlider.HORIZONTAL);
 		component.setModel(model);
 
-		JSpinner valueDisplay = buildGenericSpinner(identifier + ".Spinner", spinnerModel);
+		JSpinner valueDisplay = buildGenericSpinner(identifier + ".Spinner", spinnerModel, null);
 
 		GridBagConstraints c = makeLabelConstraintsForNextRow();
 		addComponent(makeComponentLabel(controlLabel),c);
@@ -871,21 +871,22 @@ public class CustomTabPanel extends JPanel{
 		return appendSlider(identifier, controlLabel, 50, 0, 100);
 	}
 
-	protected JSpinner buildGenericSpinner(String identifier, SpinnerNumberModel spinnerModel) throws Exception {
+	protected JSpinner buildGenericSpinner(String identifier, SpinnerNumberModel spinnerModel, String controlLabel) throws Exception {
 		JSpinner component = new JSpinner();
 		//component.setValue(initialValue);
 		double preferredHeight = component.getPreferredSize().getHeight();
 		component.setPreferredSize(new Dimension(150, (int) preferredHeight));
 		component.setModel(spinnerModel);
-
+		if(null != controlLabel) {
+			addBasicLabelledComponent(controlLabel, component, false, false);
+		}
 		trackComponent(identifier, component);
 
 		return component;
 	}
 
 	public CustomTabPanel appendSpinner(String identifier, String controlLabel, double initialValue, double min, double max, double step) throws Exception {
-		JSpinner component = buildGenericSpinner(identifier, new SpinnerNumberModel(initialValue, min, max, step));
-		addBasicLabelledComponent(controlLabel, component, false, false);
+		JSpinner component = buildGenericSpinner(identifier, new SpinnerNumberModel(initialValue, min, max, step), controlLabel);
 		return this;
 	}
 
@@ -901,8 +902,7 @@ public class CustomTabPanel extends JPanel{
 	 * @throws Exception May throw an exception if the provided identifier has already been used.
 	 */
 	public CustomTabPanel appendSpinner(String identifier, String controlLabel, int initialValue, int min, int max, int step) throws Exception {
-		JSpinner component = buildGenericSpinner(identifier, new SpinnerNumberModel(initialValue, min, max, step));
-		addBasicLabelledComponent(controlLabel, component, false, false);
+		JSpinner component = buildGenericSpinner(identifier, new SpinnerNumberModel(initialValue, min, max, step), controlLabel);
 		return this;
 	}
 	
