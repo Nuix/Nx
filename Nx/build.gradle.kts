@@ -18,17 +18,30 @@ Below values can be overridden when invoking gradle build using property argumen
 testOutputDirectoryRoot => Root directory where tests may write data while running.  Each test run will create a timestamp subdirectory
            nuixUsername => Username used to authenticate with CLS (Cloud License Server).  Otherwise, would be pulled from ENV var NUIX_USERNAME
            nuixPassword => Password used to authenticate with CLS (Cloud License Server).  Otherwise, would be pulled from ENV var NUIX_PASSWORD
+           artifactoryRepo => The internal artifactory repo used to publish team packages.  Publish defaults to the snapshot repo
+           ArtifactoryUser => Username to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable,  If not present there then don't publish
+           ArtifactoryToken => API Token used to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable.  If not present there then don't publish
 */
 
 plugins {
     id("java")
+    id("maven-publish")
+    id("com.jfrog.artifactory") version "5.+"
 }
 
+// Aparently in Kotlin, or this project in particular, findProperty may return an empty String for the group and version
 group = findProperty("group") ?: "com.nuix.nx"
-version = findProperty("version") ?: "1.19.0"
+group = if (group.toString().length == 0) "com.nuix.nx" else group.toString()
+// Add SNAPSHOT to default version number so a unique version will be created when publishing from an IDE
+version = findProperty("version") ?: "1.19.0-SNAPSHOT"
+version = if(version.toString().isEmpty() || "unspecified" == version.toString()) "1.19.0-SNAPSHOT" else version.toString()
+println("Group: ${group} Version: ${version}")
 
 val sourceCompatibility = findProperty("targetJreVersion") ?: 11
 val targetCompatibility = findProperty("targetJreVersion") ?: 11
+
+// The artifactory repo used for publishing.  Default to the snapshot repo when building from IDE, override to move to dev
+val publish_artifactory_repo = findProperty("artifactoryRepo") ?: "innovation-proserv-snapshot-local"
 
 // Directory containing Nuix Engine release.  We first attempt to pull from ENV
 var nuixEngineDirectory: String = System.getenv("NUIX_ENGINE_DIR")
@@ -160,6 +173,46 @@ tasks.create<Jar>("nxOnlyJar") {
     from(sourceSets.main.get().output)
     exclude("com/nuix/innovation/enginewrapper/**")
     destinationDirectory.set(Paths.get("$projectDir", "..", "JAR").toFile())
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava"){
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+
+            from(components["java"])
+        }
+    }
+}
+
+artifactory {
+    clientConfig.setIncludeEnvVars(false)
+
+    publish {
+        contextUrl = "https://artifactory.uat.nuix.com/artifactory"
+
+        val user = findProperty("ArtifactoryUser") ?: System.getenv("ArtifactoryUser")
+        val token = findProperty("ArtifactoryToken") ?: System.getenv("ArtifactoryToken")
+
+            repository {
+                if (null != user && null != token) {
+                    repoKey = publish_artifactory_repo.toString()
+                    username = user.toString()
+                    password = token.toString()
+                }
+            }
+
+            defaults {
+                    publications("mavenJava")
+                println("Publishing: Group=${project.group}, Artifact=${project.name}, Version=${project.version}")
+                    setPublishArtifacts(true)
+                    isPublishBuildInfo = false
+                    setPublishPom(true)
+                    setPublishIvy(false)
+            }
+    }
 }
 
 // Copies plug-in JAR to lib directory of engine release we're running against
