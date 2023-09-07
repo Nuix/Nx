@@ -200,7 +200,7 @@ public class DynamicTableModel extends AbstractTableModel {
 	
 	/***
 	 * Filter the displayed records.  When a method such as {@link #getValueAt(int, int)} is called by DynamicTable, the given method will use
-	 * the index mapping stored in {@value #filterMap} to determine for the given display index what item to fetch from
+	 * the index mapping stored in {@link #filterMap} to determine for the given display index what item to fetch from
 	 * the actual underlying full collection of records.  The act of applying filtering is therefore really just building
 	 * a modified mapping.  This method takes the filter expression that has been provided and iteratively apply it to each record
 	 * while building a new index mapping.  Once a new mapping has been constructed the associated DynamicTable is informed that data
