@@ -1,3 +1,5 @@
+import java.net.URI
+import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.io.path.pathString
 
@@ -18,9 +20,25 @@ Below values can be overridden when invoking gradle build using property argumen
 testOutputDirectoryRoot => Root directory where tests may write data while running.  Each test run will create a timestamp subdirectory
            nuixUsername => Username used to authenticate with CLS (Cloud License Server).  Otherwise, would be pulled from ENV var NUIX_USERNAME
            nuixPassword => Password used to authenticate with CLS (Cloud License Server).  Otherwise, would be pulled from ENV var NUIX_PASSWORD
-           artifactoryRepo => The internal artifactory repo used to publish team packages.  Publish defaults to the snapshot repo
-           ArtifactoryUser => Username to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable,  If not present there then don't publish
-           ArtifactoryToken => API Token used to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable.  If not present there then don't publish
+        artifactoryRepo => The internal artifactory repo used to publish team packages.  Publish defaults to the snapshot repo
+        ArtifactoryUser => Username to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable,  If not present there then don't publish
+       ArtifactoryToken => API Token used to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable.  If not present there then don't publish
+     nuixDependencyRepo => Optional repository used to download dependencies when the nuixEngineDir is not provided.
+         nuixEngineRepo => Optional repository to download the Nuix Engine distribution from
+           nuixEngineOs => If using a repository for the engine, the OS for the engine.  Acceptable options are `linux` or `windows` and defaults to `windows`
+      nuixEngineRelease => If using a repository for the engine, release version of the engine to use, in the form <major>.<minor>.<point>.<build>.  Default to 9.10.17.1073
+
+There are two main alternate routes run these builds:
+1) Provide a path to a Nuix Workstation build
+    * Either provide a NUIX_ENGINE_DIR environment variable
+    * Or run with `gradlew -PnuixEngineDir="..." ...`
+    * The path must be to a Nuix Engine or Nuix Workstation path that includes GUI JAR files.  Normally, the Nuix Engine Distribution does not
+2) Get the Nuix Engine and dependencies from a maven repository
+    * Pass in the nuixDependencyRepo where some dependencies, like the GUI dependencies will be found.  If this isn't provided, mavenCentral will be used
+    * Also pass in the nuixEngineRepo where the Nuix Engine will be downloaded from.
+    * An example might be `gradlew -PnuixEngineRepo=https://my.artifactory.com/nuix-engine` or `gradlew -PnuixDependencyRepo=https://my.artifactory.com/nuix-dependencies -PnuixEngineRepo=https://my.artifactory.com/nuix-engine`
+
+
 */
 
 plugins {
@@ -44,21 +62,42 @@ val targetCompatibility = findProperty("targetJreVersion") ?: 11
 val publish_artifactory_repo = findProperty("artifactoryRepo") ?: "innovation-proserv-snapshot-local"
 
 // Directory containing Nuix Engine release.  We first attempt to pull from ENV
-var nuixEngineDirectory: String = System.getenv("NUIX_ENGINE_DIR")
+var nuixEngineDirectory: String? = System.getenv("NUIX_ENGINE_DIR")
 // If we have it provided externally via a property, use that instead
 if (properties.containsKey("nuixEngineDir")) {
     nuixEngineDirectory = findProperty("nuixEngineDir").toString()
 }
-// Finally, if we don't have a value, throw exception since we require this
-println("NUIX_ENGINE_DIR: ${nuixEngineDirectory}")
-if (nuixEngineDirectory.isEmpty()) {
-    throw InvalidUserDataException("Please populate the environment variable 'NUIX_ENGINE_DIR' with directory containing a Nuix Engine release")
+
+// Alternatively, provide a repo where we can get dependencies from
+var useRepository: Boolean = (null == nuixEngineDirectory || nuixEngineDirectory?.isEmpty() == true)
+
+var nuixArtifactRepo: String? = null
+if(properties.containsKey("nuixRepo")) {
+    nuixArtifactRepo = findProperty("nuixRepo").toString()
 }
 
-val engineLibDir = Paths.get(nuixEngineDirectory, "lib").pathString
+// Finally, if we don't have a value, throw exception since we require this
+println("NUIX_ENGINE_DIR: ${nuixEngineDirectory}\tNuix Repo: ${nuixArtifactRepo}")
+
+if (useRepository && (null == nuixArtifactRepo || nuixArtifactRepo?.isEmpty() == true)) {
+    throw InvalidUserDataException("Please populate the environment variable 'NUIX_ENGINE_DIR' with directory containing a Nuix Workstation release" +
+            " or provide a property 'nuixRepo' that can be used to get dependencies.")
+}
+
+var engineLibDir = Paths.get(nuixEngineDirectory, "lib").pathString
 println("engineLibDir: ${engineLibDir}")
 
+if (useRepository) {
+    downloadEngineIfNeeded()
+}
+
 repositories {
+    if(useRepository) {
+        maven {
+            url = URI(nuixArtifactRepo)
+        }
+    }
+
     mavenCentral()
 }
 
@@ -95,6 +134,11 @@ dependencies {
         )
     })
 
+    if(useRepository) {
+        compileOnly("org.swinglabs.swingx:swingx-core:1.6.6-N1.2")
+        compileOnly("com.jidesoft:jide-grids:3.7.10")
+    }
+
     testRuntimeOnly(fileTree(baseDir = engineLibDir) {
         include("*.jar")
     })
@@ -104,6 +148,56 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
     }
+}
+
+fun downloadEngineIfNeeded() {
+    println("Making the Engine")
+    if(useRepository) {
+        println("No Engine Path, downloading a new one.")
+
+        val engineDownloadDir = file("engine/download")
+        Files.createDirectories(engineDownloadDir.toPath())
+
+        val engineDownloadUrl = "https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine"
+        val majorMinorVersion = "9.10"
+        val os = "win32-amd64"
+        val pointVersion = "17.1073"
+        val extension = "zip"
+
+        val engineFileName = "engine-dist-${os}-${majorMinorVersion}.${pointVersion}.${extension}"
+        val engineDownloadDestination = file("${engineDownloadDir}/${engineFileName}")
+        println("Downloading Engine to ${engineDownloadDestination}")
+
+        if (!engineDownloadDestination.exists()) {
+            val engineDownloadSource = "${engineDownloadUrl}/${majorMinorVersion}/${engineFileName}"
+            println("Downloading Engine from ${engineDownloadSource}")
+
+            ant.invokeMethod("get", mapOf("src" to engineDownloadSource, "dest" to engineDownloadDestination))
+            println("Engine Download Complete")
+        } else {
+            println("Engine already downloaded.  Skipping download step")
+        }
+
+        val unpackedEngine = file("engine/release")
+
+        println("Unpacking Engine to ${unpackedEngine}")
+        if (unpackedEngine.exists()) {
+            println("Existing Engine being removed")
+            unpackedEngine.deleteRecursively()
+        }
+
+        copy {
+            from(zipTree(engineDownloadDestination.path))
+            into(unpackedEngine.path)
+        }
+        println("Engine Unpacked.")
+
+        nuixEngineDirectory = file("engine/release").absolutePath.toString()
+        engineLibDir = Paths.get(nuixEngineDirectory, "lib").pathString
+        println("Engine Directory: ${nuixEngineDirectory}")
+        println("Engine Lib Dir: ${engineLibDir}")
+    }
+
 }
 
 fun configureTestEnvironment(test: Test) {
