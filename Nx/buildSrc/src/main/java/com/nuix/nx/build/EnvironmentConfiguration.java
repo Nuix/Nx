@@ -26,7 +26,7 @@ public class EnvironmentConfiguration {
         this.projectProperties = properties;
 
         Object engineDir = projectProperties.getOrDefault("nuixEngineDir", System.getenv("NUIX_ENGINE_DIR"));
-        System.out.println("Engine Directory: " + engineDir.toString());
+        System.out.println("Engine Directory: " + ((null == engineDir) ? "null" : engineDir.toString()));
 
         useRepository = (null == engineDir || engineDir.toString().isEmpty());
         if (!useRepository) {
