@@ -25,10 +25,10 @@ public class EnvironmentConfiguration {
     public EnvironmentConfiguration(Map<String, Object> properties) {
         this.projectProperties = properties;
 
-        String engineDir = projectProperties.getOrDefault("nuixEngineDir", System.getenv("NUIX_ENGINE_DIR")).toString();
-        useRepository = (null == engineDir || engineDir.isEmpty());
+        Object engineDir = projectProperties.getOrDefault("nuixEngineDir", System.getenv("NUIX_ENGINE_DIR"));
+        useRepository = (null == engineDir || engineDir.toString().isEmpty());
         if (!useRepository) {
-            setNuixEngineDirectory(engineDir);
+            setNuixEngineDirectory(engineDir.toString());
         }
 
         baseConfigs = new ProjectConfiguration(properties);

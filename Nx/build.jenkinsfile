@@ -26,19 +26,29 @@ pipeline {
         stage("Unit Tests") {
             steps {
                 fileOperations ([folderCreateOperation(env.TEST_TEMP_PATH)])
-                bat """
+                withCredentials([usernamePassword(credentialsId: 'CLS_Login',
+                        passwordVariable: 'NUIX_PASSWORD',
+                        usernameVariable: 'NUIX_USER')]) {
+
+                    bat """
                        cd Nx
                        call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" test
                     """
+                }
             }
         }
 
         stage("Integration Tests") {
             steps {
-                bat """
+                withCredentials([usernamePassword(credentialsId: 'CLS_Login',
+                        passwordVariable: 'NUIX_PASSWORD',
+                        usernameVariable: 'NUIX_USER')]) {
+
+                    bat """
                        cd Nx
                        call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest
                     """
+                }
             }
         }
 
