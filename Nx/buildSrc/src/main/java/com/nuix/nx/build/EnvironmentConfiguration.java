@@ -26,15 +26,22 @@ public class EnvironmentConfiguration {
         this.projectProperties = properties;
 
         Object engineDir = projectProperties.getOrDefault("nuixEngineDir", System.getenv("NUIX_ENGINE_DIR"));
+        System.out.println("Engine Directory: " + engineDir.toString());
+
         useRepository = (null == engineDir || engineDir.toString().isEmpty());
         if (!useRepository) {
             setNuixEngineDirectory(engineDir.toString());
         }
+        System.out.println("Use Repository: " + useRepository);
 
         baseConfigs = new ProjectConfiguration(properties);
+        System.out.println("Base Configs Done");
         artifactory = new ArtifactoryConfiguration(properties);
+        System.out.println("Artifactory Configs Done");
         engineDistro = new EngineDistributionConfiguration(properties);
+        System.out.println("Distribution Configs Done");
         testing = new TestingConfiguration(properties);
+        System.out.println("Testing Configs Done");
     }
 
     public void setNuixEngineDirectory(String engineDir) {
