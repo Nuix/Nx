@@ -28,7 +28,7 @@ pipeline {
                 fileOperations ([folderCreateOperation(env.TEST_TEMP_PATH)])
                 withCredentials([usernamePassword(credentialsId: 'CLS_Login',
                         passwordVariable: 'NUIX_PASSWORD',
-                        usernameVariable: 'NUIX_USER')]) {
+                        usernameVariable: 'NUIX_USERNAME')]) {
 
                     bat """
                        cd Nx
