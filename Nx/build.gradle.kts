@@ -57,8 +57,8 @@ group = configs.baseConfigs.groupName
 version = configs.baseConfigs.versionString
 println("Group: ${group} Version: ${version}")
 
-val sourceCompatibility = configs.baseConfigs.targetJreVersion
-val targetCompatibility = configs.baseConfigs.targetJreVersion
+//val sourceCompatibility = configs.baseConfigs.targetJreVersion
+//val targetCompatibility = configs.baseConfigs.targetJreVersion
 
 println("NUIX_ENGINE_DIR: ${configs.nuixEngineDirectory}\tNuix Repo: ${configs.engineDistro.nuixEngineRepo}")
 
@@ -81,6 +81,13 @@ repositories {
 
     mavenCentral()
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(configs.baseConfigs.targetJreVersion))
+    }
+}
+
 
 // We can use this to define JAR files that we need copied to lib
 val externalDependency: Configuration by configurations.creating {
