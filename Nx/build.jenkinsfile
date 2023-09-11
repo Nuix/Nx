@@ -18,17 +18,17 @@ pipeline {
             steps {
                 bat """
                        cd Nx
-                       call gradlew clean classes testClasses
+                       call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" clean classes testClasses
                     """
             }
         }
 
-        /*stage("Unit Tests") {
+        stage("Unit Tests") {
             steps {
                 fileOperations ([folderCreateOperation(env.TEST_TEMP_PATH)])
                 bat """
                        cd Nx
-                       call gradlew -PtempDir=\"%TEST_TEMP_PATH%\" test
+                       call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" test
                     """
             }
         }
@@ -37,10 +37,10 @@ pipeline {
             steps {
                 bat """
                        cd Nx
-                       call gradlew -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest
+                       call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest
                     """
             }
-        }*/
+        }
 
         stage("JAR") {
             steps {
@@ -63,7 +63,7 @@ pipeline {
 
                     bat """
                        cd Nx
-                       call gradlew -Pversion=%PROJ_VERSION% -PartifactoryRepo="innovation-proserv-dev-local" artifactoryPublish
+                       call gradlew -Pversion=%PROJ_VERSION% -PartifactRepo="innovation-proserv-dev-local" artifactoryPublish
                     """
                 }
 
