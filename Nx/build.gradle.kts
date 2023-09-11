@@ -85,6 +85,8 @@ repositories {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(configs.baseConfigs.targetJreVersion))
+        vendor.set(JvmVendorSpec.ADOPTIUM)
+        implementation.set(JvmImplementation.VENDOR_SPECIFIC)
     }
 }
 
