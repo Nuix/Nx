@@ -18,7 +18,7 @@ pipeline {
             steps {
                 bat """
                        cd Nx
-                       call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" clean classes testClasses
+                       call gradlew -Porg.gradle.java.installations.auto-detect=false -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" clean classes testClasses
                     """
             }
         }
@@ -32,7 +32,7 @@ pipeline {
 
                     bat """
                        cd Nx
-                       call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" test
+                       call gradlew -Porg.gradle.java.installations.auto-detect=false -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" test
                     """
                 }
             }
@@ -46,7 +46,7 @@ pipeline {
 
                     bat """
                        cd Nx
-                       call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest
+                       call gradlew -Porg.gradle.java.installations.auto-detect=false -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest
                     """
                 }
             }
@@ -56,7 +56,7 @@ pipeline {
             steps {
                 bat """
                        cd Nx
-                       call gradlew -Pversion=%PROJ_VERSION% jar
+                       call gradlew -Porg.gradle.java.installations.auto-detect=false -Pversion=%PROJ_VERSION% jar
                     """
                 archiveArtifacts artifacts: 'Nx/build/libs/*.jar',
                         allowEmptyArchive: true,
@@ -73,7 +73,7 @@ pipeline {
 
                     bat """
                        cd Nx
-                       call gradlew -Pversion=%PROJ_VERSION% -PartifactRepo="innovation-proserv-dev-local" artifactoryPublish
+                       call gradlew -Porg.gradle.java.installations.auto-detect=false -Pversion=%PROJ_VERSION% -PartifactRepo="innovation-proserv-dev-local" artifactoryPublish
                     """
                 }
 
