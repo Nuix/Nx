@@ -82,6 +82,7 @@ repositories {
     mavenCentral()
 }
 
+/*
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(configs.baseConfigs.targetJreVersion))
@@ -89,6 +90,7 @@ java {
         implementation.set(JvmImplementation.VENDOR_SPECIFIC)
     }
 }
+*/
 
 
 // We can use this to define JAR files that we need copied to lib
