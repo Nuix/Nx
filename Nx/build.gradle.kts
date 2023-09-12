@@ -57,8 +57,8 @@ group = configs.baseConfigs.groupName
 version = configs.baseConfigs.versionString
 println("Group: ${group} Version: ${version}")
 
-//val sourceCompatibility = configs.baseConfigs.targetJreVersion
-//val targetCompatibility = configs.baseConfigs.targetJreVersion
+val sourceCompatibility = configs.baseConfigs.targetJreVersion
+val targetCompatibility = configs.baseConfigs.targetJreVersion
 
 println("NUIX_ENGINE_DIR: ${configs.nuixEngineDirectory}\tNuix Repo: ${configs.engineDistro.nuixEngineRepo}")
 
@@ -134,11 +134,11 @@ dependencies {
     })
 }
 
-java {
+/*java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
     }
-}
+}*/
 
 fun downloadEngineIfNeeded() {
     println("Making the Engine")
