@@ -16,10 +16,9 @@ pipeline {
     stages {
         stage("Build") {
             steps {
-                bat """
-                       cd Nx
-                       call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" clean classes testClasses
-                    """
+                dir('${WORKSPACE}\\Nx') {
+                    bat 'call gradlew --no-daemon --no-parallel -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" clean classes testClasses'
+                }
             }
         }
 
@@ -30,10 +29,9 @@ pipeline {
                         passwordVariable: 'NUIX_PASSWORD',
                         usernameVariable: 'NUIX_USERNAME')]) {
 
-                    bat """
-                       cd Nx
-                       call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" test
-                    """
+                    dir('${WORKSPACE}\\Nx') {
+                        bat 'call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" test'
+                    }
                 }
             }
         }
@@ -44,20 +42,18 @@ pipeline {
                         passwordVariable: 'NUIX_PASSWORD',
                         usernameVariable: 'NUIX_USER')]) {
 
-                    bat """
-                       cd Nx
-                       call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest
-                    """
+                    dir('${WORKSPACE}\\Nx') {
+                        bat 'call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest'
+                    }
                 }
             }
         }
 
         stage("JAR") {
             steps {
-                bat """
-                       cd Nx
-                       call gradlew -Pversion=%PROJ_VERSION% jar
-                    """
+                dir('${WORKSPACE}\\Nx') {
+                    bat 'call gradlew -Pversion=%PROJ_VERSION% jar'
+                }
                 archiveArtifacts artifacts: 'Nx/build/libs/*.jar',
                         allowEmptyArchive: true,
                         fingerprint: true,
@@ -71,10 +67,9 @@ pipeline {
                         passwordVariable: 'ArtifactoryToken',
                         usernameVariable: 'ArtifactoryUser')]) {
 
-                    bat """
-                       cd Nx
-                       call gradlew -Pversion=%PROJ_VERSION% -PartifactRepo="innovation-proserv-dev-local" artifactoryPublish
-                    """
+                    dir('${WORKSPACE}\\Nx') {
+                        bat 'call gradlew -Pversion=%PROJ_VERSION% -PartifactRepo="innovation-proserv-dev-local" artifactoryPublish'
+                    }
                 }
 
             }
