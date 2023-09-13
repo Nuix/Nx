@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage("Build") {
             steps {
-                dir('${WORKSPACE}\\Nx') {
+                dir("${WORKSPACE}\\NX") {
                     bat 'call gradlew --no-daemon --no-parallel -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" clean classes testClasses'
                 }
             }
@@ -29,7 +29,7 @@ pipeline {
                         passwordVariable: 'NUIX_PASSWORD',
                         usernameVariable: 'NUIX_USERNAME')]) {
 
-                    dir('${WORKSPACE}\\Nx') {
+                    dir("${WORKSPACE}\\NX") {
                         bat 'call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" test'
                     }
                 }
@@ -42,7 +42,7 @@ pipeline {
                         passwordVariable: 'NUIX_PASSWORD',
                         usernameVariable: 'NUIX_USER')]) {
 
-                    dir('${WORKSPACE}\\Nx') {
+                    dir("${WORKSPACE}\\NX") {
                         bat 'call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest'
                     }
                 }
@@ -51,7 +51,7 @@ pipeline {
 
         stage("JAR") {
             steps {
-                dir('${WORKSPACE}\\Nx') {
+                dir("${WORKSPACE}\\NX") {
                     bat 'call gradlew -Pversion=%PROJ_VERSION% jar'
                 }
                 archiveArtifacts artifacts: 'Nx/build/libs/*.jar',
@@ -67,7 +67,7 @@ pipeline {
                         passwordVariable: 'ArtifactoryToken',
                         usernameVariable: 'ArtifactoryUser')]) {
 
-                    dir('${WORKSPACE}\\Nx') {
+                    dir("${WORKSPACE}\\NX") {
                         bat 'call gradlew -Pversion=%PROJ_VERSION% -PartifactRepo="innovation-proserv-dev-local" artifactoryPublish'
                     }
                 }
