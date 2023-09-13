@@ -17,7 +17,9 @@ pipeline {
         stage("Build") {
             steps {
                 dir("${WORKSPACE}\\NX") {
-                    bat 'call gradlew --no-daemon --no-parallel -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" clean classes testClasses'
+                    bat 'call gradlew --no-daemon --no-parallel -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" clean'
+                    bat 'call gradlew --no-daemon --no-parallel -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" classes'
+                    bat 'call gradlew --no-daemon --no-parallel -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" testClasses'
                 }
             }
         }
