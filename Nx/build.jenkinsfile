@@ -12,12 +12,12 @@ pipeline {
 
         TEST_TEMP_PATH = "${WORKSPACE}\\Temp"
     }
+stage("Run") {
+    tools {
+        jdk 'Eclipse Adoptium 11'
+    }
 
     stages {
-        tools {
-            jdk 'Eclipse Adoptium 11'
-        }
-
         stage("Build") {
             steps {
                 dir("${WORKSPACE}\\NX") {
@@ -30,7 +30,7 @@ pipeline {
 
         stage("Unit Tests") {
             steps {
-                fileOperations ([folderCreateOperation(env.TEST_TEMP_PATH)])
+                fileOperations([folderCreateOperation(env.TEST_TEMP_PATH)])
                 withCredentials([usernamePassword(credentialsId: 'CLS_Login',
                         passwordVariable: 'NUIX_PASSWORD',
                         usernameVariable: 'NUIX_USERNAME')]) {
@@ -82,7 +82,7 @@ pipeline {
         }
 
     }
-
+}
     post {
         always {
             junit allowEmptyResults: true,
