@@ -3,10 +3,6 @@ pipeline {
         label 'windows-2019'
     }
 
-    node {
-        jdk = tool name: "Eclipse Adoptium 11"
-    }
-
     parameters {
         string(name: 'NxVersion', defaultValue: '1.20', description: 'Set the MAJOR.MINOR version of the NX Jar being built.')
     }
@@ -18,6 +14,10 @@ pipeline {
     }
 
     stages {
+        tools {
+            jdk 'Eclipse Adoptium 11'
+        }
+
         stage("Build") {
             steps {
                 dir("${WORKSPACE}\\NX") {
