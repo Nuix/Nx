@@ -3,6 +3,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.io.path.pathString
 import com.nuix.nx.build.EnvironmentConfiguration /* <-- In the buildSrc module */
+import java.util.Collections
 
 /*
 External Configuration Properties
@@ -62,18 +63,20 @@ val targetCompatibility = configs.baseConfigs.targetJreVersion
 
 println("NUIX_ENGINE_DIR: ${configs.nuixEngineDirectory}\tNuix Repo: ${configs.engineDistro.nuixEngineRepo}")
 
-if (configs.isUseRepository && configs.engineDistro.nuixEngineRepo.isNullOrEmpty()) {
+val tasksThatDontNeedDependencies = listOf("clean", "jar", "artifactoryPublish")
+val needDependencies = gradle.startParameter.taskNames.any { !tasksThatDontNeedDependencies.contains(it) };
+if (configs.isUseRepository && configs.engineDistro.nuixEngineRepo.isNullOrEmpty() && needDependencies) {
     throw InvalidUserDataException("Please populate the environment variable 'NUIX_ENGINE_DIR' with directory " +
             "containing a Nuix Workstation release or provide the properties 'nuixEngineRepo' and 'nuixDepencencyRepo' " +
             "that can be used to get dependencies.")
 }
 
-if (configs.isUseRepository) {
+if (configs.isUseRepository && needDependencies) {
     downloadEngineIfNeeded()
 }
 
 repositories {
-    if(configs.isUseRepository) {
+    if(configs.isUseRepository && needDependencies) {
         maven {
             url = URI(configs.artifactory.dependencyRepository)
         }
@@ -81,17 +84,6 @@ repositories {
 
     mavenCentral()
 }
-
-/*
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(configs.baseConfigs.targetJreVersion))
-        vendor.set(JvmVendorSpec.ADOPTIUM)
-        implementation.set(JvmImplementation.VENDOR_SPECIFIC)
-    }
-}
-*/
-
 
 // We can use this to define JAR files that we need copied to lib
 val externalDependency: Configuration by configurations.creating {
@@ -107,44 +99,47 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 
-    implementation(fileTree(baseDir = configs.nuixEngineLib) {
-        include(
-                "**/*log*.jar",
-                "**/*aspect*.jar",
-                "**/*joda*.jar",
-                "**/*commons*.jar",
-                "**/*guava*.jar",
-                "**/*gson*.jar",
-                "**/nuix-*.jar",
-                "**/*jruby*.jar",
-                "**/*swing*.jar",
-                "**/*jide*.jar",
-                "**/*csv*.jar",
-                "**/*beansbinding*.jar",
-                "**/*xml.bind*.jar",
-                "**/*itext*.jar",
-        )
-    })
+    if(needDependencies) {
+        implementation(fileTree(baseDir = configs.nuixEngineLib) {
+            include(
+                    "**/*log*.jar",
+                    "**/*aspect*.jar",
+                    "**/*joda*.jar",
+                    "**/*commons*.jar",
+                    "**/*guava*.jar",
+                    "**/*gson*.jar",
+                    "**/nuix-*.jar",
+                    "**/*jruby*.jar",
+                    "**/*swing*.jar",
+                    "**/*jide*.jar",
+                    "**/*csv*.jar",
+                    "**/*beansbinding*.jar",
+                    "**/*xml.bind*.jar",
+                    "**/*itext*.jar",
+            )
+        })
 
-    if(configs.isUseRepository) {
-        compileOnly("org.swinglabs.swingx:swingx-core:1.6.6-N1.2")
-        compileOnly("com.jidesoft:jide-grids:3.7.10")
+        if(configs.isUseRepository) {
+            compileOnly("org.swinglabs.swingx:swingx-core:1.6.6-N1.2")
+            compileOnly("com.jidesoft:jide-grids:3.7.10")
+        }
+
+        testRuntimeOnly(fileTree(baseDir = configs.nuixEngineLib) {
+            include("*.jar")
+        })
     }
 
-    testRuntimeOnly(fileTree(baseDir = configs.nuixEngineLib) {
-        include("*.jar")
-    })
 }
 
-/*java {
+java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+        languageVersion.set(JavaLanguageVersion.of(configs.baseConfigs.targetJreVersion))
     }
-}*/
+}
 
 fun downloadEngineIfNeeded() {
-    println("Making the Engine")
-    if(configs.isUseRepository) {
+    println("Making the Engine: ${project.state}, ${project.status}, ${gradle.startParameter.taskNames}")
+    if(configs.isUseRepository && needDependencies) {
         println("No Engine Path, downloading a new one.")
 
         val engineDownloadDir = file("engine/download")

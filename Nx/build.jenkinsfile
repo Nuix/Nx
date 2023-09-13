@@ -17,9 +17,9 @@ pipeline {
         stage("Build") {
             steps {
                 dir("${WORKSPACE}\\NX") {
-                    bat 'call gradlew --no-daemon --no-parallel -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" clean'
-                    bat 'call gradlew --no-daemon --no-parallel -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" classes'
-                    bat 'call gradlew --no-daemon --no-parallel -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" testClasses'
+                    bat 'call gradlew clean'
+                    bat 'call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" classes'
+                    bat "call gradlew -PnuixEngineDir=\"%WORKSPACE%\\engine\\release\" testClasses"
                 }
             }
         }
@@ -32,7 +32,7 @@ pipeline {
                         usernameVariable: 'NUIX_USERNAME')]) {
 
                     dir("${WORKSPACE}\\NX") {
-                        bat 'call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" test'
+                        bat "call gradlew -PnuixEngineDir=\"%WORKSPACE%\\engine\\release\" -PtempDir=\"%TEST_TEMP_PATH%\" test"
                     }
                 }
             }
@@ -45,7 +45,7 @@ pipeline {
                         usernameVariable: 'NUIX_USER')]) {
 
                     dir("${WORKSPACE}\\NX") {
-                        bat 'call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest'
+                        bat 'call gradlew -PnuixEngineDir=\"%WORKSPACE%\\engine\\release\" -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest'
                     }
                 }
             }
