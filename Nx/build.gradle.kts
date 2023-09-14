@@ -14,6 +14,7 @@ Below values can be overridden when invoking gradle build using property argumen
                 version => The version
        targetJreVersion => Version number assigned to sourceCompatibility and targetCompatibility
           nuixEngineDir => Overrides value to engine release otherwise pulled from ENV var NUIX_ENGINE_DIR
+            userDataDir => Directory to use for the user data directory.  Default to %NUIX_ENGINE_DIR%/user-data if not set
                 tempDir => Used to override temp directory for testing which would otherwise default to dir in localappdata
             testDataDir => Directory tests can load test data they depend on from
   rubyExamplesDirectory => Directory containing Ruby script files used to test various aspects from scripting
@@ -117,7 +118,7 @@ fun configureTestEnvironment(test: Test) {
             "--add-exports=java.base/jdk.internal.loader=ALL-UNNAMED",  // Engine 9.6(?) and later require this
             "-Xmx4G",
             "-Djava.io.tmpdir=\"${configs.testing.tempDirectory}\"",
-            "-Dnuix.userDataDirs=\"${configs.nuixEngineDirectory}\\user-data\""
+            "-Dnuix.userDataDirs=\"${configs.testing.userDataDirectory}\""
             // "-verbose:class" // Can help troubleshoot weird dependency issues
     )
 

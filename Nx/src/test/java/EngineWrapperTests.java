@@ -86,10 +86,16 @@ public class EngineWrapperTests {
             String path = argParts[1].trim().replace("\"", "");
             System.out.println("DataDir Path = " + path);
             Path userDataDir = Path.of(path);
-            if(Files.exists(userDataDir)) {
-                System.out.println("DatDir Exists");
-                engine.setUserDataDirectorySupplier(userDataDir::toFile);
+            if(!Files.exists(userDataDir)) {
+                try {
+                    System.out.println("Creating DataDir");
+                    Files.createDirectories(userDataDir);
+                } catch (IOException e) {
+                    System.err.println(e.getMessage());
+                }
             }
+            engine.setUserDataDirectorySupplier(userDataDir::toFile);
+
         });
 
         return engine;

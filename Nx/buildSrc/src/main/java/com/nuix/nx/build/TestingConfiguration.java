@@ -1,11 +1,14 @@
 package com.nuix.nx.build;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
 public class TestingConfiguration {
     private final Map<String, Object> projectProperties;
 
+    @lombok.Getter
+    private final String userDataDirectory;
     @lombok.Getter
     private final String tempDirectory;
     @lombok.Getter
@@ -46,6 +49,15 @@ public class TestingConfiguration {
                                 .toAbsolutePath())
                 .toString();
 
+        if(projectProperties.containsKey("userDataDirectory")) {
+            userDataDirectory = projectProperties.get("userDataDirectory").toString();
+        } else {
+            Path projectUserData = Paths.get(projectProperties.get("projectDir").toString(),
+                    "..", "user-data")
+                    .normalize()
+                    .toAbsolutePath();
+            userDataDirectory = projectUserData.toString();
+        }
 
         Object user = projectProperties.getOrDefault("nuixUsername", System.getenv("NUIX_USERNAME"));
         nuixUsername = (null == user) ? "" : user.toString();

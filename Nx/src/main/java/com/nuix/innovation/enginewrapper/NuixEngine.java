@@ -231,6 +231,7 @@ public class NuixEngine implements AutoCloseable {
      * @return This instance for method call chaining
      */
     public NuixEngine setUserDataDirectorySupplier(Supplier<File> userDataDirectorySupplier) {
+        System.out.println("Setting the supplier: " + userDataDirectorySupplier);
         this.userDataDirectorySupplier = Suppliers.memoize(userDataDirectorySupplier::get);
         return this;
     }
