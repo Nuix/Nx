@@ -168,6 +168,8 @@ fun downloadEngineIfNeeded() {
             unpackedEngine.deleteRecursively()
         }
 
+        Runtime.getRuntime().exec("powershell.exe -command Unblock-File ${engineDownloadDestination}")
+
         copy {
             from(zipTree(engineDownloadDestination.path))
             into(unpackedEngine.path)
