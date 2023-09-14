@@ -42,7 +42,7 @@ pipeline {
                 stage("Build") {
                     steps {
                         dir("${WORKSPACE}\\NX") {
-                            bat 'call gradlew -PnuixDependencyRepo=\\"${dependencyRepo}\\" -PnuixEngineDir=\\"${WORKSPACE}\\\\${releasePath}\\" clean'
+                            bat "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" clean"
                             bat "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" classes"
                             bat "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" testClasses"
                         }
