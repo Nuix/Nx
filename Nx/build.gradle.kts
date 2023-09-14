@@ -76,7 +76,7 @@ if (configs.isUseRepository && needDependencies) {
 }
 
 repositories {
-    if(configs.isUseRepository && needDependencies) {
+    if(!configs.artifactory.dependencyRepository.isNullOrEmpty() && needDependencies) {
         maven {
             url = URI(configs.artifactory.dependencyRepository)
         }
