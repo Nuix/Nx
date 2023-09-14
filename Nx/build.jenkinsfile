@@ -33,7 +33,10 @@ pipeline {
                         fileOperations([
                                 folderCreateOperation(downloadPath),
                                 folderCreateOperation(releasePath),
-                                fileDownloadOperation(targetFileName: 'engine.zip',
+                                fileDownloadOperation(
+                                        userName: '',
+                                        password: '',
+                                        targetFileName: 'engine.zip',
                                         targetLocation: downloadPath,
                                         url: "${engineRepo}/${engineMajorMinor}/engine-dis-${engineOs}-${engineMajorMinor}.${enginePointRelease}.${engineExtension}"),
                                 fileUnZipOperation(filePath: "${downloadPath}\\engine.zip",
