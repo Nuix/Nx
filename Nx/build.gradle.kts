@@ -1,9 +1,7 @@
 import java.net.URI
-import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.io.path.pathString
 import com.nuix.nx.build.EnvironmentConfiguration /* <-- In the buildSrc module */
-import java.util.Collections
 
 /*
 External Configuration Properties
@@ -26,25 +24,7 @@ testOutputDirectoryRoot => Root directory where tests may write data while runni
            artifactUser => Username to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable,  If not present there then don't publish
           artifactToken => API Token used to authorize publishing to the Artifactory repo.  If not present as a property, get it from an environment variable.  If not present there then don't publish
      nuixDependencyRepo => Optional repository used to download dependencies when the nuixEngineDir is not provided.
-         nuixEngineRepo => Optional repository to download the Nuix Engine distribution from
-           nuixEngineOs => If using a repository for the engine, the OS for the engine.  Acceptable options are `linux` or `windows` and defaults to `windows`
-      nuixEngineRelease => If using a repository for the engine, release version of the engine to use, in the form <major>.<minor>.<point>.<build>.  Default to 9.10.17.1073
 
-There are two main alternate routes run these builds:
-1) Provide a path to a Nuix Workstation build
-    * Either provide a NUIX_ENGINE_DIR environment variable
-    * Or run with the ${nuixEngineDir} property
-    * The path must be to a Nuix Engine or Nuix Workstation path that includes GUI JAR files.  Normally, the Nuix Engine Distribution does not
-    * If both an environment variable and property are provided, the property will be used.
-    * An example might be `gradlew -PnuixEngineDir="C:\Program Files\Nuix\Nuix 9.10" ...
-2) Download the Nuix Engine from some location and get GUI dependencies from a maven repository
-    * Pass in the nuixEngineRepo where the Nuix Engine will be downloaded from.
-    * Optionally pass in the nuixDependencyRepo where some dependencies, like the GUI dependencies will be found.  If this isn't provided, mavenCentral will be used
-    * An example might be `gradlew -PnuixEngineRepo=https://my.artifactory.com/nuix-engine` or `gradlew -PnuixDependencyRepo=https://my.artifactory.com/nuix-dependencies -PnuixEngineRepo=https://my.artifactory.com/nuix-engine`
-    * Note, the full path for download will be '${nuixEngineRepo}/${major}.${minor}/engine-dist-${os}-${major}.${minor}.${release}.${build}.${extension}
-      o The ${major} ${minor} ${release} and ${build} variables are calculated from the ${nuixEngineRelease} property
-      o The ${os} and ${extension} variables are calculated from the ${nuixEngineOs} property
-If both the Nuix Engine Directory (either through the property or an environment variable) and ${nuixEngineRepo} properties are provided, the Nuix Engine Directory will be used.
 */
 val configs = EnvironmentConfiguration(project.properties)
 
@@ -65,14 +45,9 @@ println("NUIX_ENGINE_DIR: ${configs.nuixEngineDirectory}\tNuix Repo: ${configs.e
 
 val tasksThatDontNeedDependencies = listOf("clean", "jar", "artifactoryPublish")
 val needDependencies = gradle.startParameter.taskNames.any { !tasksThatDontNeedDependencies.contains(it) };
-if (configs.isUseRepository && configs.engineDistro.nuixEngineRepo.isNullOrEmpty() && needDependencies) {
+if (configs.nuixEngineDirectory.isNullOrEmpty() && needDependencies) {
     throw InvalidUserDataException("Please populate the environment variable 'NUIX_ENGINE_DIR' with directory " +
-            "containing a Nuix Workstation release or provide the properties 'nuixEngineRepo' and 'nuixDepencencyRepo' " +
-            "that can be used to get dependencies.")
-}
-
-if (configs.isUseRepository && needDependencies) {
-    downloadEngineIfNeeded()
+            "containing a Nuix Workstation release")
 }
 
 repositories {
@@ -99,7 +74,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 
-    if(needDependencies) {
         implementation(fileTree(baseDir = configs.nuixEngineLib) {
             include(
                     "**/*log*.jar",
@@ -128,7 +102,6 @@ dependencies {
             println("Runtime Test Library: ${configs.nuixEngineLib}")
             include("*.jar")
         })
-    }
 
 }
 
@@ -138,48 +111,6 @@ java {
     }
 }
 
-fun downloadEngineIfNeeded() {
-    println("Making the Engine: ${project.state}, ${project.status}, ${gradle.startParameter.taskNames}")
-    if(configs.isUseRepository && needDependencies) {
-        println("No Engine Path, downloading a new one.")
-
-        val engineDownloadDir = file("engine/download")
-        Files.createDirectories(engineDownloadDir.toPath())
-
-        val engineFileName = configs.engineDistro.getEngineDistributionName()
-        val engineDownloadDestination = file("${engineDownloadDir}/${engineFileName}")
-        println("Downloading Engine to ${engineDownloadDestination}")
-
-        if (!engineDownloadDestination.exists()) {
-            val engineDownloadSource = configs.engineDistro.getEngineDistributionPath()
-            println("Downloading Engine from ${engineDownloadSource}")
-
-            ant.invokeMethod("get", mapOf("src" to engineDownloadSource, "dest" to engineDownloadDestination))
-            println("Engine Download Complete")
-        } else {
-            println("Engine already downloaded.  Skipping download step")
-        }
-
-        val unpackedEngine = file("engine/release")
-
-        println("Unpacking Engine to ${unpackedEngine}")
-        if (unpackedEngine.exists()) {
-            println("Existing Engine being removed")
-            unpackedEngine.deleteRecursively()
-        }
-
-        Runtime.getRuntime().exec("powershell.exe -command Unblock-File ${engineDownloadDestination}")
-
-        copy {
-            from(zipTree(engineDownloadDestination.path))
-            into(unpackedEngine.path)
-        }
-        println("Engine Unpacked.")
-
-        configs.setNuixEngineDirectory(file("engine/release").absolutePath.toString())
-    }
-
-}
 
 fun configureTestEnvironment(test: Test) {
     // Args passed to JVM running tests
@@ -187,6 +118,7 @@ fun configureTestEnvironment(test: Test) {
             "--add-exports=java.base/jdk.internal.loader=ALL-UNNAMED",  // Engine 9.6(?) and later require this
             "-Xmx4G",
             "-Djava.io.tmpdir=\"${configs.testing.tempDirectory}\"",
+            "-Dnuix.userDataDirs=\"${configs.nuixEngineDirectory}\\user-data\""
             // "-verbose:class" // Can help troubleshoot weird dependency issues
     )
 
