@@ -191,9 +191,10 @@ fun configureTestEnvironment(test: Test) {
     // Directory used to store data a test may rely on (like sample data)
     val testOutputDirectory = Paths.get(configs.testing.testOutputDirectoryRoot, "${System.currentTimeMillis()}").pathString
     // Configure ENV vars for JVM tests run in
+    val tempHardCodedPath = "c:\\jenkins\\tools\\hudson.model.JDK\\Eclipse_Adoptium_11\\jdk\\jdk-11.0.20.1+1/bin;c:\\jenkins\\tools\\hudson.model.JDK\\Eclipse_Adoptium_11\\jdk\\jdk-11.0.20.1+1/bin;C:\\Python311\\Scripts\\;C:\\Python311\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files\\Amazon\\cfn-bootstrap\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\Git\\cmd;C:\\Program Files\\Git\\mingw64\\bin;C:\\Program Files\\Git\\usr\\bin;C:\\Program Files\\OpenSSH-Win64;C:\\Program Files\\Amazon\\AWSCLIV2\\;C:\\Program Files\\Docker;C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
     test.setEnvironment(
             // Add our engine release's bin and bin/x86 to PATH
-            Pair("PATH", "${System.getenv("PATH")};${configs.getNuixBinDirectory()};${configs.getNuixBinX86Directory()}"),
+            Pair("PATH", "${tempHardCodedPath};${configs.getNuixBinDirectory()};${configs.getNuixBinX86Directory()}"),
 
             // Define where tests can place re-usable test data
             Pair("TEST_DATA_DIRECTORY", configs.testing.testDataDirectory),
