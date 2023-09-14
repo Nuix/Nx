@@ -309,6 +309,10 @@ tasks.test {
     dependsOn(tasks.findByName("copyJarsToEngine"))
     useJUnitPlatform()
     configureTestEnvironment(this)
+
+    println("Test: ${this}")
+    println("Test Args: ${jvmArgs}")
+    println("Test Environment: ${environment}")
 }
 
 // Customize where Javadoc output is written to

@@ -38,7 +38,7 @@ public class EngineWrapperTests {
 
         System.out.println("Environment Variables:");
         for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
-            System.out.println(String.format("%s => %s", entry.getKey(), entry.getValue()));
+            System.out.println(String.format("\t%s => %s", entry.getKey(), entry.getValue()));
         }
 
         testOutputDirectory = new File(System.getenv("TEST_OUTPUT_DIRECTORY"));
