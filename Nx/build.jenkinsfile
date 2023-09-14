@@ -36,6 +36,9 @@ pipeline {
                                 passwordVariable: 'NUIX_PASSWORD',
                                 usernameVariable: 'NUIX_USERNAME')]) {
 
+                            dir("${WORKSPACE}\\NX\\engine\\release\\user-data\\SecretStore") {
+                                bat "call powershell Get-Acl"
+                            }
                             dir("${WORKSPACE}\\NX") {
                                 bat "call gradlew -PnuixDependencyRepo=\"https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual\" -PnuixEngineDir=\"%WORKSPACE%\\NX\\engine\\release\" -PtempDir=\"%TEST_TEMP_PATH%\" test"
                             }

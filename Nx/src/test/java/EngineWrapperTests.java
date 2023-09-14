@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EngineWrapperTests {
