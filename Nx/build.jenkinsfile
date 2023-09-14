@@ -1,3 +1,12 @@
+def releasePath = "Nx\\engine\\release"
+def dependencyRepo = "https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual"
+def engineMajorMinor = "9.10"
+def enginePointRelease = "17.1073"
+def engineOs = "win32-amd64"
+def engineExtension = "zip"
+def engineRepo = "https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine"
+def downloadPath = "Nx\\engine\\download"
+
 pipeline {
     agent {
         label 'windows-2019'
@@ -18,25 +27,14 @@ pipeline {
             tools {
                 jdk 'Eclipse Adoptium 11'
             }
-            def releasePath = "Nx\\engine\\release"
-            def dependencyRepo = "https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual"
             stages {
                 stage("Get Engine") {
-                    def engineMajorMinor = "9.10"
-                    def enginePointRelease = "17.1073"
-                    def engineOs = "win32-amd64"
-                    def engineExtension = "zip"
-                    def engineRepo = "https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine"
-                    def engineDownloadUrl = "${engineRepo}/${engineMajorMinor}/engine-dis-${engineOs}-${engineMajorMinor}.${enginePointRelease}.${engineExtension}"
-
-                    def downloadPath = "Nx\\engine\\download"
-
                     fileOperations([
                             folderCreateOperation(downloadPath),
                             folderCreateOperation(releasePath),
                             fileDownloadOperation(targetFileName: 'engine.zip',
                                                   targetLocation: downloadPath,
-                                                  url: engineDownloadUrl),
+                                                  url: "${engineRepo}/${engineMajorMinor}/engine-dis-${engineOs}-${engineMajorMinor}.${enginePointRelease}.${engineExtension}"),
                             fileUnZipOperation(filePath: "${downloadPath}\\engine.zip",
                                                targetLocation: releasePath)])
                 }
