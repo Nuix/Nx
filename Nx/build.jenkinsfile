@@ -32,13 +32,9 @@ pipeline {
                     steps{
                         fileOperations([
                                 folderCreateOperation(downloadPath),
-                                folderCreateOperation(releasePath),
-                                fileDownloadOperation(
-                                        userName: '',
-                                        password: '',
-                                        targetFileName: 'engine.zip',
-                                        targetLocation: downloadPath,
-                                        url: "${engineRepo}/${engineMajorMinor}/engine-dis-${engineOs}-${engineMajorMinor}.${enginePointRelease}.${engineExtension}"),
+                                folderCreateOperation(releasePath)])
+                        bat "curl -L --url ${engineRepo}/${engineMajorMinor}/engine-dis-${engineOs}-${engineMajorMinor}.${enginePointRelease}.${engineExtension} -o ${releasePath}\\engine.zip"
+                        fileOperations([
                                 fileUnZipOperation(filePath: "${downloadPath}\\engine.zip",
                                         targetLocation: releasePath)])
                     }
