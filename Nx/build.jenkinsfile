@@ -24,7 +24,7 @@ pipeline {
                         dir("${WORKSPACE}\\NX") {
                             bat 'call gradlew clean'
                             bat 'call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineRepo="https://artifactory.uat.nuix.com/artifactory/builds-syd/nuix-engine" classes'
-                            bat "call gradlew -PnuixEngineDir=\"%WORKSPACE%\\NX\\engine\\release\" testClasses"
+                            bat "call gradlew -PnuixDependencyRepo=\"https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual\" -PnuixEngineDir=\"%WORKSPACE%\\NX\\engine\\release\" testClasses"
                         }
                     }
                 }
@@ -37,7 +37,7 @@ pipeline {
                                 usernameVariable: 'NUIX_USERNAME')]) {
 
                             dir("${WORKSPACE}\\NX") {
-                                bat "call gradlew -PnuixEngineDir=\"%WORKSPACE%\\NX\\engine\\release\" -PtempDir=\"%TEST_TEMP_PATH%\" test"
+                                bat "call gradlew -PnuixDependencyRepo=\"https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual\" -PnuixEngineDir=\"%WORKSPACE%\\NX\\engine\\release\" -PtempDir=\"%TEST_TEMP_PATH%\" test"
                             }
                         }
                     }
@@ -50,7 +50,7 @@ pipeline {
                                 usernameVariable: 'NUIX_USER')]) {
 
                             dir("${WORKSPACE}\\NX") {
-                                bat 'call gradlew -PnuixEngineDir=\"%WORKSPACE%\\NX\\engine\\release\" -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest'
+                                bat 'call gradlew -PnuixDependencyRepo="https://artifactory.uat.nuix.com/artifactory/rest-maven-virtual" -PnuixEngineDir=\"%WORKSPACE%\\NX\\engine\\release\" -PtempDir=\"%TEST_TEMP_PATH%\" integrationTest'
                             }
                         }
                     }
