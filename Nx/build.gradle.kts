@@ -76,7 +76,7 @@ if (configs.isUseRepository && needDependencies) {
 }
 
 repositories {
-    if(!configs.artifactory.dependencyRepository.isNullOrEmpty() && needDependencies) {
+    if(needDependencies && !configs.artifactory.dependencyRepository.isNullOrEmpty()) {
         maven {
             url = URI(configs.artifactory.dependencyRepository)
         }
@@ -125,6 +125,7 @@ dependencies {
         }
 
         testRuntimeOnly(fileTree(baseDir = configs.nuixEngineLib) {
+            println("Runtime Test Library: ${configs.nuixEngineLib}")
             include("*.jar")
         })
     }
