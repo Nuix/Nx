@@ -39,6 +39,10 @@ public class EngineWrapperTests {
             System.out.println(arg);
         }
 
+        System.out.println("Runtime Configuration:");
+        RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
+        List<String> arguments = runtimeMxBean.getInputArguments();
+        arguments.forEach(System.out::println);
 
         System.out.println("Environment Variables:");
         for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
