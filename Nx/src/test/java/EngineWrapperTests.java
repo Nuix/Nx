@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,11 +37,6 @@ public class EngineWrapperTests {
         for (String arg : jvmArgs) {
             System.out.println("\t" + arg);
         }
-
-        System.out.println("Runtime Configuration:");
-        RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
-        List<String> arguments = runtimeMxBean.getInputArguments();
-        arguments.forEach(System.out::println);
 
         System.out.println("Environment Variables:");
         for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
@@ -76,9 +73,26 @@ public class EngineWrapperTests {
                 .withMinWorkerCount(4)
                 .withRequiredFeatures(features);
 
-        return NuixEngine.usingFirstAvailableLicense(caseCreationCloud)
+        NuixEngine engine = NuixEngine.usingFirstAvailableLicense(caseCreationCloud)
                 .setEngineDistributionDirectoryFromEnvVar()
                 .setLogDirectory(new File(testOutputDirectory, "Logs_" + System.currentTimeMillis()));
+
+        RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
+        List<String> jvmArgs = bean.getInputArguments();
+        jvmArgs.stream().filter(arg -> arg.startsWith("-Dnuix.userDataDirs")).findFirst().ifPresent(arg -> {
+            System.out.println("DataDir param: " + arg);
+            String[] argParts = arg.split("=");
+            System.out.println("DataDir Path Part = " + argParts[1]);
+            String path = argParts[1].trim().replace("\"", "");
+            System.out.println("DataDir Path = " + path);
+            Path userDataDir = Path.of(path);
+            if(Files.exists(userDataDir)) {
+                System.out.println("DatDir Exists");
+                engine.setUserDataDirectorySupplier(userDataDir::toFile);
+            }
+        });
+
+        return engine;
     }
 
     @Test
