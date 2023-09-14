@@ -42,7 +42,7 @@ pipeline {
                 stage("Build") {
                     steps {
                         dir("${WORKSPACE}\\NX") {
-                            bat 'call gradlew clean'
+                            bat 'call gradlew -PnuixDependencyRepo=\\"${dependencyRepo}\\" -PnuixEngineDir=\\"${WORKSPACE}\\\\${releasePath}\\" clean'
                             bat "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" classes"
                             bat "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" testClasses"
                         }
@@ -98,7 +98,7 @@ pipeline {
                                 usernameVariable: 'ArtifactoryUser')]) {
 
                             dir("${WORKSPACE}\\NX") {
-                                bat 'call gradlew -Pversion=%PROJ_VERSION% -PartifactRepo="innovation-proserv-dev-local" artifactoryPublish'
+                                bat "call gradlew  -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" -Pversion=%PROJ_VERSION% -PartifactRepo=\"innovation-proserv-dev-local\" artifactoryPublish"
                             }
                         }
 

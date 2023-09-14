@@ -93,7 +93,7 @@ dependencies {
             )
         })
 
-        if(!configs.artifactory.dependencyRepository.isNullOrEmpty()) {
+        if (!configs.artifactory.dependencyRepository.isNullOrEmpty()) {
             compileOnly("org.swinglabs.swingx:swingx-core:1.6.6-N1.2")
             compileOnly("com.jidesoft:jide-grids:3.7.10")
         }
@@ -102,7 +102,6 @@ dependencies {
             println("Runtime Test Library: ${configs.nuixEngineLib}")
             include("*.jar")
         })
-
 }
 
 java {
