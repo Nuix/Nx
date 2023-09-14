@@ -36,7 +36,7 @@ public class EngineWrapperTests {
         RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
         List<String> jvmArgs = bean.getInputArguments();
         for (String arg : jvmArgs) {
-            System.out.println(arg);
+            System.out.println("\t" + arg);
         }
 
         System.out.println("Runtime Configuration:");
