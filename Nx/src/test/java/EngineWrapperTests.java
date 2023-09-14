@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EngineWrapperTests {
@@ -35,6 +38,11 @@ public class EngineWrapperTests {
         for (String arg : jvmArgs) {
             System.out.println(arg);
         }
+
+        System.out.println("Runtime Configuration:");
+        RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
+        List<String> arguments = runtimeMxBean.getInputArguments();
+        arguments.forEach(System.out::println);
 
         System.out.println("Environment Variables:");
         for (Map.Entry<String, String> entry : System.getenv().entrySet()) {

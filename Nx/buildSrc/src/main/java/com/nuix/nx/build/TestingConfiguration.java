@@ -15,7 +15,7 @@ public class TestingConfiguration {
     @lombok.Getter
     private final String testOutputDirectoryRoot;
     @lombok.Getter
-    private final String nuixUsername;
+    private final String  nuixUsername;
     @lombok.Getter
     private final String nuixPassword;
 
