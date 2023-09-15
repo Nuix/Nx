@@ -113,6 +113,8 @@ java {
 
 
 fun configureTestEnvironment(test: Test) {
+    test.executable = "${configs.nuixEngineDirectory}\\jre\\bin\\java.exe"
+
     // Args passed to JVM running tests
     test.jvmArgs(
             "--add-exports=java.base/jdk.internal.loader=ALL-UNNAMED",  // Engine 9.6(?) and later require this
