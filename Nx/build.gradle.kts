@@ -100,9 +100,12 @@ dependencies {
         }
 
         testRuntimeOnly(fileTree(baseDir = configs.nuixEngineLib) {
-            println("Runtime Test Library: ${configs.nuixEngineLib}")
             include("*.jar")
         })
+
+    testRuntimeOnly(fileTree(baseDir = "${configs.nuixEngineLib}/non-fips") {
+        include("*.jar")
+    })
 }
 
 java {
