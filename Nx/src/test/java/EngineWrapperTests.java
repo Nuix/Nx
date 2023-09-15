@@ -43,6 +43,13 @@ public class EngineWrapperTests {
             System.out.println(String.format("\t%s => %s", entry.getKey(), entry.getValue()));
         }
 
+        System.out.println("Runtime Properties");
+        java.util.Properties props = System.getProperties();
+        props.forEach((key, value) -> {
+            System.out.printf("%s:%s%n", key, value);
+        });
+
+
         testOutputDirectory = new File(System.getenv("TEST_OUTPUT_DIRECTORY"));
         testDataDirectory = new File(System.getenv("TEST_DATA_DIRECTORY"));
 
