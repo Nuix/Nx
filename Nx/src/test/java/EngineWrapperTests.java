@@ -46,8 +46,9 @@ public class EngineWrapperTests {
         System.out.println("Runtime Properties");
         java.util.Properties props = System.getProperties();
         props.forEach((key, value) -> {
-            System.out.printf("%s:%s%n", key, value);
+            System.out.printf("\t%s:%s%n", key, value);
         });
+        System.out.printf("Cryptographic Strength: %d%n", javax.crypto.Cipher.getMaxAllowedKeyLength("AES"));
 
 
         testOutputDirectory = new File(System.getenv("TEST_OUTPUT_DIRECTORY"));
