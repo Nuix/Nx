@@ -52,7 +52,7 @@ pipeline {
                 stage("Unit Tests") {
                     steps {
                         fileOperations([folderCreateOperation(env.TEST_TEMP_PATH)])
-                        withCredentials([usernamePassword(credentialsId: 'CLS_Login',
+                        withCredentials([usernamePassword(credentialsId: 'REST-Service_CLS',
                                 passwordVariable: 'NUIX_PASSWORD',
                                 usernameVariable: 'NUIX_USERNAME')]) {
 
