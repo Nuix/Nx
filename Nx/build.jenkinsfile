@@ -52,7 +52,7 @@ pipeline {
 
                 stage("Unit Tests") {
                     environment {
-                        PATH = "${downloadPath}\\jre;${downloadPath}\\jre\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files\\OpenSSH-Win64"
+                        RUN_PATH = "${downloadPath}\\jre;${downloadPath}\\jre\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files\\OpenSSH-Win64"
                     }
                     steps {
                         fileOperations([folderCreateOperation(env.TEST_TEMP_PATH)])

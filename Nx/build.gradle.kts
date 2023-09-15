@@ -132,7 +132,7 @@ fun configureTestEnvironment(test: Test) {
     // Configure ENV vars for JVM tests run in
     test.setEnvironment(
             // Add our engine release's bin and bin/x86 to PATH
-            Pair("PATH", "${System.getenv("PATH")};${configs.getNuixBinDirectory()};${configs.getNuixBinX86Directory()}"),
+            Pair("PATH", "${System.getenv("RUN_PATH")};${configs.getNuixBinDirectory()};${configs.getNuixBinX86Directory()}"),
 
             // Define where tests can place re-usable test data
             Pair("TEST_DATA_DIRECTORY", configs.testing.testDataDirectory),
