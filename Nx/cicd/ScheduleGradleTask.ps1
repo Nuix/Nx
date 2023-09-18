@@ -13,7 +13,6 @@ $ready_state_timeout = (Get-Date).AddMinutes(5)
 $task_name = "nx_" + $gradleTask
 $powershell_command = "$Env:windir\System32\WindowsPowerShell\v1.0\powershell.exe"
 $taskParameterString = "@(" + ($taskParameters -Join ", ") + ")"
-$taskParameterString = $taskParameterString + ")
 $powershell_argument = "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File $appdir\cicd\RunGradleTask.ps1 -appdir $appdir -gradleTask $gradleTask -taskParameters $taskParameterString"
 $task_action = New-ScheduledTaskAction -Execute $powershell_command `
                                        -WorkingDirectory $appdir `
