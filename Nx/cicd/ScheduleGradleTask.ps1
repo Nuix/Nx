@@ -3,8 +3,8 @@
 # Unit testing to a scheduled task so it runs in a more normal environment.
 
 param ([Parameter(Mandatory)][string]$appdir,
-       [Parameter(Mandatory)][string]$gradleTask,
-       [string[]]$taskParameters=@())
+    [Parameter(Mandatory)][string]$gradleTask,
+    [string[]]$taskParameters=@())
 
 
 $start_time = (Get-Date).AddMinutes(1).ToString("HH:mm")
@@ -12,8 +12,13 @@ $ready_state_timeout = (Get-Date).AddMinutes(5)
 
 $task_name = "nx_" + $gradleTask
 $powershell_command = "$Env:windir\System32\WindowsPowerShell\v1.0\powershell.exe"
-$taskParameterString = "@(" + ($taskParameters -Join ", ") + ")"
-$powershell_argument = "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File $appdir\cicd\RunGradleTask.ps1 -appdir $appdir -gradleTask $gradleTask -taskParameters $taskParameterString"
+$gradleParameters = @()
+foreach($gradleParam in $taskParameters) {
+    $valueSplits = $gradleParam.split("=")
+    $gradleParameters += $valueSplits[0] + '="' + $valueSplits[1] + '"'
+}
+$gradleParametersString = $gradleParameters -Join ","
+$powershell_argument = "-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command $appdir\cicd\RunGradleTask.ps1 -appdir $appdir -gradleTask $gradleTask -taskParameters $gradleParametersString"
 $task_action = New-ScheduledTaskAction -Execute $powershell_command `
                                        -WorkingDirectory $appdir `
                                        -Argument $powershell_argument

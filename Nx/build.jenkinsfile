@@ -82,11 +82,11 @@ pipeline {
                             dir("${WORKSPACE}\\NX\\cicd") {
                                 bat label: "integrationtest", returnStatus: true,
                                         script: "call powershell .\\ScheduleGradleTask.ps1 " +
-                                        "-appdir ${WORKSPACE}\\Nx " +
+                                        "-appdir \"${WORKSPACE}\\Nx\" " +
                                         "-gradleTask integrationTest " +
-                                        "-taskParameters @('nuixDependencyRepo=\"${dependencyRepo}\"', " +
-                                                        "'nuixEngineDir=\"${WORKSPACE}\\${releasePath}\"', " +
-                                                        "'tempDir=\"${TEST_TEMP_PATH}\"')"
+                                        "-taskParameters nuixDependencyRepo=\"\"\"${dependencyRepo}\"\"\"," +
+                                                        "nuixEngineDir=\"\"\"${WORKSPACE}\\${releasePath}\"\"\"," +
+                                                        "tempDir=\"\"\"${TEST_TEMP_PATH}\"\"\""
                             }
                         }
                     }
