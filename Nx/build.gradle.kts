@@ -1,6 +1,7 @@
 import java.net.URI
 import java.nio.file.Paths
 import kotlin.io.path.pathString
+import org.gradle.tooling.BuildException
 import com.nuix.nx.build.EnvironmentConfiguration /* <-- In the buildSrc module */
 
 /*
@@ -37,7 +38,7 @@ plugins {
 
 group = configs.baseConfigs.groupName
 version = configs.baseConfigs.versionString
-println("Group: ${group} Version: ${version}")
+println("Group: $group Version: $version")
 
 val sourceCompatibility = configs.baseConfigs.targetJreVersion
 val targetCompatibility = configs.baseConfigs.targetJreVersion
@@ -45,7 +46,7 @@ val targetCompatibility = configs.baseConfigs.targetJreVersion
 println("NUIX_ENGINE_DIR: ${configs.nuixEngineDirectory}\tNuix Repo: ${configs.engineDistro.nuixEngineRepo}")
 
 val tasksThatDontNeedDependencies = listOf("clean", "jar", "artifactoryPublish")
-val needDependencies = gradle.startParameter.taskNames.any { !tasksThatDontNeedDependencies.contains(it) };
+val needDependencies = gradle.startParameter.taskNames.any { !tasksThatDontNeedDependencies.contains(it) }
 if (configs.nuixEngineDirectory.isNullOrEmpty() && needDependencies) {
     throw InvalidUserDataException("Please populate the environment variable 'NUIX_ENGINE_DIR' with directory " +
             "containing a Nuix Workstation release")
@@ -53,6 +54,7 @@ if (configs.nuixEngineDirectory.isNullOrEmpty() && needDependencies) {
 
 repositories {
     if(needDependencies && !configs.artifactory.dependencyRepository.isNullOrEmpty()) {
+        println("Adding Nuix Repo")
         maven {
             url = URI(configs.artifactory.dependencyRepository)
         }
@@ -67,15 +69,17 @@ val externalDependency: Configuration by configurations.creating {
 }
 
 dependencies {
-    implementation("org.jetbrains:annotations:24.0.1")
+        implementation("org.jetbrains:annotations:24.0.1")
 
-    compileOnly("org.projectlombok:lombok:1.18.26")
-    annotationProcessor("org.projectlombok:lombok:1.18.26")
+        compileOnly("org.projectlombok:lombok:1.18.26")
+        annotationProcessor("org.projectlombok:lombok:1.18.26")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+        testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 
+    //if(needDependencies) {
         implementation(fileTree(baseDir = configs.nuixEngineLib) {
+            println(configs.nuixEngineLib)
             include(
                     "**/*log*.jar",
                     "**/*aspect*.jar",
@@ -95,6 +99,7 @@ dependencies {
         })
 
         if (!configs.artifactory.dependencyRepository.isNullOrEmpty()) {
+            println("Adding GUI Dependencies")
             compileOnly("org.swinglabs.swingx:swingx-core:1.6.6-N1.2")
             compileOnly("com.jidesoft:jide-grids:3.7.10")
         }
@@ -103,69 +108,16 @@ dependencies {
             include("*.jar")
         })
 
-    testRuntimeOnly(fileTree(baseDir = "${configs.nuixEngineLib}/non-fips") {
-        include("*.jar")
-    })
+        testRuntimeOnly(fileTree(baseDir = "${configs.nuixEngineLib}/non-fips") {
+            include("*.jar")
+        })
+    //}
 }
 
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(configs.baseConfigs.targetJreVersion))
     }
-}
-
-
-fun configureTestEnvironment(test: Test) {
-    test.executable = "${configs.nuixEngineDirectory}\\jre\\bin\\java.exe"
-
-    // Args passed to JVM running tests
-    test.jvmArgs(
-            "--add-exports=java.base/jdk.internal.loader=ALL-UNNAMED",  // Engine 9.6(?) and later require this
-            "-Xmx4G",
-            "-Djava.io.tmpdir=\"${configs.testing.tempDirectory}\"",
-            "-Dnuix.userDataDirs=\"${configs.testing.userDataDirectory}\""
-            // "-verbose:class" // Can help troubleshoot weird dependency issues
-    )
-
-    // Directory used to store data a test may rely on (like sample data)
-    val testOutputDirectory = Paths.get(configs.testing.testOutputDirectoryRoot, "${System.currentTimeMillis()}").pathString
-    // Configure ENV vars for JVM tests run in
-    test.setEnvironment(
-            // Add our engine release's bin and bin/x86 to PATH
-            Pair("PATH", "${System.getenv("RUN_PATH")};${configs.getNuixBinDirectory()};${configs.getNuixBinX86Directory()}"),
-
-            // Define where tests can place re-usable test data
-            Pair("TEST_DATA_DIRECTORY", configs.testing.testDataDirectory),
-
-            // Define where tests can write output produce for later review
-            Pair("TEST_OUTPUT_DIRECTORY", testOutputDirectory),
-
-            // Defines where example ruby scripts live
-            Pair("RUBY_EXAMPLES_DIRECTORY", configs.testing.rubyExamplesDirectory),
-
-            // Forward ENV username and password
-            Pair("NUIX_USERNAME", configs.testing.nuixUsername),
-            Pair("NUIX_PASSWORD", configs.testing.nuixPassword),
-
-            // Forward LOCALAPPDATA and APPDATA
-            Pair("LOCALAPPDATA", System.getenv("LOCALAPPDATA")),
-            Pair("APPDATA", System.getenv("APPDATA")),
-
-            // We need to make sure we set these so workers will properly resolve temp dir
-            // (when using a worker based operation via EngineWrapper).
-            Pair("TEMP", configs.testing.tempDirectory),
-            Pair("TMP", configs.testing.tempDirectory),
-
-            Pair("NUIX_ENGINE_DIR", configs.nuixEngineDirectory)
-    )
-}
-
-// Builds JAR without any of the Engine wrapper stuff included
-tasks.create<Jar>("nxOnlyJar") {
-    println("Producing NX only JAR file")
-    from(sourceSets.main.get().output)
-    exclude("com/nuix/innovation/enginewrapper/**")
-    destinationDirectory.set(Paths.get("$projectDir", "..", "JAR").toFile())
 }
 
 publishing {
@@ -215,6 +167,70 @@ tasks.artifactoryDeploy {
 
 }
 
+val testLauncher = javaToolchains.launcherFor {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}
+
+fun configureTestEnvironment(test: Test) {
+    println("Configuring the Test Environment")
+
+    //test.executable = "${configs.nuixEngineDirectory}\\jre\\bin\\java.exe"
+    //test.javaLauncher = "${configs.nuixEngineDirectory}\\jre\\bin\\java.exe"
+
+    // Args passed to JVM running tests
+    test.jvmArgs(
+            "--add-exports=java.base/jdk.internal.loader=ALL-UNNAMED",  // Engine 9.6(?) and later require this
+            "-Xmx4G",
+            "-Djava.io.tmpdir=\"${configs.testing.tempDirectory}\"",
+            "-Dnuix.userDataDirs=\"${configs.testing.userDataDirectory}\""
+            // "-verbose:class" // Can help troubleshoot weird dependency issues
+    )
+
+    // Directory used to store data a test may rely on (like sample data)
+    val testOutputDirectory = Paths.get(configs.testing.testOutputDirectoryRoot, "${System.currentTimeMillis()}").pathString
+    // Configure ENV vars for JVM tests run in
+    test.setEnvironment(
+            // Add our engine release's bin and bin/x86 to PATH
+            Pair("PATH", "${System.getenv("RUN_PATH")};${configs.getNuixBinDirectory()};${configs.getNuixBinX86Directory()}"),
+
+            // Define where tests can place re-usable test data
+            Pair("TEST_DATA_DIRECTORY", configs.testing.testDataDirectory),
+
+            // Define where tests can write output produce for later review
+            Pair("TEST_OUTPUT_DIRECTORY", testOutputDirectory),
+
+            // Defines where example ruby scripts live
+            Pair("RUBY_EXAMPLES_DIRECTORY", configs.testing.rubyExamplesDirectory),
+
+            // Forward ENV username and password
+            Pair("NUIX_USERNAME", configs.testing.nuixUsername),
+            Pair("NUIX_PASSWORD", configs.testing.nuixPassword),
+
+            // Forward LOCALAPPDATA and APPDATA
+            Pair("LOCALAPPDATA", System.getenv("LOCALAPPDATA")),
+            Pair("APPDATA", System.getenv("APPDATA")),
+
+            // We need to make sure we set these so workers will properly resolve temp dir
+            // (when using a worker based operation via EngineWrapper).
+            Pair("TEMP", configs.testing.tempDirectory),
+            Pair("TMP", configs.testing.tempDirectory),
+
+            Pair("NUIX_ENGINE_DIR", configs.nuixEngineDirectory),
+
+            Pair("JAVA_HOME", "${configs.nuixEngineDirectory}\\jre")
+    )
+
+
+}
+
+// Builds JAR without any of the Engine wrapper stuff included
+tasks.create<Jar>("nxOnlyJar") {
+    println("Producing NX only JAR file")
+    from(sourceSets.main.get().output)
+    exclude("com/nuix/innovation/enginewrapper/**")
+    destinationDirectory.set(Paths.get("$projectDir", "..", "JAR").toFile())
+}
+
 // Copies plug-in JAR to lib directory of engine release we're running against
 tasks.register<Copy>("copyJarsToEngine") {
     val name = "@nx"
@@ -247,11 +263,13 @@ tasks.register<Copy>("copyJarsToEngine") {
 tasks.test {
     dependsOn(tasks.findByName("copyJarsToEngine"))
     useJUnitPlatform()
-    configureTestEnvironment(this)
 
-    println("Test: ${this}")
-    println("Test Args: ${jvmArgs}")
-    println("Test Environment: ${environment}")
+    doFirst {
+        println("Test: ${this}")
+        configureTestEnvironment(this@test)
+        println("Test Args: ${jvmArgs}")
+        println("Test Environment: ${environment}")
+    }
 }
 
 // Customize where Javadoc output is written to
