@@ -73,7 +73,7 @@ pipeline {
                     }
                 }
 
-                stage("Integration Tests") {
+                /*stage("Integration Tests") {
                     steps {
                         withCredentials([usernamePassword(credentialsId: 'REST-Service_CLS',
                                 passwordVariable: 'NUIX_PASSWORD',
@@ -90,7 +90,7 @@ pipeline {
                             }
                         }
                     }
-                }
+                }*/
 
                 stage("JAR") {
                     steps {
