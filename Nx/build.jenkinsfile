@@ -29,7 +29,7 @@ pipeline {
                 jdk 'Eclipse Adoptium 11'
             }
             stages {
-                stage("Get Engine") {
+                /*stage("Get Engine") {
                     steps{
                         fileOperations([
                                 folderCreateOperation(downloadPath),
@@ -48,7 +48,7 @@ pipeline {
                             bat label: "buildTests", returnStatus: true, script:  "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" testClasses"
                         }
                     }
-                }
+                }*/
 
                 stage("Unit Tests") {
                     environment {
@@ -92,7 +92,7 @@ pipeline {
                     }
                 }*/
 
-                stage("JAR") {
+                /*stage("JAR") {
                     steps {
                         dir("${WORKSPACE}\\NX") {
                             bat 'call gradlew -Pversion=%PROJ_VERSION% jar'
@@ -119,7 +119,7 @@ pipeline {
                         }
 
                     }
-                }
+                }*/
 
             }
         }
