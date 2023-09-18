@@ -64,9 +64,9 @@ pipeline {
                                 bat "call powershell .\\cicd\\ScheduleGradleTask.ps1 " +
                                         "-appdir ${WORKSPACE} " +
                                         "-gradleTask test " +
-                                        "-taskParameters 'nuixDependencyRepo=\"${dependencyRepo}\"', " +
+                                        "-taskParameters @('nuixDependencyRepo=\"${dependencyRepo}\"', " +
                                                         "'nuixEngineDir=\"${WORKSPACE}\\${releasePath}\"', " +
-                                                        "'tempDir=\"${TEST_TEMP_PATH}\"'"
+                                                        "'tempDir=\"${TEST_TEMP_PATH}\"')"
                             }
                         }
                     }
@@ -82,9 +82,9 @@ pipeline {
                                 bat "call powershell .\\cicd\\ScheduleGradleTask.ps1 " +
                                         "-appdir ${WORKSPACE} " +
                                         "-gradleTask integrationTest " +
-                                        "-taskParameters 'nuixDependencyRepo=\"${dependencyRepo}\"', " +
+                                        "-taskParameters @('nuixDependencyRepo=\"${dependencyRepo}\"', " +
                                                         "'nuixEngineDir=\"${WORKSPACE}\\${releasePath}\"', " +
-                                                        "'tempDir=\"${TEST_TEMP_PATH}\"'"
+                                                        "'tempDir=\"${TEST_TEMP_PATH}\"')"
                             }
                         }
                     }
