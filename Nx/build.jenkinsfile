@@ -43,9 +43,9 @@ pipeline {
                 stage("Build") {
                     steps {
                         dir("${WORKSPACE}\\NX") {
-                            bat "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" clean"
-                            bat "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" classes"
-                            bat "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" testClasses"
+                            bat label: "clean", returnStatus: true, script: "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" clean"
+                            bat label: "buildClasses", returnStatus: true, script: "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" classes"
+                            bat label: "buildTests", returnStatus: true, script:  "call gradlew -PnuixDependencyRepo=\"${dependencyRepo}\" -PnuixEngineDir=\"${WORKSPACE}\\${releasePath}\" testClasses"
                         }
                     }
                 }
@@ -60,9 +60,10 @@ pipeline {
                                 passwordVariable: 'NUIX_PASSWORD',
                                 usernameVariable: 'NUIX_USERNAME')]) {
 
-                            dir("${WORKSPACE}\\NX") {
-                                bat "call powershell .\\cicd\\ScheduleGradleTask.ps1 " +
-                                        "-appdir ${WORKSPACE} " +
+                            dir("${WORKSPACE}\\NX\\cicd") {
+                                bat label: "unittest", returnStatus: true,
+                                        script: "call powershell .\\ScheduleGradleTask.ps1 " +
+                                        "-appdir ${WORKSPACE}\\Nx " +
                                         "-gradleTask test " +
                                         "-taskParameters @('nuixDependencyRepo=\"${dependencyRepo}\"', " +
                                                         "'nuixEngineDir=\"${WORKSPACE}\\${releasePath}\"', " +
@@ -78,9 +79,10 @@ pipeline {
                                 passwordVariable: 'NUIX_PASSWORD',
                                 usernameVariable: 'NUIX_USER')]) {
 
-                            dir("${WORKSPACE}\\NX") {
-                                bat "call powershell .\\cicd\\ScheduleGradleTask.ps1 " +
-                                        "-appdir ${WORKSPACE} " +
+                            dir("${WORKSPACE}\\NX\\cicd") {
+                                bat label: "integrationtest", returnStatus: true,
+                                        script: "call powershell .\\ScheduleGradleTask.ps1 " +
+                                        "-appdir ${WORKSPACE}\\Nx " +
                                         "-gradleTask integrationTest " +
                                         "-taskParameters @('nuixDependencyRepo=\"${dependencyRepo}\"', " +
                                                         "'nuixEngineDir=\"${WORKSPACE}\\${releasePath}\"', " +
