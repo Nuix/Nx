@@ -15,6 +15,6 @@ if ($taskParameters.Count) {
         $gradleArgs += "-P" + $parameter
     }
 }
-"Executing Command './gradlew $gradleTask $gradleArgs'" | Out-File -Append -FilePath "$appdir\Task.log"
+"Executing Command './gradlew --console=plain $gradleTask $gradleArgs'" | Out-File -Append -FilePath "$appdir\Task.log"
 
 ./gradlew $gradleTask $gradleArgs  | Out-File -Append -FilePath "$appdir\Task.log"
