@@ -32,13 +32,13 @@ if (versionProperty == "unspecified") {
 }
 
 group = findProperty("group") ?: "com.nuix.nx"
-version = versionProperty ?: "1.20.0"
+version = versionProperty ?: "1.21.0"
 
 val sourceCompatibility = findProperty("targetJreVersion") ?: 11
 val targetCompatibility = findProperty("targetJreVersion") ?: 11
 
 // Directory containing Nuix Engine release.  We first attempt to pull from ENV
-var nuixEngineDirectory: String = System.getenv("NUIX_ENGINE_DIR")
+var nuixEngineDirectory: String = (findProperty("NUIX_ENGINE_DIR") ?: System.getenv("NUIX_ENGINE_DIR")).toString()
 // If we have it provided externally via a property, use that instead
 if (properties.containsKey("nuixEngineDir")) {
     nuixEngineDirectory = findProperty("nuixEngineDir").toString()
@@ -51,6 +51,8 @@ if (nuixEngineDirectory.isEmpty()) {
 
 val engineLibDir = Paths.get(nuixEngineDirectory, "lib").pathString
 println("engineLibDir: ${engineLibDir}")
+
+val appLibDir = "C:\\Program Files\\Nuix\\Nuix 9.8\\lib"
 
 repositories {
     mavenCentral()
@@ -69,6 +71,13 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+
+    implementation(fileTree(baseDir = appLibDir) {
+        include(
+            "**/*swingx*.jar",
+            "**/*jide*.jar",
+        )
+    })
 
     implementation(fileTree(baseDir = engineLibDir) {
         include(
