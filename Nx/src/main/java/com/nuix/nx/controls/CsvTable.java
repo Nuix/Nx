@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.*;
 
@@ -106,7 +107,7 @@ public class CsvTable extends JPanel {
         add(scrollPane, gbc_scrollPane);
 
         recordsTable = new JTable(recordsTableModel);
-        recordsTable.setFont(new Font("Consolas", Font.PLAIN, 14));
+        recordsTable.setFont(new Font("Arial MS Unicode", Font.PLAIN, 14));
         recordsTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         recordsTable.setFillsViewportHeight(true);
         scrollPane.setViewportView(recordsTable);
@@ -118,7 +119,7 @@ public class CsvTable extends JPanel {
     }
 
     private void importCsv(File csvFile) {
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile, StandardCharsets.UTF_8))) {
             CSVFormat csvFormat = CSVFormat.EXCEL.builder()
                     .setSkipHeaderRecord(false)
                     .build();

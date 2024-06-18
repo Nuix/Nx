@@ -6,9 +6,12 @@ require_relative "NxBootstrap.rb"
 # dialog in your script
 # ==========================================================================
 
-case_directory ||= "FALLBACK_VALUE"
+case_directory = java.io.File.new(File.join(File.dirname(__FILE__),"TestCase_#{Time.now.to_i}"))
+if case_directory.exists
+	case_directory.delete
+end
 
-# Open a test case, change this to a case on your system
+# Open a test case
 $current_case = $utilities.getCaseFactory.create(case_directory,{})
 
 # Tell the library what the current case is
@@ -110,6 +113,15 @@ file_tab.appendPathList("file_paths")
 # ===============================
 choice_table_tab = dialog.addTab("choice_table_tab","Choice Table")
 choice_table_tab.appendStringChoiceTable("choices001","Tags",$current_case.getAllTags)
+
+# ===============================
+# Add a tab and test choice table
+# ===============================
+string_list_tab = dialog.addTab("string_list_tab","String List Table")
+string_list_tab.appendStringList("string_list_001")
+string_list_tab.appendStringList("string_list_002", true)
+string_list_tab.appendStringList("string_list_003",["Alpha","Beta","Gamma"])
+string_list_tab.appendStringList("string_list_004",["Alpha","Beta","Gamma"],true)
 
 # =========
 # CSV Table
