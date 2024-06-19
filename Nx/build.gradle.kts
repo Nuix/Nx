@@ -38,7 +38,7 @@ val sourceCompatibility = findProperty("targetJreVersion") ?: 11
 val targetCompatibility = findProperty("targetJreVersion") ?: 11
 
 // Directory containing Nuix Engine release.  We first attempt to pull from ENV
-var nuixEngineDirectory: String = System.getenv("NUIX_ENGINE_DIR")
+var nuixEngineDirectory: String = (findProperty("NUIX_ENGINE_DIR") ?: System.getenv("NUIX_ENGINE_DIR")).toString()
 // If we have it provided externally via a property, use that instead
 if (properties.containsKey("nuixEngineDir")) {
     nuixEngineDirectory = findProperty("nuixEngineDir").toString()
