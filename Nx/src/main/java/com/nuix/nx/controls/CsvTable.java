@@ -120,7 +120,7 @@ public class CsvTable extends JPanel {
 
     private void importCsv(File csvFile) {
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile, StandardCharsets.UTF_8))) {
-            CSVFormat csvFormat = CSVFormat.EXCEL.withSkipHeaderRecord();
+            CSVFormat csvFormat = CSVFormat.EXCEL.withSkipHeaderRecord(false);
 
 //            CSVFormat csvFormat = CSVFormat.EXCEL.builder()
 //                    .setSkipHeaderRecord(false)
@@ -134,10 +134,14 @@ public class CsvTable extends JPanel {
             List<String> missingHeaders = new ArrayList<String>();
 
             for (CSVRecord csvRecord : records) {
-                String[] values = csvRecord.toMap().values().toArray(new String[0]);
+                String[] values = new String[csvRecord.size()];
+
+                for (int i = 0; i < values.length; i++) {
+                    values[i] = csvRecord.get(i);
+                }
+
                 if (headers == null) {
                     headers = values;
-
                     System.out.println("Headers:");
                     for (int i = 0; i < headers.length; i++) {
                         //CSV reader leaks in newlines for some reason, gotta chop em off
