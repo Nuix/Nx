@@ -363,7 +363,7 @@ public class ProgressDialog extends JDialog {
 	 */
 	public void logMessage(String message){
 		if(timestampLoggedMessages){
-			txtrLog.append(DateTime.now().toString("YYYY-MM-dd hh:mm:ss") + ": " + message+"\n");
+			txtrLog.append(DateTime.now().toString("YYYY-MM-dd HH:mm:ss") + ": " + message+"\n");
 		} else {
 			txtrLog.append(message+"\n");			
 		}
