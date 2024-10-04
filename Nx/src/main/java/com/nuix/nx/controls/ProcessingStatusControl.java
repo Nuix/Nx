@@ -81,7 +81,26 @@ public class ProcessingStatusControl extends JPanel {
 	private JPanel processingSettingsTab;
 	private DataProcessingSettingsControl dataProcessingSettingsControl;
 	private JButton btnOpenLogDirectory;
-	
+
+	private boolean jobWasAborted = false;
+	private boolean jobWasStopped = false;
+
+	/***
+	 * Gets whether the job was aborted
+	 * @return True if the job was aborted thru the interface
+	 */
+	public boolean getJobWasAborted() {
+		return jobWasAborted;
+	}
+
+	/***
+	 * Gets whether the job was stopped
+	 * @return True if the job was stopped through the interface
+	 */
+	public boolean getJobWasStopped() {
+		return jobWasStopped;
+	}
+
 	public ProcessingStatusControl() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0};
@@ -392,6 +411,7 @@ public class ProcessingStatusControl extends JPanel {
 				btnStopProcessing.setEnabled(false);
 				btnAbortProcessing.setEnabled(false);
 				job.stop();
+				jobWasStopped = true;
 			}
 		}
 	}
@@ -407,6 +427,7 @@ public class ProcessingStatusControl extends JPanel {
 				btnStopProcessing.setEnabled(false);
 				btnAbortProcessing.setEnabled(false);
 				job.abort();
+				jobWasAborted = true;
 			}
 		}
 	}

@@ -39,6 +39,22 @@ public class ProcessingStatusDialog extends JDialog {
     @Setter
     private int autoCloseDelaySeconds = 60;
 
+    /***
+     * Gets whether the job was aborted
+     * @return True if the job was aborted thru the interface
+     */
+    public boolean getJobWasAborted() {
+        return processingStatusControl.getJobWasAborted();
+    }
+
+    /***
+     * Gets whether the job was stopped
+     * @return True if the job was stopped through the interface
+     */
+    public boolean getJobWasStopped() {
+        return processingStatusControl.getJobWasStopped();
+    }
+
     public ProcessingStatusDialog() {
         super((JDialog) null);
         //We will own closing this

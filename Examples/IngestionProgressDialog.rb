@@ -70,4 +70,7 @@ processing_status_dialog.setAutoCloseDelaySeconds(42) # Set to non-default value
 puts "Handing off to processing status dialog..."
 processing_status_dialog.displayAndBeginProcessing(processor)
 
+puts "Job was aborted?: #{processing_status_dialog.getJobWasAborted}"
+puts "Job was stopped?: #{processing_status_dialog.getJobWasStopped}"
+
 $current_case.close
