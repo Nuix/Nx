@@ -35,9 +35,30 @@ public class ProcessingStatusDialog extends JDialog {
     private JButton btnClose;
     private Timer autoCloseTimer;
 
-    @Getter
-    @Setter
+
+
+
     private int autoCloseDelaySeconds = 60;
+
+    /***
+     * Gets how long the dialog should remain open after processing completes.  After this time period, the
+     * dialog will close itself.  A value of 0 will disable automatic closing of the dialog.
+     * @return The delay in seconds the dialog will wait before closing itself.  A value of 0 means that
+     * the dialog will remain open until the user dismisses it.
+     */
+    public int getAutoCloseDelaySeconds() {
+        return autoCloseDelaySeconds;
+    }
+
+    /***
+     * Sets how long the dialog should remain open after processing completes.  After this time period, the
+     * dialog will close itself.  A value of 0 will disable automatic closing of the dialog.
+     * @param autoCloseDelaySeconds How long in seconds to wait before auto closing the dialog.  A value of
+     *                              0 will leave the dialog visible until the user dismisses it.
+     */
+    public void setAutoCloseDelaySeconds(int autoCloseDelaySeconds) {
+        this.autoCloseDelaySeconds = autoCloseDelaySeconds;
+    }
 
     /***
      * Gets whether the job was aborted

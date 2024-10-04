@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -313,31 +313,45 @@ extends javax.swing.JDialog</pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAutoCloseDelaySeconds()">getAutoCloseDelaySeconds</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets how long the dialog should remain open after processing completes.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getJobWasAborted()">getJobWasAborted</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets whether the job was aborted</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getJobWasStopped()">getJobWasStopped</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets whether the job was stopped</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#log(java.lang.String)">log</a></span>&#8203;(java.lang.String&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block">Logs a message to the log text area and the Nuix logs</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeProcessingFinishedListener(com.nuix.nx.controls.ProcessingFinishedListener)">removeProcessingFinishedListener</a></span>&#8203;(<a href="../controls/ProcessingFinishedListener.html" title="interface in com.nuix.nx.controls">ProcessingFinishedListener</a>&nbsp;listener)</code></th>
 <td class="colLast">
 <div class="block">Removes a previously added callback</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAutoCloseDelaySeconds(int)">setAutoCloseDelaySeconds</a></span>&#8203;(int&nbsp;autoCloseDelaySeconds)</code></th>
+<td class="colLast">
+<div class="block">Sets how long the dialog should remain open after processing completes.</div>
 </td>
 </tr>
 </table>
@@ -418,6 +432,38 @@ extends javax.swing.JDialog</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getAutoCloseDelaySeconds()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAutoCloseDelaySeconds</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;getAutoCloseDelaySeconds()</pre>
+<div class="block">Gets how long the dialog should remain open after processing completes.  After this time period, the
+ dialog will close itself.  A value of 0 will disable automatic closing of the dialog.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The delay in seconds the dialog will wait before closing itself.  A value of 0 means that
+ the dialog will remain open until the user dismisses it.</dd>
+</dl>
+</li>
+</ul>
+<a id="setAutoCloseDelaySeconds(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAutoCloseDelaySeconds</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setAutoCloseDelaySeconds&#8203;(int&nbsp;autoCloseDelaySeconds)</pre>
+<div class="block">Sets how long the dialog should remain open after processing completes.  After this time period, the
+ dialog will close itself.  A value of 0 will disable automatic closing of the dialog.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>autoCloseDelaySeconds</code> - How long in seconds to wait before auto closing the dialog.  A value of
+                              0 will leave the dialog visible until the user dismisses it.</dd>
+</dl>
+</li>
+</ul>
 <a id="getJobWasAborted()">
 <!--   -->
 </a>
