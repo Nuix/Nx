@@ -105,7 +105,6 @@ public class ProcessingStatusDialog extends JDialog {
      */
     public void displayAndBeginProcessing(Processor processor) {
         Thread t = new Thread(() -> {
-            setLocationRelativeTo(null);
             setVisible(true);
         });
 
