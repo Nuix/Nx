@@ -31,7 +31,7 @@ public class RubyScriptRunnerTests {
         List<String> output = new ArrayList<>();
         RubyScriptRunner rubyScriptRunner = new RubyScriptRunner();
 
-        rubyScriptRunner.whenScriptCompletes((ret) -> {
+        rubyScriptRunner.whenScriptCompletes((ret,vars) -> {
             assertEquals(42L, ret);
         });
 

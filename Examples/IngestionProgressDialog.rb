@@ -65,6 +65,7 @@ processor.setParallelProcessingSettings({
 })
 
 processing_status_dialog = ProcessingStatusDialog.new
+processing_status_dialog.setAutoCloseDelaySeconds(42) # Set to non-default value
 # This will begin processing and display the processing status dialog
 puts "Handing off to processing status dialog..."
 processing_status_dialog.displayAndBeginProcessing(processor)

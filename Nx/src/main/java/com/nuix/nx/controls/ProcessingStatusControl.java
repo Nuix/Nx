@@ -417,23 +417,6 @@ public class ProcessingStatusControl extends JPanel {
 	}
 
 	public void beginProcessing(Processor processor){
-//		BroadcastingLogAppender loggingListener = new BroadcastingLogAppender();
-//		loggingListener.setLayout(new PatternLayout("%-5p [%t]: %m"));
-//		loggingListener.setLevel(Level.ALL);
-//		Queue<String> logFifo = new CircularFifoQueue<String>(1000);
-//		loggingListener.addListener(new LogEventListener() {
-//			
-//			@Override
-//			public void eventLogged(Appender source, LoggingEvent event) {
-//				logFifo.add(source.getLayout().format(event));
-//				SwingUtilities.invokeLater(() -> {
-//					txtrLogEvents.setText(String.join("\n", logFifo));
-//					txtrLogEvents.setCaretPosition(txtrLogEvents.getDocument().getLength());	
-//				});
-//			}
-//		});
-//		loggingListener.hookLogging();
-		
 		dataProcessingSettingsControl.loadSettings(processor.getProcessingSettings());
 		
 		long startTime = System.currentTimeMillis();

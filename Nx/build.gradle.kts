@@ -54,6 +54,17 @@ println("engineLibDir: ${engineLibDir}")
 
 repositories {
     mavenCentral()
+
+    val github_username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
+    val github_token = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+
+    maven {
+        url = uri("https://maven.pkg.github.com/nuix/nuix-java-engine-baseline")
+        credentials {
+            username = github_username
+            password = github_token
+        }
+    }
 }
 
 // We can use this to define JAR files that we need copied to lib
@@ -72,22 +83,25 @@ dependencies {
 
     implementation(fileTree(baseDir = engineLibDir) {
         include(
-                "**/*log*.jar",
-                "**/*aspect*.jar",
-                "**/*joda*.jar",
-                "**/*commons*.jar",
-                "**/*guava*.jar",
-                "**/*gson*.jar",
-                "**/nuix-*.jar",
-                "**/*jruby*.jar",
-                "**/*swing*.jar",
-                "**/*jide*.jar",
-                "**/*csv*.jar",
-                "**/*beansbinding*.jar",
-                "**/*xml.bind*.jar",
-                "**/*itext*.jar",
+            "**/*log*.jar",
+            "**/*aspect*.jar",
+            "**/*joda*.jar",
+            "**/*commons*.jar",
+            "**/*guava*.jar",
+            "**/*gson*.jar",
+            "**/nuix-*.jar",
+            "**/*jruby*.jar",
+            "**/*swing*.jar",
+            "**/*jide*.jar",
+            "**/*csv*.jar",
+            "**/*beansbinding*.jar",
+            "**/*xml.bind*.jar",
+            "**/*itext*.jar",
         )
     })
+
+    // Wrapper class for running tests in engine, pulled from public facing GitHub repository
+    implementation("com.nuix.innovation:enginewrapper:Nuix9.10-v1.1.7")
 
     testRuntimeOnly(fileTree(baseDir = engineLibDir) {
         include("*.jar")
@@ -105,26 +119,26 @@ fun configureTestEnvironment(test: Test) {
 
     // Engine runtime temp directory
     val nuixTempDirectory = findProperty("tempDir")
-            ?: Paths.get(System.getenv("LOCALAPPDATA"), "Temp", "Nuix").pathString
+        ?: Paths.get(System.getenv("LOCALAPPDATA"), "Temp", "Nuix").pathString
 
     // Args passed to JVM running tests
     test.jvmArgs(
-            "--add-exports=java.base/jdk.internal.loader=ALL-UNNAMED",  // Engine 9.6(?) and later require this
-            "-Xmx4G",
-            "-Djava.io.tmpdir=\"${nuixTempDirectory}\"",
-            // "-verbose:class" // Can help troubleshoot weird dependency issues
+        "--add-exports=java.base/jdk.internal.loader=ALL-UNNAMED",  // Engine 9.6(?) and later require this
+        "-Xmx4G",
+        "-Djava.io.tmpdir=\"${nuixTempDirectory}\"",
+        // "-verbose:class" // Can help troubleshoot weird dependency issues
     )
 
     // Directory used to store data a test may rely on (like sample data)
     val testDataDirectory = findProperty("testDataDir") ?: Paths.get("$projectDir", "..", "TestData").pathString
 
-    // Directory used to store data a test may rely on (like sample data)
+    // Directory used to store examples
     val rubyExamplesDirectory = findProperty("rubyExamplesDirectory")
-            ?: Paths.get("$projectDir", "..", "Examples").pathString
+        ?: Paths.get("$projectDir", "..", "Examples").pathString
 
     // Directory that tests may write data to, unique to each test invocation
     val testOutputDirectoryRoot = findProperty("testOutputDirectoryRoot")
-            ?: Paths.get("$projectDir", "..", "TestOutput").pathString
+        ?: Paths.get("$projectDir", "..", "TestOutput").pathString
     val testOutputDirectory = Paths.get(testOutputDirectoryRoot.toString(), "${System.currentTimeMillis()}").pathString
 
     val binDir = Paths.get(nuixEngineDirectory, "bin").pathString
@@ -132,32 +146,37 @@ fun configureTestEnvironment(test: Test) {
 
     // Configure ENV vars for JVM tests run in
     test.setEnvironment(
-            // Add our engine release's bin and bin/x86 to PATH
-            Pair("PATH", "${System.getenv("PATH")};${binDir};${binX86Dir}"),
+        // Add our engine release's bin and bin/x86 to PATH
+        Pair("PATH", "${System.getenv("PATH")};${binDir};${binX86Dir}"),
 
-            // Define where tests can place re-usable test data
-            Pair("TEST_DATA_DIRECTORY", testDataDirectory),
+        // Define where tests can place re-usable test data
+        Pair("TEST_DATA_DIRECTORY", testDataDirectory),
 
-            // Define where tests can write output produce for later review
-            Pair("TEST_OUTPUT_DIRECTORY", testOutputDirectory),
+        // Define where tests can write output produce for later review
+        Pair("TEST_OUTPUT_DIRECTORY", testOutputDirectory),
 
-            // Defines where example ruby scripts live
-            Pair("RUBY_EXAMPLES_DIRECTORY", rubyExamplesDirectory),
+        // Defines where example ruby scripts live
+        Pair("RUBY_EXAMPLES_DIRECTORY", rubyExamplesDirectory),
 
-            // Forward ENV username and password
-            Pair("NUIX_USERNAME", findProperty("nuixUsername") ?: System.getenv("NUIX_USERNAME")),
-            Pair("NUIX_PASSWORD", findProperty("nuixPassword") ?: System.getenv("NUIX_PASSWORD")),
+        // Forward ENV username and password
+        Pair("NUIX_USERNAME", findProperty("nuixUsername") ?: System.getenv("NUIX_USERNAME")),
+        Pair("NUIX_PASSWORD", findProperty("nuixPassword") ?: System.getenv("NUIX_PASSWORD")),
 
-            // Forward LOCALAPPDATA and APPDATA
-            Pair("LOCALAPPDATA", System.getenv("LOCALAPPDATA")),
-            Pair("APPDATA", System.getenv("APPDATA")),
+        // Forward LOCALAPPDATA and APPDATA
+        Pair("LOCALAPPDATA", System.getenv("LOCALAPPDATA")),
+        Pair("APPDATA", System.getenv("APPDATA")),
+        Pair("PROGRAMDATA", System.getenv("PROGRAMDATA")),
 
-            // We need to make sure we set these so workers will properly resolve temp dir
-            // (when using a worker based operation via EngineWrapper).
-            Pair("TEMP", nuixTempDirectory),
-            Pair("TMP", nuixTempDirectory),
+        // Important to have in some instances, otherwise some code may resolve a local
+        // path in project tree rather than actual system drive
+        Pair("SYSTEMDRIVE", System.getenv("SYSTEMDRIVE")),
 
-            Pair("NUIX_ENGINE_DIR", nuixEngineDirectory)
+        // We need to make sure we set these so workers will properly resolve temp dir
+        // (when using a worker based operation via EngineWrapper).
+        Pair("TEMP", nuixTempDirectory),
+        Pair("TMP", nuixTempDirectory),
+
+        Pair("NUIX_ENGINE_DIR", nuixEngineDirectory)
     )
 }
 
@@ -183,7 +202,7 @@ tasks.register<Copy>("copyJarsToEngine") {
         delete(toDelete)
     }
 
-    println("Copying files engine to engine lib dir...")
+    println("Copying JAR to engine lib dir...")
     copy {
         into(File(engineLibDir))
         from(configurations.findByName("externalDependency"))
@@ -197,9 +216,42 @@ tasks.register<Copy>("copyJarsToEngine") {
     }
 }
 
+// Copies plug-in JAR to lib directory of engine release we're running against
+tasks.register<Copy>("copyJarsToExampleDir") {
+    // Directory used to store examples
+    val rubyExamplesDirectory = (findProperty("rubyExamplesDirectory")
+        ?: Paths.get("$projectDir", "..", "Examples").pathString).toString()
+
+    val name = "Nx"
+    val jarName = "${name}.jar"
+    dependsOn(tasks.findByName("nxOnlyJar"))
+
+    duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+
+    doFirst {
+        val toDelete = File(rubyExamplesDirectory, jarName)
+        println("Deleting: " + toDelete.absolutePath)
+        delete(toDelete)
+    }
+
+    println("Copying Nx.jar to examples dir: " + rubyExamplesDirectory)
+    copy {
+        into(File(rubyExamplesDirectory))
+        from(configurations.findByName("externalDependency"))
+        rename("(.*)\\.jar", "${name}-Dependency-$1.jar")
+    }
+
+    copy {
+        from(tasks.findByName("nxOnlyJar"))
+        into(File(rubyExamplesDirectory))
+        rename(".*\\.jar", jarName)
+    }
+}
+
 // Ensure that tests are ran by JUnit and that test environment gets configured
 tasks.test {
     dependsOn(tasks.findByName("copyJarsToEngine"))
+    dependsOn(tasks.findByName("copyJarsToExampleDir"))
     useJUnitPlatform()
     configureTestEnvironment(this)
 }
