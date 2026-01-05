@@ -70,6 +70,8 @@ public class DynamicTableControl extends JPanel {
 	private JButton btnAddRecord;
 	private Supplier<Object> addRecordCallback = null;
 	private JButton btnRemoveSelected;
+	private boolean showFilterControls = true;
+	private boolean showStatusLabel = true;
 	
 	public DynamicTableControl(List<String> headers, List<Object> records, DynamicTableValueCallback valueCallback) {
 		filterUpdateTimer = new Timer(250, new ActionListener(){
@@ -117,29 +119,32 @@ public class DynamicTableControl extends JPanel {
 				});
 				
 				lblFilter = new JLabel("Filter:");
-				GridBagConstraints gbc_lblFilter = new GridBagConstraints();
-				gbc_lblFilter.insets = new Insets(0, 0, 5, 5);
-				gbc_lblFilter.anchor = GridBagConstraints.EAST;
-				gbc_lblFilter.gridx = 0;
-				gbc_lblFilter.gridy = 0;
-				add(lblFilter, gbc_lblFilter);
-				
 				txtFilter = new JTextField();
-				GridBagConstraints gbc_txtFilter = new GridBagConstraints();
-				gbc_txtFilter.insets = new Insets(0, 0, 5, 5);
-				gbc_txtFilter.fill = GridBagConstraints.HORIZONTAL;
-				gbc_txtFilter.gridx = 1;
-				gbc_txtFilter.gridy = 0;
-				add(txtFilter, gbc_txtFilter);
 				txtFilter.setColumns(10);
-				
 				toolBar = new JToolBar();
 				toolBar.setFloatable(false);
-				GridBagConstraints gbc_toolBar = new GridBagConstraints();
-				gbc_toolBar.insets = new Insets(0, 0, 5, 0);
-				gbc_toolBar.gridx = 2;
-				gbc_toolBar.gridy = 0;
-				add(toolBar, gbc_toolBar);
+				
+				if (showFilterControls) {
+					GridBagConstraints gbc_lblFilter = new GridBagConstraints();
+					gbc_lblFilter.insets = new Insets(0, 0, 5, 5);
+					gbc_lblFilter.anchor = GridBagConstraints.EAST;
+					gbc_lblFilter.gridx = 0;
+					gbc_lblFilter.gridy = 0;
+					add(lblFilter, gbc_lblFilter);
+					
+					GridBagConstraints gbc_txtFilter = new GridBagConstraints();
+					gbc_txtFilter.insets = new Insets(0, 0, 5, 5);
+					gbc_txtFilter.fill = GridBagConstraints.HORIZONTAL;
+					gbc_txtFilter.gridx = 1;
+					gbc_txtFilter.gridy = 0;
+					add(txtFilter, gbc_txtFilter);
+					
+					GridBagConstraints gbc_toolBar = new GridBagConstraints();
+					gbc_toolBar.insets = new Insets(0, 0, 5, 0);
+					gbc_toolBar.gridx = 2;
+					gbc_toolBar.gridy = 0;
+					add(toolBar, gbc_toolBar);
+				}
 				
 				btnShowChecked = new JButton("");
 				btnShowChecked.addActionListener(new ActionListener() {
@@ -269,11 +274,11 @@ public class DynamicTableControl extends JPanel {
 				
 				scrollPane = new JScrollPane();
 				GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-				gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
+				gbc_scrollPane.insets = new Insets(0, 0, showStatusLabel ? 5 : 0, 0);
 				gbc_scrollPane.gridwidth = 3;
 				gbc_scrollPane.fill = GridBagConstraints.BOTH;
 				gbc_scrollPane.gridx = 0;
-				gbc_scrollPane.gridy = 1;
+				gbc_scrollPane.gridy = showFilterControls ? 1 : 0;
 				add(scrollPane, gbc_scrollPane);
 				dataTable = new JXTable(tableModel){
 
@@ -301,13 +306,15 @@ public class DynamicTableControl extends JPanel {
 				dataTable.setFillsViewportHeight(true);
 				scrollPane.setViewportView(dataTable);
 				
-				GridBagConstraints gbc_lblLblcounts = new GridBagConstraints();
-				gbc_lblLblcounts.gridwidth = 2;
-				gbc_lblLblcounts.anchor = GridBagConstraints.WEST;
-				gbc_lblLblcounts.insets = new Insets(0, 0, 0, 5);
-				gbc_lblLblcounts.gridx = 0;
-				gbc_lblLblcounts.gridy = 2;
-				add(lblLblcounts, gbc_lblLblcounts);
+				if (showStatusLabel) {
+					GridBagConstraints gbc_lblLblcounts = new GridBagConstraints();
+					gbc_lblLblcounts.gridwidth = 2;
+					gbc_lblLblcounts.anchor = GridBagConstraints.WEST;
+					gbc_lblLblcounts.insets = new Insets(0, 0, 0, 5);
+					gbc_lblLblcounts.gridx = 0;
+					gbc_lblLblcounts.gridy = showFilterControls ? 2 : 1;
+					add(lblLblcounts, gbc_lblLblcounts);
+				}
 				TableColumn checkColumn = dataTable.getColumnModel().getColumn(0);
 				checkColumn.setMinWidth(25);
 				checkColumn.setMaxWidth(25);
@@ -456,5 +463,17 @@ public class DynamicTableControl extends JPanel {
 
 	public JButton getBtnAddRecord() {
 		return btnAddRecord;
+	}
+	
+	public void setShowFilterControls(boolean show) {
+		this.showFilterControls = show;
+		lblFilter.setVisible(show);
+		txtFilter.setVisible(show);
+		toolBar.setVisible(show);
+	}
+	
+	public void setShowStatusLabel(boolean show) {
+		this.showStatusLabel = show;
+		lblLblcounts.setVisible(show);
 	}
 }

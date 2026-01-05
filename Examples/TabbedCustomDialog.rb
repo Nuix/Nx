@@ -305,6 +305,29 @@ dynamic_table_tab.appendDynamicTable("dynamic_table","Dynamic Table",headers,val
 	end
 end
 
+dynamic_table_tab = dialog.addTab("dynamic_table_tab_2","Dynamic Table (Hide Some)")
+
+# Need to supply a callback which can fetch field values from a given record in the data
+# and potential save values back assuming you wish the table to be editable
+dynamic_table_tab.appendDynamicTable("dynamic_table_2","Dynamic Table",headers,values) do |record,column|
+	case column
+	when 0
+		next record[:name]
+	when 1
+		next record[:color]
+	when 2
+		next record[:age].to_s
+	else
+		next "Unknown"
+	end
+end
+
+dynamic_table_2 = dialog.getControl("dynamic_table_2")
+
+# Hide both filter controls and status label for table-only view
+dynamic_table_2.setShowFilterControls(false);
+dynamic_table_2.setShowStatusLabel(false);
+
 # ============================================================================
 # Display the dialog and then dump a listing of the settings the user provided
 # ============================================================================
