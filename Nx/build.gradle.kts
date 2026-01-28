@@ -32,7 +32,7 @@ if (versionProperty == "unspecified") {
 }
 
 group = findProperty("group") ?: "com.nuix.nx"
-version = versionProperty ?: "1.22.1"
+version = versionProperty ?: "1.22.2"
 
 val sourceCompatibility = findProperty("targetJreVersion") ?: 11
 val targetCompatibility = findProperty("targetJreVersion") ?: 11
