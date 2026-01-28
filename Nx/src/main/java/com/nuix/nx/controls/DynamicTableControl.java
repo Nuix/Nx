@@ -5,6 +5,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 package com.nuix.nx.controls;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -13,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.swing.ImageIcon;
@@ -33,6 +35,8 @@ import javax.swing.table.TableColumn;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.decorator.ColorHighlighter;
+import org.jdesktop.swingx.decorator.HighlightPredicate;
 
 import com.nuix.nx.controls.models.ChoiceTableModelChangeListener;
 import com.nuix.nx.controls.models.DynamicTableModel;
@@ -475,5 +479,32 @@ public class DynamicTableControl extends JPanel {
 	public void setShowStatusLabel(boolean show) {
 		this.showStatusLabel = show;
 		lblLblcounts.setVisible(show);
+	}
+	
+	public static class CellInfo {
+		public final Object value;
+		public final int row;
+		public final int column;
+		public final Object rowRecord;
+		
+		public CellInfo(Object value, int row, int column, Object rowRecord) {
+			this.value = value;
+			this.row = row;
+			this.column = column;
+			this.rowRecord = rowRecord;
+		}
+	}
+	
+	public void addCellHighlighter(Color highlightColor, Function<CellInfo, Boolean> shouldHighlight) {
+		dataTable.addHighlighter(new ColorHighlighter((renderer, adapter) -> {
+			int row = adapter.row;
+			Object rowRecord = row < tableModel.getRecords().size() ? tableModel.getRecords().get(row) : null;
+			CellInfo info = new CellInfo(adapter.getValue(), row, adapter.column, rowRecord);
+			return shouldHighlight.apply(info);
+		}, highlightColor, null));
+	}
+	
+	public void clearCellHighlighters() {
+		dataTable.setHighlighters();
 	}
 }

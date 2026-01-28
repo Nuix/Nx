@@ -139,6 +139,11 @@ public class RubyExamples {
     }
 
     @Test
+    public void TestDynamicTable04() throws Exception {
+        executeRubyExample("DynamicTableTest04.rb", null);
+    }
+
+    @Test
     public void TestChoiceDialog() throws Exception {
         executeRubyExample("ChoiceDialog.rb", null);
     }
