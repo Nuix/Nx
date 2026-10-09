@@ -56,7 +56,7 @@ pipeline {
                     }
                     steps {
                         fileOperations([folderCreateOperation(env.TEST_TEMP_PATH)])
-                        withCredentials([usernamePassword(credentialsId: 'REST-Service_CLS',
+                        withCredentials([usernamePassword(credentialsId: 'jenkins-innovation/REST-Service_CLS',
                                 passwordVariable: 'NUIX_PASSWORD',
                                 usernameVariable: 'NUIX_USERNAME')]) {
 
@@ -75,7 +75,7 @@ pipeline {
 
                 /*stage("Integration Tests") {
                     steps {
-                        withCredentials([usernamePassword(credentialsId: 'REST-Service_CLS',
+                        withCredentials([usernamePassword(credentialsId: 'jenkins-innovation/REST-Service_CLS',
                                 passwordVariable: 'NUIX_PASSWORD',
                                 usernameVariable: 'NUIX_USER')]) {
 
@@ -106,7 +106,7 @@ pipeline {
 
                 stage("Publish") {
                     steps {
-                        withCredentials([usernamePassword(credentialsId: 'ArtifactorySLUKE',
+                        withCredentials([usernamePassword(credentialsId: 'jenkins-innovation/ArtifactorySLUKE',
                                 passwordVariable: 'ArtifactoryToken',
                                 usernameVariable: 'ArtifactoryUser')]) {
 
